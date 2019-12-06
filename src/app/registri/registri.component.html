@@ -1,0 +1,24 @@
+<div class="registri">
+    <div>
+        <span>registri</span>
+        <div class="registro" *ngFor="let r of registri.r">{{r | hex}}</div>
+    </div>
+    <div>
+        <span>iar</span>
+        <div class="registro">{{registri.iar | hex}}</div>
+        <span>pc</span>
+        <div class="registro">{{registri.pc | hex}}</div>
+        <span>mar</span>
+        <div class="registro">{{registri.mar | hex}}</div>
+        <span>ir</span>
+        <div class="registro">{{registri.ir | hex}}</div>
+        <span>temp</span>
+        <div class="registro">{{registri.temp | hex}}</div>
+        <span>mdr</span>
+        <div class="registro">{{registri.mdr | hex}}</div>
+        <span>a</span>
+        <div class="registro">{{registri.a | hex}}</div>
+        <span>b</span>
+        <div class="registro">{{registri.b | hex}}</div>
+    </div>
+</div>

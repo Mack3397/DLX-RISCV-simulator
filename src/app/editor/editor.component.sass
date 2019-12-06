@@ -1,0 +1,35 @@
+.editor
+    background: #2a2a2a
+    color: white
+    display: grid
+    grid-template-columns: 40px auto
+    overflow-x: hidden
+    overflow-y: auto
+    font-size: 1.5rem
+    height: 10em
+    .numbers
+        height: 100%
+        background: #ffffff10
+        .number
+            font-family: monospace
+            padding-right: .2em
+            color: #bbbbbb
+            text-align: right
+            height: 1.5rem
+    .lines
+        position: relative
+        height: 100%
+        overflow-x: auto
+        overflow-y: hidden
+        .cursor
+            position: absolute
+            width: 0
+            height: 1.5rem
+            border-left: 1px solid white
+        .line
+            margin: 0
+            height: 1.5rem
+            tab-size: 4
+
+.selected
+    background: #ffffff10
