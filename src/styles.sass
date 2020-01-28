@@ -1,12 +1,9 @@
-.instruction-r
-    color: #00ffd5
-.instruction-i
-    color: #229bff
-.instruction-j
-    color: #ff00dd
-.registry
-    color: #00ff00
-.registry-d
-    color: #b3ff00
-.immediate
-    color: #ffae00
+@import "~codemirror/lib/codemirror"
+@import "app/editor/codemirror-theme"
+
+.CodeMirror
+    font-size: 1.5rem
+    .running
+        background-color: #ffff002b
+        .CodeMirror-linenumber.CodeMirror-gutter-elt
+            background-color: #ffff002b

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Registri } from './registri';
 
 @Component({
@@ -8,7 +8,7 @@ import { Registri } from './registri';
 })
 export class RegistriComponent implements OnInit {
 
-  registri = new Registri();
+  @Input() registri: Registri;
 
   constructor() { }
 

@@ -1,9 +1,10 @@
-<div class="editor" tabindex="-1" (keydown)="onKeydown($event)">
-    <div class="numbers">
-        <div class="number" *ngFor="let line of lines; index as i" [class.selected]="i == cursor.y">{{i}}</div>
-    </div>
-    <div class="lines">
-        <div class="cursor" [style.left]="'calc( '+cursor.x+'ch - '+(cursor.x * 0.3)+'px)'" [style.top]="(cursor.y * 1.5) + 'rem'"></div>
-        <pre class="line" *ngFor="let line of lines; index as i" [class.selected]="i == cursor.y" [appCodeline]="lines[i]"></pre>
-    </div>
-</div>
+<ngx-codemirror #codeEditor
+    [(ngModel)]="content"
+    [options]="options"
+></ngx-codemirror>
+<button mat-raised-button (click)="onRun()" [disabled]="isRunDisabled">
+    <span style="display: flex; align-items: center;">Run <i class="fas fa-play" style="color: #00ff00; margin-left: .5em;"></i></span>
+</button>
+<button mat-raised-button (click)="onStop()" [disabled]="isStopDisabled">
+    <span style="display: flex; align-items: center;">Stop <i class="fas fa-square" style="color: #ff0000; margin-left: .5em;"></i></span>
+</button>

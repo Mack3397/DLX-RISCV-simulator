@@ -1,116 +1,84 @@
-import { Component, OnInit } from '@angular/core';
+import 'codemirror/addon/selection/active-line'
+import './modes/dlx.js';
+import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { EditorFromTextArea } from 'codemirror';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.sass']
 })
-export class EditorComponent implements OnInit {
+export class EditorComponent implements AfterViewInit {
 
-  lines : string[] = ['ADDI R2, R3, 0x00F8'];
-  cursor = {x: 0, y: 0};
+  @ViewChild('codeEditor', { static: false }) codeEditor: CodemirrorComponent;
+
+  @Input() mode: string;
+
+  @Input() pc: number = 0;
+  @Output() pcChange: EventEmitter<number> = new EventEmitter();
+
+  @Output() runLine: EventEmitter<string> = new EventEmitter();
+
+  private running: boolean = false;
+
+  content: string = 'main: ADDI R2, R3, 00F8h\nADD R4, R5, R6 ;commento\n';
+
+  get options() {
+    return {
+      lineNumbers: true,
+      firstLineNumber: 0,
+      lineNumberFormatter: (line: number) => line * 4,
+      theme: 'darktheme',
+      mode: this.mode,
+      styleActiveLine: true
+    }
+  }
+
+  get doc(): EditorFromTextArea {
+    return this.codeEditor && this.codeEditor.codeMirror;
+  }
+  
+  get currentLine(): number {
+    return this.pc / 4;
+  }
+
+  set currentLine(val: number) {
+    this.pc = val * 4;
+    this.pcChange.emit(this.pc);
+  }
+
+  get isRunDisabled(): boolean {
+    if(this.doc)
+      return this.currentLine >= this.doc.lineCount();
+    else
+      return false;
+  }
+
+  get isStopDisabled(): boolean {
+    return !this.running;
+  }
 
   constructor() { }
 
-  ngOnInit() {
+  ngAfterViewInit() {
+    this.doc.on("change", () => this.onStop());
   }
 
-  onFocus(event: MouseEvent) {
-    console.log(event);
+  onRun() {
+    if (this.currentLine > 0)
+      this.doc.removeLineClass(this.currentLine - 1, 'wrap', 'running');
+    this.doc.addLineClass(this.currentLine, 'wrap', 'running');
+    this.currentLine++;
+    this.running = true;
+    this.runLine.emit(this.doc.getLine(this.currentLine - 1));
   }
 
-  onKeydown(event: KeyboardEvent) {
-    event.preventDefault();
-    event.stopPropagation();
-    const currline = this.lines[this.cursor.y];
-    switch (event.key) {
-      case 'ArrowDown':
-        this.moveDown();
-        break;
-      case 'ArrowUp':
-        this.moveUp();
-        break;
-      case 'ArrowRight':
-        this.moveRight();
-        break;
-      case 'ArrowLeft':
-        this.moveLeft();
-        break;
-      case 'Enter':
-        this.lines[this.cursor.y] = currline.slice(0, this.cursor.x);
-        this.lines.splice(this.cursor.y + 1, 0, currline.slice(this.cursor.x));
-        this.cursor.y++;
-        this.cursor.x = 0;
-        break;
-      case 'Backspace':
-        if (this.cursor.x > 0) {
-          this.lines[this.cursor.y] = currline.slice(0, this.cursor.x - 1) + currline.slice(this.cursor.x);
-          this.moveLeft();
-        } else if (this.cursor.y > 0) {
-          this.moveLeft();
-          this.lines[this.cursor.y] += this.lines[this.cursor.y + 1];
-          this.lines.splice(this.cursor.y + 1, 1);
-        }
-        break;
-      case 'Delete':
-        if (this.cursor.x < currline.length) {
-          this.lines[this.cursor.y] = currline.slice(0, this.cursor.x) + currline.slice(this.cursor.x + 1);
-        } else if (this.cursor.y < this.lines.length - 1) {
-          this.lines[this.cursor.y] += this.lines[this.cursor.y + 1];
-          this.lines.splice(this.cursor.y + 1, 1);
-        }
-        break;
-      case 'Tab':
-        const spaces = 4 - this.cursor.x % 4;
-        this.lines[this.cursor.y] = currline.slice(0, this.cursor.x) + ' '.repeat(spaces) + currline.slice(this.cursor.x);
-        this.cursor.x += spaces;
-        break;
-      default :
-        if (event.key.length == 1) {
-          this.lines[this.cursor.y] = currline.slice(0, this.cursor.x) + event.key + currline.slice(this.cursor.x);
-          this.cursor.x++;
-        }
-        break;
-    }
-  
-    console.log(`${this.cursor.x}, ${this.cursor.y} | ${event.key}`);
-  }
-
-  moveDown() {
-    if (this.cursor.y < this.lines.length - 1) {
-      this.cursor.y++
-      const max = this.lines[this.cursor.y].length;
-      if (this.cursor.x > max) {
-        this.cursor.x = max;
-      }
-    }
-  }
-
-  moveUp() {
-    if (this.cursor.y > 0) {
-      this.cursor.y--;
-      const max = this.lines[this.cursor.y].length;
-      if (this.cursor.x > max) {
-        this.cursor.x = max;
-      }
-    }
-  }
-
-  moveRight() {
-    if (this.cursor.x < this.lines[this.cursor.y].length) {
-      this.cursor.x++;
-    } else {
-      this.moveDown();
-    }
-  }
-
-  moveLeft() {
-    if (this.cursor.x > 0) {
-      this.cursor.x--;
-    } else if(this.cursor.y > 0) {
-      this.moveUp();
-      this.cursor.x = this.lines[this.cursor.y].length;
-    }
+  onStop() {
+    this.doc.removeLineClass(this.currentLine - 1, 'wrap', 'running');
+    this.doc.removeLineClass(this.currentLine, 'wrap', 'running');
+    this.currentLine = 0;
+    this.running = false;
   }
 
 }

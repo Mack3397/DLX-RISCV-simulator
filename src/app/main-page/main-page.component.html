@@ -1,4 +1,4 @@
 <div class="main">
-    <app-editor></app-editor>
-    <app-registri></app-registri>
+    <app-editor [mode]="editorMode" [(pc)]="registri.pc" (runLine)="onRun($event)"></app-editor>
+    <app-registri [registri]="registri"></app-registri>
 </div>
