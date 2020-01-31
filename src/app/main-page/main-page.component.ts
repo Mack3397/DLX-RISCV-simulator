@@ -12,15 +12,14 @@ export class MainPageComponent implements OnInit {
 
   editorMode: string;
   interpreter: Interpreter;
-
-  registri = new Registri();
-
+  registri : Registri;
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.route.data.subscribe(data => {
       this.editorMode = data.editorMode;
       this.interpreter = data.interpreter;
+      this.registri = data.registri;
     })
   }
 

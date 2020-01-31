@@ -1,9 +1,9 @@
-<div class="registri">
+div class="registri">
     <div>
-        <span>registri</span>
-        <div class="registro" *ngFor="let r of registri.r">{{r | hex}}</div>
+        <span>Registri</span>
+        <div class="registro" *ngFor="let x of registri.x">{{x}}</div>
     </div>
-    <div>
+    <div >
         <span>iar</span>
         <div class="registro">{{registri.iar | hex}}</div>
         <span>pc</span>
@@ -20,5 +20,27 @@
         <div class="registro">{{registri.a | hex}}</div>
         <span>b</span>
         <div class="registro">{{registri.b | hex}}</div>
+    </div>
+    <div>
+        <span>PC</span>
+        <div class="registro">{{registri.pc | hex}}</div>
+        <span>Instruction</span>
+        <div class="registro">{{registri.instruction}}</div>
+        <span>Opcode</span>
+        <div class="registro">{{registri.opcode}}</div>
+        <span>RD</span>
+        <div class="registro">{{registri.rd}}</div>
+        <span>RS1</span>
+        <div class="registro">{{registri.rs1}}</div>
+        <span>RS2</span>
+        <div class="registro">{{registri.rs2}}</div>
+        <span>Func3</span>
+        <div class="registro">{{registri.func3}}</div>
+        <span>Func7</span>
+        <div class="registro">{{registri.func7}}</div>
+        <span>Immediate</span>
+        <div class="registro">{{registri.immediate}}</div>
+        <span>Jump-Offset</span>
+        <div class="registro">{{registri.jumpOffset}}</div>
     </div>
 </div>

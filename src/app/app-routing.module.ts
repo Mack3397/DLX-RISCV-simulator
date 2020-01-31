@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { DLXInterpreter } from './interpreters/DLX.interpreter';
+import { RV32Interpreter } from './interpreters/RV32I.interpreter';
+import { Registri } from './registri/registri';
 
 
 const routes: Routes = [
@@ -11,7 +13,17 @@ const routes: Routes = [
     component: MainPageComponent,
     data: {
       interpreter: new DLXInterpreter(),
-      editorMode: 'dlx'
+      editorMode: 'dlx',
+      registri : new Registri("DLX")
+    }
+  },
+  { 
+    path: 'rv32i',
+    component: MainPageComponent,
+    data: {
+      interpreter: new RV32Interpreter(),
+      editorMode: 'dlx',
+      registri : new Registri("RV32I")
     }
   },
 ];
