@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "DLXemu": {
+    "DLX-RISCV-simulator": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -17,7 +17,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/DLXemu",
+            "outputPath": "dist/DLX-RISCV-simulator",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -68,18 +68,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "DLXemu:build"
+            "browserTarget": "DLX-RISCV-simulator:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "DLXemu:build:production"
+              "browserTarget": "DLX-RISCV-simulator:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "DLXemu:build"
+            "browserTarget": "DLX-RISCV-simulator:build"
           }
         },
         "test": {
@@ -117,16 +117,16 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "DLXemu:serve"
+            "devServerTarget": "DLX-RISCV-simulator:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "DLXemu:serve:production"
+              "devServerTarget": "DLX-RISCV-simulator:serve:production"
             }
           }
         }
       }
     }
   },
-  "defaultProject": "DLXemu"
+  "defaultProject": "DLX-RISCV-simulator"
 }

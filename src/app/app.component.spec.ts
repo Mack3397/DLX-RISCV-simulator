@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'DLXemu'`, () => {
+  it(`should have as title 'DLX-RISCV-simulator'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('DLXemu');
+    expect(app.title).toEqual('DLX-RISCV-simulator');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('.content span').textContent).toContain('DLXemu app is running!');
+    expect(compiled.querySelector('.content span').textContent).toContain('DLX-RISCV-simulator app is running!');
   });
 });
