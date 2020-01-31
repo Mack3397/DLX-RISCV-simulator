@@ -5,7 +5,7 @@
             <div class="registro" *ngFor="let r of registri.r">{{r | format: fType}}</div>
         </ng-container>
         <ng-container *ngIf="isRV32I">
-            <div class="registro" *ngFor="let x of registri.x">{{x}}</div>
+            <div class="registro" *ngFor="let x of registri.x">{{x | format: fType}}</div>
         </ng-container>
     </div>
     <div *ngIf="isDLX">
@@ -30,23 +30,23 @@
         <span>PC</span>
         <div class="registro">{{registri.pc | format: fType}}</div>
         <span>Instruction</span>
-        <div class="registro">{{registri.instruction}}</div>
+        <div class="registro">{{registri.instruction | format: fType}}</div>
         <span>Opcode</span>
-        <div class="registro">{{registri.opcode}}</div>
+        <div class="registro">{{registri.opcode | format: fType : 7}}</div>
         <span>RD</span>
-        <div class="registro">{{registri.rd}}</div>
+        <div class="registro">{{registri.rd | format: fType : 5}}</div>
         <span>RS1</span>
-        <div class="registro">{{registri.rs1}}</div>
+        <div class="registro">{{registri.rs1 | format: fType : 5}}</div>
         <span>RS2</span>
-        <div class="registro">{{registri.rs2}}</div>
+        <div class="registro">{{registri.rs2 | format: fType : 5}}</div>
         <span>Func3</span>
-        <div class="registro">{{registri.func3}}</div>
+        <div class="registro">{{registri.func3 | format: fType : 3}}</div>
         <span>Func7</span>
-        <div class="registro">{{registri.func7}}</div>
+        <div class="registro">{{registri.func7 | format: fType : 7}}</div>
         <span>Immediate</span>
-        <div class="registro">{{registri.immediate}}</div>
+        <div class="registro">{{registri.immediate | format: fType : 20}}</div>
         <span>Jump-Offset</span>
-        <div class="registro">{{registri.jumpOffset}}</div>
+        <div class="registro">{{registri.jumpOffset | format: fType : 20}}</div>
     </div>
 </div>
 <mat-button-toggle-group name="fType" [(ngModel)]="fType">
