@@ -2,34 +2,33 @@
     <div>
         <span>Registri</span>
         <ng-container *ngIf="isDLX">
-            
-        <div class="registro" *ngFor="let r of registri.r">{{x | hex}}</div>
+            <div class="registro" *ngFor="let r of registri.r">{{r | format: fType}}</div>
         </ng-container>
         <ng-container *ngIf="isRV32I">
-        <div class="registro" *ngFor="let x of registri.x">{{x}}</div>
+            <div class="registro" *ngFor="let x of registri.x">{{x}}</div>
         </ng-container>
     </div>
     <div *ngIf="isDLX">
         <span>iar</span>
-        <div class="registro">{{registri.iar | hex}}</div>
+        <div class="registro">{{registri.iar | format: fType}}</div>
         <span>pc</span>
-        <div class="registro">{{registri.pc | hex}}</div>
+        <div class="registro">{{registri.pc | format: fType}}</div>
         <span>mar</span>
-        <div class="registro">{{registri.mar | hex}}</div>
+        <div class="registro">{{registri.mar | format: fType}}</div>
         <span>ir</span>
-        <div class="registro">{{registri.ir | hex}}</div>
+        <div class="registro">{{registri.ir | format: fType}}</div>
         <span>temp</span>
-        <div class="registro">{{registri.temp | hex}}</div>
+        <div class="registro">{{registri.temp | format: fType}}</div>
         <span>mdr</span>
-        <div class="registro">{{registri.mdr | hex}}</div>
+        <div class="registro">{{registri.mdr | format: fType}}</div>
         <span>a</span>
-        <div class="registro">{{registri.a | hex}}</div>
+        <div class="registro">{{registri.a | format: fType}}</div>
         <span>b</span>
-        <div class="registro">{{registri.b | hex}}</div>
+        <div class="registro">{{registri.b | format: fType}}</div>
     </div>
     <div *ngIf="isRV32I">
         <span>PC</span>
-        <div class="registro">{{registri.pc | hex}}</div>
+        <div class="registro">{{registri.pc | format: fType}}</div>
         <span>Instruction</span>
         <div class="registro">{{registri.instruction}}</div>
         <span>Opcode</span>
@@ -50,3 +49,8 @@
         <div class="registro">{{registri.jumpOffset}}</div>
     </div>
 </div>
+<mat-button-toggle-group name="fType" [(ngModel)]="fType">
+    <mat-button-toggle value="dec">Decimale</mat-button-toggle>
+    <mat-button-toggle value="bin">Binario</mat-button-toggle>
+    <mat-button-toggle value="hex">Esadecimale</mat-button-toggle>
+</mat-button-toggle-group>

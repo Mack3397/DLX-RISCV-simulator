@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -11,8 +12,8 @@ import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { RegistriComponent } from './registri/registri.component';
-import { HexPipe } from './pipes/hex.pipe';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FormatPipe } from './pipes/format.pipe';
 
 @NgModule({
   declarations: [
@@ -20,7 +21,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     EditorComponent,
     MainPageComponent,
     RegistriComponent,
-    HexPipe
+    FormatPipe
   ],
   imports: [
     BrowserModule,
@@ -28,6 +29,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AppRoutingModule,
     CodemirrorModule,
     MatButtonModule,
+    MatButtonToggleModule,
     MatToolbarModule,
     BrowserAnimationsModule,
   ],

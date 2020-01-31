@@ -10,6 +10,8 @@ export class RegistriComponent implements OnInit {
 
   @Input() registri: Registri;
 
+  fType: 'dec'|'bin'|'hex' = 'hex'
+
   get isDLX() {
     return this.registri.constructor.name === 'RegistriDLX';
   }
@@ -17,7 +19,6 @@ export class RegistriComponent implements OnInit {
   get isRV32I() {
     return this.registri.constructor.name === 'RegistriRV32I';
   }
-
 
   constructor() { }
 

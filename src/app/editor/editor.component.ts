@@ -36,7 +36,7 @@ export class EditorComponent implements AfterViewInit {
     return {
       lineNumbers: true,
       firstLineNumber: 0,
-      lineNumberFormatter: (line: number) => line * 4,
+      lineNumberFormatter: (line: number) => (line * 4).toString(16),
       theme: 'darktheme',
       mode: this.mode,
       styleActiveLine: true
