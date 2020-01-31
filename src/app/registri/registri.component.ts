@@ -13,11 +13,11 @@ export class RegistriComponent implements OnInit {
   fType: 'dec'|'bin'|'hex' = 'hex'
 
   get isDLX() {
-    return this.registri.constructor.name === 'RegistriDLX';
+    return this.registri.constructor.name === 'DLXRegistri';
   }
 
   get isRV32I() {
-    return this.registri.constructor.name === 'RegistriRV32I';
+    return this.registri.constructor.name === 'RV32IRegistri';
   }
 
   constructor() { }

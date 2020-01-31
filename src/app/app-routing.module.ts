@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
-import { DLXInterpreter } from './interpreters/DLX.interpreter';
+import { DLXInterpreter } from './interpreters/dlx.interpreter';
 import { RV32Interpreter } from './interpreters/RV32I.interpreter';
-import { RegistriDLX } from './registri/registri.dlx';
-import { RegistriRV32I } from './registri/registri.rv32i';
+import { DLXRegistri } from './registri/dlx.registri';
+import { RV32IRegistri } from './registri/rv32i.registri';
 
 
 const routes: Routes = [
@@ -15,7 +15,7 @@ const routes: Routes = [
     data: {
       interpreter: new DLXInterpreter(),
       editorMode: 'dlx',
-      registri : new RegistriDLX()
+      registri : new DLXRegistri()
     }
   },
   { 
@@ -24,7 +24,7 @@ const routes: Routes = [
     data: {
       interpreter: new RV32Interpreter(),
       editorMode: 'rv32i',
-      registri : new RegistriRV32I()
+      registri : new RV32IRegistri()
     }
   },
 ];

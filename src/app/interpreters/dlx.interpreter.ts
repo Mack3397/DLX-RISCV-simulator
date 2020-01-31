@@ -1,11 +1,11 @@
 import { Interpreter } from './interpreter';
 import { Registri } from '../registri/registri';
-import { RegistriDLX } from '../registri/registri.dlx';
+import { DLXRegistri } from '../registri/dlx.registri';
 
 export class DLXInterpreter extends Interpreter{
 
     //TODO specificare quali sono registri speciali
-    readonly instructions: {[key: string]: (args: (number|string)[], registers: RegistriDLX, memory: number[], unsigned?: boolean) => number} = {
+    readonly instructions: {[key: string]: (args: (number|string)[], registers: DLXRegistri, memory: number[], unsigned?: boolean) => number} = {
         ADD: (args, registers, memory) => this.overflowCheck(this.instructions['ADDU'](args, registers, memory)),
         ADDI: (args, registers, memory) => this.overflowCheck(this.instructions['ADDUI'](args, registers, memory, false)),
         ADDU: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a + registers.temp,
@@ -98,25 +98,25 @@ export class DLXInterpreter extends Interpreter{
         XORI: (args, registers, memory) => registers.r[this.prepI(args, registers, true)] = registers.a ^ registers.temp,
     };
 
-    prepR([rd, rs1, rs2]: (number|string)[], registers: RegistriDLX): number{
+    prepR([rd, rs1, rs2]: (number|string)[], registers: DLXRegistri): number{
         registers.a = registers.r[rs1];
         registers.temp = registers.b = registers.r[rs2];
         return rd as number;
     }
 
-    prepI([rd, rs1, immediate]: (number|string)[], registers: RegistriDLX, unsigned: boolean = false): number{
+    prepI([rd, rs1, immediate]: (number|string)[], registers: DLXRegistri, unsigned: boolean = false): number{
         registers.a = registers.r[rs1];
         registers.b = registers.r[rd];
         registers.temp = unsigned ? immediate as number : this.signExtend(immediate as number);
         return rd as number;
     }
 
-    prepILoad([rd, offset, rs1]: (number|string)[], registers: RegistriDLX): [number, number] {
+    prepILoad([rd, offset, rs1]: (number|string)[], registers: DLXRegistri): [number, number] {
         registers.mar = Math.floor((this.signExtend(offset as number) + registers.r[rs1]) / 4)
         return [rd, offset] as [number, number];
     }
 
-    prepIStore([offset, rs1, rd]: (number|string)[], registers: RegistriDLX): [number, number] {
+    prepIStore([offset, rs1, rd]: (number|string)[], registers: DLXRegistri): [number, number] {
         registers.mar = Math.floor((this.signExtend(offset as number) + registers.r[rs1]) / 4)
         return [rd, offset] as [number, number];
     }
@@ -170,6 +170,6 @@ export class DLXInterpreter extends Interpreter{
         });
 
         if (this.instructions[instruction])
-            this.instructions[instruction](argsFixed, registers as RegistriDLX, memory);
+            this.instructions[instruction](argsFixed, registers as DLXRegistri, memory);
     }
 }
