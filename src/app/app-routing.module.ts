@@ -23,7 +23,7 @@ const routes: Routes = [
     component: MainPageComponent,
     data: {
       interpreter: new RV32Interpreter(),
-      editorMode: 'dlx',
+      editorMode: 'rv32i',
       registri : new RegistriRV32I()
     }
   },

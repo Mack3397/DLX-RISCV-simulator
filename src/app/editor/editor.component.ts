@@ -1,5 +1,6 @@
 import 'codemirror/addon/selection/active-line'
 import './modes/dlx.js';
+import './modes/rv32i.js';
 import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { EditorFromTextArea } from 'codemirror';
@@ -21,8 +22,15 @@ export class EditorComponent implements AfterViewInit {
   @Output() runLine: EventEmitter<string> = new EventEmitter();
 
   private running: boolean = false;
+  content: string = 'ADDI R1, R0, 80F8h\nLH R1, 7FFFh\nLHI R2, 7FFFh\nADD R3, R1, R2 ;commento\nLUI R1, 7FFFh';
 
-  content: string = 'ADDI R1, R0, 80F8h\nLHI R1, 7FFFh\nLHI R2, 7FFFh\nADD R3, R1, R2 ;commento\n';
+  set start(val: string) {
+    this.pcChange.emit(parseInt(val, 16));
+  }
+
+  get start() {
+    return this.pc.toString(16);
+  }
 
   get options() {
     return {
