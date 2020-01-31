@@ -11,10 +11,10 @@
   /** elenco istruzioni diviso per tipo, register, immediate e jump
     * IJ sarebbero le istruzioni di tipo immediate che però si comportano come jump
   */
-  const instructions_R = 'ADD|ADDU|AND|DIV|DIVU|MOVI2S|MOVS2I|MULT|MULTU|NOP|OR|SEQ|SGE|SGT|SLE|SLL|SLT|SNE|SRA|SRL|SUB|SUBU|XOR';
-  const instructions_I = 'ADDI|ADDUI|ANDI|LB|LBU|LH|LHI|LHU|LW|ORI|SB|SEQI|SGEI|SGTI|SH|SLEI|SLLI|SLTI|SNEI|SRAI|SRLI|SUBI|SUBUI|SW|XORI';
+  const instructions_R = 'ADDU|ADD|AND|DIV|MOVI2S|MOVS2I|MULT|NOP|OR|SEQ|SGE|SGT|SLE|SLL|SLT|SNE|SRA|SRL|SUBU|SUB|XOR';
+  const instructions_I = 'ADDI|ADDUI|ANDI|DIVI|LBU|LB|LHI|LHU|LH|LW|MULTI|ORI|SB|SEQI|SGEI|SGTI|SH|SLEI|SLLI|SLTI|SNEI|SRAI|SRLI|SUBI|SUBUI|SW|XORI';
   const instructions_IJ = 'BEQZ|BNEZ|JALR|JR';
-  const instructions_J = 'J|JAL|RFE|TRAP';
+  const instructions_J = 'JAL|J|RFE|TRAP';
 
   CodeMirror.defineMode('dlx', function(){
     return {
@@ -43,13 +43,13 @@
           style = 'keyword-i';
         } else if (stream.match(RegExp('^('+instructions_R+')', 'i'))) {
           style = 'keyword';
-        } else if (stream.match(/^R\d{1,2}/i)) {
+        } else if (stream.match(/^R[123]?\d/i)) {
           style = 'variable';
           if (state.first) {
             style += '-2';
             state.first = false;
           }
-        } else if (stream.match(/^(([0-9A-F]+h)|([01]+b))/)) {
+        } else if (stream.match(/^(([0-9A-F]{4}H)|([01]{16}B))/i)) {
           style = 'number';
         } else if (state.j_instruction && stream.match(/^\w+/)) {
           style = 'tag';

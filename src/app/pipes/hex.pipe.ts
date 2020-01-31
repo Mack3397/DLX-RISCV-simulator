@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class HexPipe implements PipeTransform {
 
   transform(value: number, ...args: any[]): any {
-    return value.toString(16).padStart(8,'0').toUpperCase();
+    return (value >>> 0).toString(16).padStart(8,'0').toUpperCase();
   }
 
 }

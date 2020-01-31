@@ -22,7 +22,7 @@ export class EditorComponent implements AfterViewInit {
 
   private running: boolean = false;
 
-  content: string = 'main: ADDI R2, R3, 00F8h\nADD R4, R5, R6 ;commento\n';
+  content: string = 'ADDI R1, R0, 80F8h\nLHI R1, 7FFFh\nLHI R2, 7FFFh\nADD R3, R1, R2 ;commento\n';
 
   get options() {
     return {
@@ -62,7 +62,7 @@ export class EditorComponent implements AfterViewInit {
   constructor() { }
 
   ngAfterViewInit() {
-    this.doc.on("change", () => this.onStop());
+    this.doc.on("change", (event) => this.onStop());
   }
 
   onRun() {

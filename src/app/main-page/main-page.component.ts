@@ -12,6 +12,7 @@ export class MainPageComponent implements OnInit {
 
   editorMode: string;
   interpreter: Interpreter;
+  memory: number[] = [];
   registri : Registri;
   constructor(private route: ActivatedRoute) { }
 
@@ -24,7 +25,7 @@ export class MainPageComponent implements OnInit {
   }
 
   onRun(line: string) {
-    this.interpreter.run(line, this.registri);
+    this.interpreter.run(line, this.registri, this.memory);
   }
 
 }

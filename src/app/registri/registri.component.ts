@@ -10,6 +10,15 @@ export class RegistriComponent implements OnInit {
 
   @Input() registri: Registri;
 
+  get isDLX() {
+    return this.registri.constructor.name === 'RegistriDLX';
+  }
+
+  get isRV32I() {
+    return this.registri.constructor.name === 'RegistriRV32I';
+  }
+
+
   constructor() { }
 
   ngOnInit() {

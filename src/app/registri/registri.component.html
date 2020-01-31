@@ -1,9 +1,15 @@
-div class="registri">
+<div class="registri">
     <div>
         <span>Registri</span>
+        <ng-container *ngIf="isDLX">
+            
+        <div class="registro" *ngFor="let r of registri.r">{{x | hex}}</div>
+        </ng-container>
+        <ng-container *ngIf="isRV32I">
         <div class="registro" *ngFor="let x of registri.x">{{x}}</div>
+        </ng-container>
     </div>
-    <div >
+    <div *ngIf="isDLX">
         <span>iar</span>
         <div class="registro">{{registri.iar | hex}}</div>
         <span>pc</span>
@@ -21,7 +27,7 @@ div class="registri">
         <span>b</span>
         <div class="registro">{{registri.b | hex}}</div>
     </div>
-    <div>
+    <div *ngIf="isRV32I">
         <span>PC</span>
         <div class="registro">{{registri.pc | hex}}</div>
         <span>Instruction</span>

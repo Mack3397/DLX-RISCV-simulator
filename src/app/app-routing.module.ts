@@ -3,7 +3,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { DLXInterpreter } from './interpreters/DLX.interpreter';
 import { RV32Interpreter } from './interpreters/RV32I.interpreter';
-import { Registri } from './registri/registri';
+import { RegistriDLX } from './registri/registri.dlx';
+import { RegistriRV32I } from './registri/registri.rv32i';
 
 
 const routes: Routes = [
@@ -14,7 +15,7 @@ const routes: Routes = [
     data: {
       interpreter: new DLXInterpreter(),
       editorMode: 'dlx',
-      registri : new Registri("DLX")
+      registri : new RegistriDLX()
     }
   },
   { 
@@ -23,7 +24,7 @@ const routes: Routes = [
     data: {
       interpreter: new RV32Interpreter(),
       editorMode: 'dlx',
-      registri : new Registri("RV32I")
+      registri : new RegistriRV32I()
     }
   },
 ];
