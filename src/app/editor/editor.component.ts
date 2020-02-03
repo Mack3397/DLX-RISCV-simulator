@@ -76,7 +76,6 @@ export class EditorComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
     if (this.doc) {
       let pre = Math.floor(changes.pc.previousValue / 4);
       let cur = Math.floor(changes.pc.currentValue / 4);

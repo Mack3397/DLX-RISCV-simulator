@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Registri } from '../registri/registri';
 import { ActivatedRoute } from '@angular/router';
 import { Interpreter } from '../interpreters/interpreter';
+import { Memory } from '../memory/memory';
 
 @Component({
   selector: 'app-main-page',
@@ -12,9 +13,14 @@ export class MainPageComponent implements OnInit {
 
   editorMode: string;
   interpreter: Interpreter;
-  memory: number[] = [];
+  memory: Memory;
   registri : Registri;
-  constructor(private route: ActivatedRoute) { }
+
+  constructor(private route: ActivatedRoute) {
+    this.memory = new Memory();
+    //inizializzo 2 mB di memoria;
+    this.memory.add('RAM', 0x10000000, 0x20000000);
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

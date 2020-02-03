@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
-import { DLXInterpreter } from './interpreters/dlx.interpreter';
-import { RV32Interpreter } from './interpreters/RV32I.interpreter';
+import { DLXInterpreter } from './interpreters/dlx/dlx.interpreter';
+import { RV32Interpreter } from './interpreters/rv32i.interpreter';
 import { DLXRegistri } from './registri/dlx.registri';
 import { RV32IRegistri } from './registri/rv32i.registri';
 
