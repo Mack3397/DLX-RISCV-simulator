@@ -1,18 +1,18 @@
 export class Device {
     name: string
     private memory: number[];
-    address: number;
-    size: number;
+    min_address: number;
+    max_address: number;
 
-    constructor(name: string, address: number, size: number) {
+    constructor(name: string, min_address: number, max_address: number) {
         this.name = name;
         this.memory = [];
-        this.address = address;
-        this.size = size;
+        this.min_address = min_address;
+        this.max_address = max_address;
     }
 
     public checkAddress(address: number): boolean {
-        return this.address <= address && address >= this.address + this.size;
+        return this.min_address <= address && address <= this.max_address;
     }
 
     public load(address: number): number {

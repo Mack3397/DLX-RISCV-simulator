@@ -1,15 +1,16 @@
-import { Interpreter } from './interpreter';
-import { Registri } from '../registri/registri';
-import { DLXRegistri } from '../registri/dlx.registri';
+import { Interpreter } from '../interpreter';
+import { Registri } from '../../registri/registri';
+import { DLXRegistri } from '../../registri/dlx.registri';
+import { Memory } from 'src/app/memory/memory';
 
 export class DLXInterpreter extends Interpreter{
 
     //TODO aggiungi registro c
 
     //TODO specificare quali sono registri speciali
-    readonly instructions: {[key: string]: (args: (number)[], registers: DLXRegistri, memory: number[], unsigned?: boolean) => number} = {
-        ADD: (args, registers, memory) => this.overflowCheck(this.instructions['ADDU'](args, registers, memory)),
-        ADDI: (args, registers, memory) => this.overflowCheck(this.instructions['ADDUI'](args, registers, memory, false)),
+    readonly instructions: {[key: string]: (args: number[], registers: DLXRegistri, memory?: Memory, unsigned?: boolean) => number} = {
+        ADD: (args, registers) => this.overflowCheck(this.instructions['ADDU'](args, registers)),
+        ADDI: (args, registers) => this.overflowCheck(this.instructions['ADDUI'](args, registers, null, false)),
         ADDU: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a + registers.temp,
         ADDUI: (args, registers, memory, unsigned = true) => registers.r[this.prepI(args, registers, unsigned)] = registers.a + registers.temp,
         AND: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a & registers.temp,
@@ -24,28 +25,28 @@ export class DLXInterpreter extends Interpreter{
         JR: () => null,
         LB: (args, registers, memory) => {
             let [rd, offset] = this.prepILoad(args, registers);
-            registers.mdr = memory[registers.mar] || 0;
+            registers.mdr = memory.load(registers.mar);
             return registers.r[rd] = this.signExtend(this.load(registers.mdr, offset, 'byte'), 8);
         },
         LBU: (args, registers, memory) => {
             let [rd, offset] = this.prepILoad(args, registers);
-            registers.mdr = memory[registers.mar] || 0;
+            registers.mdr = memory.load(registers.mar);
             return registers.r[rd] = this.load(registers.mdr, offset, 'byte');
         },
         LH: (args, registers, memory) => {
             let [rd, offset] = this.prepILoad(args, registers);
-            registers.mdr = memory[registers.mar] || 0;
+            registers.mdr = memory.load(registers.mar);
             return registers.r[rd] = this.signExtend(this.load(registers.mdr, offset, 'halfword'));
         },
-        LHI: ([rd, immediate], registers) => registers.r[rd] = (immediate as number) << 16,
+        LHI: ([rd, immediate], registers) => registers.r[rd] = immediate << 16,
         LHU: (args, registers, memory) => {
             let [rd, offset] = this.prepILoad(args, registers);
-            registers.mdr = memory[registers.mar] || 0;
+            registers.mdr = memory.load(registers.mar);
             return registers.r[rd] = this.load(registers.mdr, offset, 'halfword');
         },
         LW: (args, registers, memory) => {
             let [rd, offset] = this.prepILoad(args, registers);
-            registers.mdr = memory[registers.mar] || 0;
+            registers.mdr = memory.load(registers.mar);
             return registers.r[rd] = registers.mdr;
         },
         MOVI2S: ([rd, rs1], registers) => registers[rd] = registers.a = registers.r[rs1],
@@ -61,7 +62,7 @@ export class DLXInterpreter extends Interpreter{
         SB: (args, registers, memory) => {
             let [rd, offset] = this.prepIStore(args, registers);
             registers.mdr = registers.r[rd];
-            return memory[registers.mar] = this.store(registers.mdr, memory[registers.mar], offset, 'byte');
+            return memory.store(registers.mar, this.store(registers.mdr, memory.load(registers.mar), offset, 'byte'));
         },
         SEQ: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a == registers.temp ? 1 : 0,
         SEQI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a == registers.temp ? 1 : 0,
@@ -72,7 +73,7 @@ export class DLXInterpreter extends Interpreter{
         SH: (args, registers, memory) => {
             let [rd, offset] = this.prepIStore(args, registers);
             registers.mdr = registers.r[rd];
-            return memory[registers.mar] = this.store(registers.mdr, memory[registers.mar], offset, 'halfword');
+            return memory.store(registers.mar, this.store(registers.mdr, memory.load(registers.mar), offset, 'halfword'));
         },
         SLE: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a <= registers.temp ? 1 : 0,
         SLEI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a <= registers.temp ? 1 : 0,
@@ -93,7 +94,7 @@ export class DLXInterpreter extends Interpreter{
         SW: (args, registers, memory) => {
             let [rd, offset] = this.prepIStore(args, registers);
             registers.mdr = registers.r[rd];
-            return memory[registers.mar] = registers.mdr;
+            return memory.store(registers.mar, registers.mdr);
         },
         TRAP: () => null,
         XOR: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a ^ registers.temp,
@@ -103,28 +104,28 @@ export class DLXInterpreter extends Interpreter{
     prepR([rd, rs1, rs2]: (number)[], registers: DLXRegistri): number{
         registers.a = registers.r[rs1];
         registers.temp = registers.b = registers.r[rs2];
-        return rd as number;
+        return rd;
     }
 
     prepI([rd, rs1, immediate]: (number)[], registers: DLXRegistri, unsigned: boolean = false): number{
         registers.a = registers.r[rs1];
         registers.b = registers.r[rd];
-        registers.temp = unsigned ? immediate as number : this.signExtend(immediate as number);
-        return rd as number;
+        registers.temp = unsigned ? immediate : this.signExtend(immediate);
+        return rd;
     }
 
     prepILoad([rd, offset, rs1]: (number)[], registers: DLXRegistri): [number, number] {
-        registers.mar = Math.floor((this.signExtend(offset as number) + registers.r[rs1]) / 4)
-        return [rd, offset] as [number, number];
+        registers.mar = Math.floor((this.signExtend(offset) + registers.r[rs1]) / 4);
+        return [rd, offset];
     }
 
     prepIStore([offset, rs1, rd]: (number)[], registers: DLXRegistri): [number, number] {
-        registers.mar = Math.floor((this.signExtend(offset as number) + registers.r[rs1]) / 4)
-        return [rd, offset] as [number, number];
+        registers.mar = Math.floor((this.signExtend(offset) + registers.r[rs1]) / 4);
+        return [rd, offset];
     }
 
     overflowCheck(n: number) {
-        if (n > 2147483647) {
+        if (n > 0x7FFFFFFF) {
             // throw new Error('overflow');
             console.log('overflow');
         }
@@ -155,10 +156,10 @@ export class DLXInterpreter extends Interpreter{
         if (n == 0) return 0;
         if (dim === 'halfword' && offset % 2 != 0) { console.log('fault'); return 0 }
         let m = this.mask[dim];
-        return (n & m[0]) | (dest & ~m[offset % 4]);
+        return ((n & m[0]) << ((offset % 4)*8)) | (dest & ~m[offset % 4]);
     }
 
-    run(line: string, registers: Registri, memory: number[]): void {
+    run(line: string, registers: Registri, memory: Memory): void {
         let tokens = line.split(/\W+/);
         if (!tokens[0] || line.match(/\w+:/)) tokens.shift();
 
