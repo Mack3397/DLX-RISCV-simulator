@@ -4,18 +4,20 @@ import { DLXRegistri } from '../registri/dlx.registri';
 
 export class DLXInterpreter extends Interpreter{
 
+    //TODO aggiungi registro c
+
     //TODO specificare quali sono registri speciali
-    readonly instructions: {[key: string]: (args: (number|string)[], registers: DLXRegistri, memory: number[], unsigned?: boolean) => number} = {
+    readonly instructions: {[key: string]: (args: (number)[], registers: DLXRegistri, memory: number[], unsigned?: boolean) => number} = {
         ADD: (args, registers, memory) => this.overflowCheck(this.instructions['ADDU'](args, registers, memory)),
         ADDI: (args, registers, memory) => this.overflowCheck(this.instructions['ADDUI'](args, registers, memory, false)),
-        ADDU: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a + registers.temp,
+        ADDU: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a + registers.temp,
         ADDUI: (args, registers, memory, unsigned = true) => registers.r[this.prepI(args, registers, unsigned)] = registers.a + registers.temp,
-        AND: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a & registers.temp,
-        ANDI: (args, registers, memory) => registers.r[this.prepI(args, registers, true)] = registers.a & registers.temp,
+        AND: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a & registers.temp,
+        ANDI: (args, registers) => registers.r[this.prepI(args, registers, true)] = registers.a & registers.temp,
         BEQZ: () => null,
-        BNEZ: () => null,
-        DIV: (args, registers, memory) => Math.floor(registers.r[this.prepR(args, registers)] = registers.a / registers.temp),
-        DIVI: (args, registers, memory) => Math.floor(registers.r[this.prepI(args, registers)] = registers.a / registers.temp),
+        BNEZ: ([rs1, name], registers) => registers.r[rs1] !== 0 ? registers.pc = name : 0,
+        DIV: (args, registers) => Math.floor(registers.r[this.prepR(args, registers)] = registers.a / registers.temp),
+        DIVI: (args, registers) => Math.floor(registers.r[this.prepI(args, registers)] = registers.a / registers.temp),
         J: () => null,
         JAL: () => null,
         JALR: () => null,
@@ -35,7 +37,7 @@ export class DLXInterpreter extends Interpreter{
             registers.mdr = memory[registers.mar] || 0;
             return registers.r[rd] = this.signExtend(this.load(registers.mdr, offset, 'halfword'));
         },
-        LHI: ([rd, immediate], registers, memory) => registers.r[rd] = (immediate as number) << 16,
+        LHI: ([rd, immediate], registers) => registers.r[rd] = (immediate as number) << 16,
         LHU: (args, registers, memory) => {
             let [rd, offset] = this.prepILoad(args, registers);
             registers.mdr = memory[registers.mar] || 0;
@@ -46,47 +48,47 @@ export class DLXInterpreter extends Interpreter{
             registers.mdr = memory[registers.mar] || 0;
             return registers.r[rd] = registers.mdr;
         },
-        MOVI2S: ([rd, rs1], registers, memory) => registers[rd] = registers.a = registers.r[rs1],
-        MOVS2I: ([rd, rs1], registers, memory) => registers.r[rs1] = registers[rd],
+        MOVI2S: ([rd, rs1], registers) => registers[rd] = registers.a = registers.r[rs1],
+        MOVS2I: ([rd, rs1], registers) => registers.r[rs1] = registers[rd],
         //? sulle slide si chiama MUL e nel libro dice che funziona con FPR e non GPR (stessa cosa div)
-        MULT: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a * registers.temp,
+        MULT: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a * registers.temp,
         //? qui e DIVI non ci sono nel libro al loro posto è definito DIVU e MULTU
-        MULTI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a * registers.temp,
-        NOP: (args, registers, memory) => null,
-        OR: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a | registers.temp,
-        ORI: (args, registers, memory) => registers.r[this.prepI(args, registers, true)] = registers.a | registers.temp,
+        MULTI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a * registers.temp,
+        NOP: () => null,
+        OR: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a | registers.temp,
+        ORI: (args, registers) => registers.r[this.prepI(args, registers, true)] = registers.a | registers.temp,
         RFE: () => null,
         SB: (args, registers, memory) => {
             let [rd, offset] = this.prepIStore(args, registers);
             registers.mdr = registers.r[rd];
             return memory[registers.mar] = this.store(registers.mdr, memory[registers.mar], offset, 'byte');
         },
-        SEQ: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a == registers.temp ? 1 : 0,
-        SEQI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a == registers.temp ? 1 : 0,
-        SGE: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a >= registers.temp ? 1 : 0,
-        SGEI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a >= registers.temp ? 1 : 0,
-        SGT: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a > registers.temp ? 1 : 0,
-        SGTI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a > registers.temp ? 1 : 0,
+        SEQ: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a == registers.temp ? 1 : 0,
+        SEQI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a == registers.temp ? 1 : 0,
+        SGE: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a >= registers.temp ? 1 : 0,
+        SGEI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a >= registers.temp ? 1 : 0,
+        SGT: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a > registers.temp ? 1 : 0,
+        SGTI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a > registers.temp ? 1 : 0,
         SH: (args, registers, memory) => {
             let [rd, offset] = this.prepIStore(args, registers);
             registers.mdr = registers.r[rd];
             return memory[registers.mar] = this.store(registers.mdr, memory[registers.mar], offset, 'halfword');
         },
-        SLE: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a <= registers.temp ? 1 : 0,
-        SLEI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a <= registers.temp ? 1 : 0,
-        SLL: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a << (registers.temp & 0x1F),
-        SLLI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a << (registers.temp & 0x1F),
-        SLT: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a < registers.temp ? 1 : 0,
-        SLTI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a < registers.temp ? 1 : 0,
-        SNE: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a != registers.temp ? 1 : 0,
-        SNEI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a != registers.temp ? 1 : 0,
-        SRA: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a >> (registers.temp & 0x1F),
-        SRAI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a >> (registers.temp & 0x1F),
-        SRL: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a >>> (registers.temp & 0x1F),
-        SRLI: (args, registers, memory) => registers.r[this.prepI(args, registers)] = registers.a >>> (registers.temp & 0x1F),
+        SLE: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a <= registers.temp ? 1 : 0,
+        SLEI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a <= registers.temp ? 1 : 0,
+        SLL: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a << (registers.temp & 0x1F),
+        SLLI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a << (registers.temp & 0x1F),
+        SLT: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a < registers.temp ? 1 : 0,
+        SLTI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a < registers.temp ? 1 : 0,
+        SNE: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a != registers.temp ? 1 : 0,
+        SNEI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a != registers.temp ? 1 : 0,
+        SRA: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a >> (registers.temp & 0x1F),
+        SRAI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a >> (registers.temp & 0x1F),
+        SRL: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a >>> (registers.temp & 0x1F),
+        SRLI: (args, registers) => registers.r[this.prepI(args, registers)] = registers.a >>> (registers.temp & 0x1F),
         SUB: (args, registers, memory) => this.overflowCheck(this.instructions['SUBU'](args, registers, memory)),
         SUBI: (args, registers, memory) => this.overflowCheck(this.instructions['SUBUI'](args, registers, memory, false)),
-        SUBU: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a - registers.temp,
+        SUBU: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a - registers.temp,
         SUBUI: (args, registers, memory, unsigned = true) => registers.r[this.prepI(args, registers, unsigned)] = registers.a - registers.temp,
         SW: (args, registers, memory) => {
             let [rd, offset] = this.prepIStore(args, registers);
@@ -94,29 +96,29 @@ export class DLXInterpreter extends Interpreter{
             return memory[registers.mar] = registers.mdr;
         },
         TRAP: () => null,
-        XOR: (args, registers, memory) => registers.r[this.prepR(args, registers)] = registers.a ^ registers.temp,
-        XORI: (args, registers, memory) => registers.r[this.prepI(args, registers, true)] = registers.a ^ registers.temp,
+        XOR: (args, registers) => registers.r[this.prepR(args, registers)] = registers.a ^ registers.temp,
+        XORI: (args, registers) => registers.r[this.prepI(args, registers, true)] = registers.a ^ registers.temp,
     };
 
-    prepR([rd, rs1, rs2]: (number|string)[], registers: DLXRegistri): number{
+    prepR([rd, rs1, rs2]: (number)[], registers: DLXRegistri): number{
         registers.a = registers.r[rs1];
         registers.temp = registers.b = registers.r[rs2];
         return rd as number;
     }
 
-    prepI([rd, rs1, immediate]: (number|string)[], registers: DLXRegistri, unsigned: boolean = false): number{
+    prepI([rd, rs1, immediate]: (number)[], registers: DLXRegistri, unsigned: boolean = false): number{
         registers.a = registers.r[rs1];
         registers.b = registers.r[rd];
         registers.temp = unsigned ? immediate as number : this.signExtend(immediate as number);
         return rd as number;
     }
 
-    prepILoad([rd, offset, rs1]: (number|string)[], registers: DLXRegistri): [number, number] {
+    prepILoad([rd, offset, rs1]: (number)[], registers: DLXRegistri): [number, number] {
         registers.mar = Math.floor((this.signExtend(offset as number) + registers.r[rs1]) / 4)
         return [rd, offset] as [number, number];
     }
 
-    prepIStore([offset, rs1, rd]: (number|string)[], registers: DLXRegistri): [number, number] {
+    prepIStore([offset, rs1, rd]: (number)[], registers: DLXRegistri): [number, number] {
         registers.mar = Math.floor((this.signExtend(offset as number) + registers.r[rs1]) / 4)
         return [rd, offset] as [number, number];
     }
@@ -157,8 +159,11 @@ export class DLXInterpreter extends Interpreter{
     }
 
     run(line: string, registers: Registri, memory: number[]): void {
-        let [instruction, ... args] = line.split(/\W+/);
-    
+        let tokens = line.split(/\W+/);
+        if (!tokens[0] || line.match(/\w+:/)) tokens.shift();
+
+        let [instruction, ... args] = tokens;
+
         let argsFixed = args.map<number>(arg => {
             if (arg.match(/^R[123]?\d/i)) {
                 return parseInt(arg.substr(1));
@@ -166,8 +171,12 @@ export class DLXInterpreter extends Interpreter{
                 return parseInt(arg.substr(0, 4), 16)
             } else if (arg.match(/^[01]{16}B/i)) {
                 return parseInt(arg.substr(0, 4), 2)
+            } else if (this.tags[arg]) {
+                return this.tags[arg];
             } else return 0;
         });
+
+        // possos parsare qui i tag per le jump
 
         if (this.instructions[instruction])
             this.instructions[instruction](argsFixed, registers as DLXRegistri, memory);

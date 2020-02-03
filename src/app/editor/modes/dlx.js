@@ -19,10 +19,11 @@
   CodeMirror.defineMode('dlx', function(){
     return {
       startState: function(){
-        return { first: true, j_instruction: false };
+        return { first: true, j_instruction: false, indent: 0};
       },
       token: function(stream, state){
         let style;
+        let matched;
 
         if (stream.sol()) {
           state.first = true;
@@ -30,9 +31,10 @@
         }
 
         if (stream.match(/^;.*/)) {
-          style = 'comment'
-        } else if (stream.match(/^\w+:/)) {
-          style = 'tag'
+          style = 'comment';
+        } else if (matched = stream.match(/^\w+:/)) {
+          style = 'tag';
+          state.indent = matched[0].length + 1;
         } else if (stream.match(RegExp('^('+instructions_J+')', 'i'))) {
           style = 'keyword-j';
           state.j_instruction = true;
@@ -42,7 +44,7 @@
         } else if (stream.match(RegExp('^('+instructions_I+')', 'i'))) {
           style = 'keyword-i';
         } else if (stream.match(RegExp('^('+instructions_R+')', 'i'))) {
-          style = 'keyword';
+          style = 'keyword-r';
         } else if (stream.match(/^R[123]?\d/i)) {
           style = 'variable';
           if (state.first) {
@@ -61,6 +63,7 @@
         return style;
       },
       indent: function(state){
+        return state.indent;
       }
     };
   });

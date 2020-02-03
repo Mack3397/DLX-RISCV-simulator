@@ -2,7 +2,12 @@
     <div>
         <span>Registri</span>
         <ng-container *ngIf="isDLX">
-            <div class="registro" *ngFor="let r of registri.r">{{r | format: fType}}</div>
+            <div class="gpd" *ngFor="let r of registri.r; index as i">
+                <div class="index">{{i}}</div>
+                <div class="registro">
+                    {{r | format: fType}}
+                </div>
+            </div>
         </ng-container>
         <ng-container *ngIf="isRV32I">
             <div class="registro" *ngFor="let x of registri.x">{{x | format: fType}}</div>

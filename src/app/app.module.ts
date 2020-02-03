@@ -14,6 +14,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 import { RegistriComponent } from './registri/registri.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormatPipe } from './pipes/format.pipe';
+import { MemoryComponent } from './memory/memory.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { FormatPipe } from './pipes/format.pipe';
     EditorComponent,
     MainPageComponent,
     RegistriComponent,
-    FormatPipe
+    FormatPipe,
+    MemoryComponent
   ],
   imports: [
     BrowserModule,

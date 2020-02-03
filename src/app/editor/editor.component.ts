@@ -1,7 +1,7 @@
 import 'codemirror/addon/selection/active-line'
 import './modes/dlx.js';
 import './modes/rv32i.js';
-import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { EditorFromTextArea } from 'codemirror';
 
@@ -10,7 +10,7 @@ import { EditorFromTextArea } from 'codemirror';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.sass']
 })
-export class EditorComponent implements AfterViewInit {
+export class EditorComponent implements AfterViewInit, OnChanges {
 
   @ViewChild('codeEditor', { static: false }) codeEditor: CodemirrorComponent;
 
@@ -20,9 +20,11 @@ export class EditorComponent implements AfterViewInit {
   @Output() pcChange: EventEmitter<number> = new EventEmitter();
 
   @Output() runLine: EventEmitter<string> = new EventEmitter();
+  @Output() doParseTags: EventEmitter<string> = new EventEmitter();
 
+  private prePc: number = 0;
   private running: boolean = false;
-  content: string = 'ADDI R1, R0, 80F8h\nLH R1, 7FFFh\nLHI R2, 7FFFh\nADD R3, R1, R2 ;commento\nLUI R1, 7FFFh';
+  content: string = '      ADDI R1, R0, 0008h\nloop: ADD R2, R2, R1\n      SUBI R1, R1, 0001h\n      BNEZ R1, loop';
 
   set start(val: string) {
     this.pcChange.emit(parseInt(val, 16));
@@ -73,18 +75,36 @@ export class EditorComponent implements AfterViewInit {
     this.doc.on("change", (event) => this.onStop());
   }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes);
+    if (this.doc) {
+      let pre = Math.floor(changes.pc.previousValue / 4);
+      let cur = Math.floor(changes.pc.currentValue / 4);
+      if (!this.running) {
+        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
+        this.doc.removeLineClass(pre, 'wrap', 'next');
+      } else if (changes.pc) {
+        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
+        this.doc.removeLineClass(pre, 'wrap', 'next');
+        this.doc.addLineClass(pre, 'wrap', 'runned');
+        if (cur < this.doc.lineCount()) {
+          this.doc.addLineClass(cur, 'wrap', 'next');
+        }
+        this.prePc = pre;
+      }
+    }
+  }
+
   onRun() {
-    if (this.currentLine > 0)
-      this.doc.removeLineClass(this.currentLine - 1, 'wrap', 'running');
-    this.doc.addLineClass(this.currentLine, 'wrap', 'running');
     this.currentLine++;
-    this.running = true;
+    if (!this.running) {
+      this.doParseTags.emit(this.content);
+      this.running = true;
+    }
     this.runLine.emit(this.doc.getLine(this.currentLine - 1));
   }
 
   onStop() {
-    this.doc.removeLineClass(this.currentLine - 1, 'wrap', 'running');
-    this.doc.removeLineClass(this.currentLine, 'wrap', 'running');
     this.currentLine = 0;
     this.running = false;
   }

@@ -28,4 +28,7 @@ export class MainPageComponent implements OnInit {
     this.interpreter.run(line, this.registri, this.memory);
   }
 
+  doParseTags(code: string) {
+    this.interpreter.parseTags(code);
+  }
 }
