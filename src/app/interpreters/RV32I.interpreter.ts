@@ -5,7 +5,7 @@ import { Memory } from '../memory/memory';
 
 export class RV32Interpreter extends Interpreter {
 
-    readonly instructions : {[key : string] : (args : (number | string)[], registers : RV32IRegistri, memory : Memory, usnigned ?: boolean) => number} = {
+    readonly instructions : {[key : string] : (args : number[], registers : RV32IRegistri, memory : Memory, usnigned ?: boolean) => number} = {
         // R-type instructions
         ADD : (args, registers) => { 
             registers.func3 = 0; registers.func7 = 0;
@@ -108,9 +108,10 @@ export class RV32Interpreter extends Interpreter {
         },
         // I-type instructions [JUMP]
         JALR : (args, registers) => {
+            console.log('eseguo JALR');
             registers.func3 = 0; registers.func7 = 0;
             registers.rd = registers.x[this.prepI_Jump(args, registers)] = registers.pc;
-            return registers.pc = (registers.x[registers.rs1] + registers.jumpOffset)  & ~(1<<0);
+            return registers.pc = registers.immediate = (registers.rs1 + registers.jumpOffset) & ~(1<<0);
         },
 
         // S-type instructions 
@@ -133,6 +134,9 @@ export class RV32Interpreter extends Interpreter {
             return 2;
         },
 
+        // B-type instructions
+        
+
         // U-type instructions 
         LUI : ([rd, immediate], registers) => {
             registers.func3 = 0; registers.func7 = 0; registers.opcode = 55;
@@ -146,50 +150,50 @@ export class RV32Interpreter extends Interpreter {
         // J-type instructions
         JAL : ([rd, immediate], registers) => {
             registers.func3 = 0; registers.func7 = 0; registers.opcode = 111;
-            registers.rd = registers.x[rd as number] = registers.pc;
-            registers.jumpOffset = immediate as number;
-            return registers.pc = (registers.pc - 4) + registers.jumpOffset;
+            registers.rd = registers.x[rd] = registers.pc;
+            registers.jumpOffset = immediate;
+            return registers.pc = registers.jumpOffset;
         },
     };
 
-    prepR ([rd, rs1, rs2] : (number|string)[], registers : RV32IRegistri) : number {
+    prepR ([rd, rs1, rs2] : number[], registers : RV32IRegistri) : number {
         registers.opcode = 51;
         registers.rs1 = registers.x[rs1];
         registers.rs2 = registers.x[rs2];
-        return rd as number;
+        return rd;
     }
 
-    prepI ([rd, rs1, immediate] : (number|string)[], registers : RV32IRegistri, unsigned : boolean = false) : number {
+    prepI ([rd, rs1, immediate] : number[], registers : RV32IRegistri, unsigned : boolean = false) : number {
         registers.opcode = 19; 
         registers.rs1 = registers.x[rs1];
-        registers.immediate = unsigned ? (immediate as number) : (this.signExtend(immediate as number));
-        return rd as number;
+        registers.immediate = unsigned ? (immediate) : (this.signExtend(immediate));
+        return rd;
     }
 
-    prepI_Load ([rd, immediate, rs1] : (number|string)[], registers : RV32IRegistri, unsigned : boolean = false) : number {
+    prepI_Load ([rd, immediate, rs1] : number[], registers : RV32IRegistri, unsigned : boolean = false) : number {
         registers.opcode = 3; 
         registers.rs1 = registers.x[rs1];
-        registers.immediate = unsigned ? (immediate as number) : (this.signExtend(immediate as number));
-        return rd as number;
+        registers.immediate = unsigned ? (immediate) : (this.signExtend(immediate));
+        return rd;
     }
 
-    prepI_Jump ([rd, rs1, immediate] : (number|string)[], registers : RV32IRegistri) {
+    prepI_Jump ([rd, rs1, immediate] : number[], registers : RV32IRegistri) {
         registers.opcode = 111;
         registers.rs1 = registers.x[rs1];
-        registers.jumpOffset = this.signExtend(immediate as number);
-        return rd as number;
+        registers.jumpOffset = this.signExtend(immediate);
+        return rd;
     }
 
-    prepS ([rs2, immediate, rs1] : (number|string)[], registers : RV32IRegistri) : number {
+    prepS ([rs2, immediate, rs1] : number[], registers : RV32IRegistri) : number {
         registers.opcode = 35;
         registers.rs1 = registers.x[rs1];
-        registers.immediate = this.signExtend(immediate as number);
-        return rs2 as number;
+        registers.immediate = this.signExtend(immediate);
+        return rs2;
     }
 
-    prepU ([rd, immediate] : (number|string)[], registers : RV32IRegistri) : number {
-        registers.immediate = (immediate as number) << 12;
-        return rd as number;
+    prepU ([rd, immediate] : number[], registers : RV32IRegistri) : number {
+        registers.immediate = (immediate) << 12;
+        return rd;
     }
 
     signExtend(immediate : number) : number {
@@ -198,8 +202,11 @@ export class RV32Interpreter extends Interpreter {
     }
 
     run(line : string, registers: Registri, memory : Memory) : void {
-        let [instruction, ... args] = line.split(/\W+/);
-    
+        let tokens = line.split(/\W+/);
+        if (!tokens[0] || line.match(/\w+:/)) tokens.shift();
+
+        let [instruction, ... args] = tokens;
+
         let argsFixed = args.map<number>(arg => {
             if (arg.match(/^R[123]?\d/i)) {
                 return parseInt(arg.substr(1));
@@ -212,7 +219,7 @@ export class RV32Interpreter extends Interpreter {
             } else return 0;
         });
 
-
+        console.log(argsFixed);
         if (this.instructions[instruction])
             this.instructions[instruction](argsFixed, registers as RV32IRegistri, memory);  
     }
