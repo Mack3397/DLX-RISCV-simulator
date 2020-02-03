@@ -7,81 +7,81 @@ export class RV32Interpreter extends Interpreter {
 
     readonly instructions : {[key : string] : (args : (number | string)[], registers : RV32IRegistri, memory : Memory, usnigned ?: boolean) => number} = {
         // R-type instructions
-        ADD : (args, registers, memory) => { 
+        ADD : (args, registers) => { 
             registers.func3 = 0; registers.func7 = 0;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 + registers.rs2; 
         },
-        SUB : (args, registers, memory) => {
+        SUB : (args, registers) => {
             registers.func3 = 0; registers.func7 = 32;
             return registers.rd = registers.x[this.prepR(args, registers)]  = registers.rs1 - registers.rs2;
         },
-        SLL : (args, registers, memory) => {
+        SLL : (args, registers) => {
             registers.func3 = 1; registers.func7 = 0;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 << (registers.rs2 & 0x1F);
         },
-        SLT : (args, registers, memory) => {
+        SLT : (args, registers) => {
             registers.func3 = 2; registers.func7 = 0;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 < registers.rs2 ? 1 : 0;
         },
-        SLTU : (args, registers, memory) => {
+        SLTU : (args, registers) => {
             registers.func3 = 3; registers.func7 = 0;
             return registers.rd = registers.x[this.prepR(args, registers)] = (registers.rs1 == 0) ? (registers.rs2 != 0 ? 1 : 0) : (registers.rs1 < registers.rs2 ? 1 : 0);
         },
-        XOR : (args, registers, memory) => {
+        XOR : (args, registers) => {
             registers.func3 = 4; registers.func7 = 0;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 ^ registers.rs2;
         },
-        SRL : (args, registers, memory) => {
+        SRL : (args, registers) => {
             registers.func3 = 5; registers.func7 = 0;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 >>> (registers.rs2 & 0x1F);
         },
-        SRA : (args, registers, memory) => {
+        SRA : (args, registers) => {
             registers.func3 = 5; registers.func7 = 32;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 >> (registers.rs2 & 0x1F);
         },
-        OR : (args, registers, memory) => {
+        OR : (args, registers) => {
             registers.func3 = 6; registers.func7 = 32;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 | registers.rs2 & 0x1F;
         },
-        AND : (args, registers, memory) => {
+        AND : (args, registers) => {
             registers.func3 = 7; registers.func7 = 32;
             return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 & registers.rs2 & 0x1F;
         },
 
         // I-type instructions
-        ADDI : (args, registers, memory) => {
+        ADDI : (args, registers) => {
             registers.func3 = 0; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers)] = registers.rs1 + registers.immediate;
         },
-        SLTI : (args, registers, memory) => {
+        SLTI : (args, registers) => {
             registers.func3 = 2; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers)] = this.signExtend(registers.rs1) < registers.immediate ? 1 : 0;
         },
-        SLTIU : (args, registers, memory) => {
+        SLTIU : (args, registers) => {
             registers.func3 = 3; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers, true)] = registers.immediate == 1 ? (registers.rs1 == 0 ? 1 : 0) : (registers.rs1 < registers.immediate ? 1 : 0);
         },
-        XORI : (args, registers, memory) => {
+        XORI : (args, registers) => {
             registers.func3 = 4; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers)] = registers.immediate == -1 ? (registers.rs1 ^ 1) : (registers.rs1 ^ registers.immediate);
         },
-        ORI : (args, registers, memory) => {
+        ORI : (args, registers) => {
             registers.func3 = 6; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers)] = registers.rs1 | registers.immediate;
         },
-        ANDI : (args, registers, memory) => {
+        ANDI : (args, registers) => {
             registers.func3 = 7; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers)] = registers.rs1 & registers.immediate;
         },
-        SLLI : (args, registers, memory) => {
+        SLLI : (args, registers) => {
             registers.func3 = 1; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers, true)] = registers.rs1 << (registers.immediate & 0x1F);
         },
-        SRLI : (args, registers, memory) => {
+        SRLI : (args, registers) => {
             registers.func3 = 5; registers.func7 = 0;  
             return registers.rd = registers.x[this.prepI(args, registers, true)] = registers.rs1 >>> (registers.immediate & 0x1F);
         },
-        SRAI : (args, registers, memory) => {
+        SRAI : (args, registers) => {
             registers.func3 = 5; registers.func7 = 32; 
             return registers.rd = registers.x[this.prepI(args, registers, true)] = registers.rs1 >> (registers.immediate & 0x1F);
         },
@@ -106,6 +106,12 @@ export class RV32Interpreter extends Interpreter {
             registers.func3 = 5; registers.func7 = 0; 
             return registers.rd = registers.x[this.prepI(args, registers)] = memory.load(registers.rs1 + registers.immediate) & 0x0000FFFF;
         },
+        // I-type instructions [JUMP]
+        JALR : (args, registers) => {
+            registers.func3 = 0; registers.func7 = 0;
+            registers.rd = registers.x[this.prepI_Jump(args, registers)] = registers.pc;
+            return registers.pc = (registers.x[registers.rs1] + registers.jumpOffset)  & ~(1<<0);
+        },
 
         // S-type instructions 
         SB : (args, registers, memory) => {
@@ -128,13 +134,21 @@ export class RV32Interpreter extends Interpreter {
         },
 
         // U-type instructions 
-        LUI : (args, registers, memory) => {
+        LUI : ([rd, immediate], registers) => {
             registers.func3 = 0; registers.func7 = 0; registers.opcode = 55;
-            return registers.rd = registers.x[this.prepU(args, registers)] = registers.immediate;
+            return registers.rd = registers.x[this.prepU([rd, immediate], registers)] = registers.immediate;
         },
-        AUIPC : (args, registers, memory) => {
+        AUIPC : ([rd, immediate], registers) => {
             registers.func3 = 0; registers.func7 = 0; registers.opcode = 23;
-            return registers.rd = registers.x[this.prepU(args, registers)] = (registers.pc - 4) + registers.immediate;
+            return registers.rd = registers.x[this.prepU([rd, immediate], registers)] = (registers.pc - 4) + registers.immediate;
+        },
+
+        // J-type instructions
+        JAL : ([rd, immediate], registers) => {
+            registers.func3 = 0; registers.func7 = 0; registers.opcode = 111;
+            registers.rd = registers.x[rd as number] = registers.pc;
+            registers.jumpOffset = immediate as number;
+            return registers.pc = (registers.pc - 4) + registers.jumpOffset;
         },
     };
 
@@ -159,6 +173,13 @@ export class RV32Interpreter extends Interpreter {
         return rd as number;
     }
 
+    prepI_Jump ([rd, rs1, immediate] : (number|string)[], registers : RV32IRegistri) {
+        registers.opcode = 111;
+        registers.rs1 = registers.x[rs1];
+        registers.jumpOffset = this.signExtend(immediate as number);
+        return rd as number;
+    }
+
     prepS ([rs2, immediate, rs1] : (number|string)[], registers : RV32IRegistri) : number {
         registers.opcode = 35;
         registers.rs1 = registers.x[rs1];
@@ -172,7 +193,7 @@ export class RV32Interpreter extends Interpreter {
     }
 
     signExtend(immediate : number) : number {
-        if((1<<11) & immediate) return (immediate | 0xFFFFF000);
+        if((1<<11) & immediate) return (immediate | 0xFFFFF000)>>>0;
         else return immediate;
     }
 
@@ -186,8 +207,11 @@ export class RV32Interpreter extends Interpreter {
                 return parseInt(arg.substr(0, 4), 16)
             } else if (arg.match(/^[01]{16}B/i)) {
                 return parseInt(arg.substr(0, 4), 2)
+            } else if (this.tags[arg]) {
+                return this.tags[arg];
             } else return 0;
         });
+
 
         if (this.instructions[instruction])
             this.instructions[instruction](argsFixed, registers as RV32IRegistri, memory);  
