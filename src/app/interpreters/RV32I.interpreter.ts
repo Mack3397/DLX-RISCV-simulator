@@ -135,7 +135,36 @@ export class RV32Interpreter extends Interpreter {
         },
 
         // B-type instructions
-        
+        BEQ : (args, registers) => {
+            registers.func3 = 0;
+            let jumpOffset = this.prepB(args, registers);
+            return registers.pc = (registers.rs1 == registers.rs2 ? registers.jumpOffset : registers.pc);
+        },
+        BNE : (args, registers) => {
+            registers.func3 = 1;
+            let jumpOffset = this.prepB(args, registers);
+            return registers.pc = (registers.rs1 != registers.rs2 ? jumpOffset : registers.pc);
+        },
+        BLT : (args, registers) => {
+            registers.func3 = 4;
+            let jumpOffset = this.prepB(args, registers);
+            return registers.pc = (this.signExtend(registers.rs1) < this.signExtend(registers.rs2) ? jumpOffset : registers.pc);
+        },
+        BGE : (args, registers) => {
+            registers.func3 = 5;
+            let jumpOffset = this.prepB(args, registers);
+            return registers.pc = (this.signExtend(registers.rs1) >= this.signExtend(registers.rs2) ? jumpOffset : registers.pc);
+        },
+        BLTU : (args, registers) => {
+            registers.func3 = 6;
+            let jumpOffset = this.prepB(args, registers);
+            return registers.pc = (registers.rs1 < registers.rs2 ? jumpOffset : registers.pc);
+        },
+        BGEU : (args, registers) => {
+            registers.func3 = 7;
+            let jumpOffset = this.prepB(args, registers);
+            return registers.pc = (registers.rs1 >= registers.rs2 ? jumpOffset : registers.pc);
+        },
 
         // U-type instructions 
         LUI : ([rd, immediate], registers) => {
@@ -173,7 +202,7 @@ export class RV32Interpreter extends Interpreter {
     prepI_Load ([rd, immediate, rs1] : number[], registers : RV32IRegistri, unsigned : boolean = false) : number {
         registers.opcode = 3; 
         registers.rs1 = registers.x[rs1];
-        registers.immediate = unsigned ? (immediate) : (this.signExtend(immediate));
+        registers.immediate = (unsigned ? immediate : this.signExtend(immediate));
         return rd;
     }
 
@@ -194,6 +223,13 @@ export class RV32Interpreter extends Interpreter {
     prepU ([rd, immediate] : number[], registers : RV32IRegistri) : number {
         registers.immediate = (immediate) << 12;
         return rd;
+    }
+
+    prepB ([rs1, rs2, immediate] : number[], registers : RV32IRegistri) : number {
+        registers.opcode = 99; registers.func7 = 0;
+        registers.rs1 = registers.x[rs1];
+        registers.rs2 = registers.x[rs2];
+        return registers.jumpOffset = this.signExtend(immediate);
     }
 
     signExtend(immediate : number) : number {
