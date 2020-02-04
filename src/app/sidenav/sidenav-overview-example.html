@@ -1,0 +1,9 @@
+<mat-sidenav-container class="example-container">
+  <mat-toolbar class="mat-elevation-z6" color="primary">
+    <span>Simulatore</span>
+    <a mat-button routerLink="/dlx" routerLinkActive="active">DLX</a>
+    <a mat-button routerLink="/rv32i" routerLinkActive="active">RV32I</a>
+</mat-toolbar>
+  <mat-sidenav mode="side" opened>DOCUMENTAZIONE</mat-sidenav>
+  <section><router-outlet></router-outlet></section>
+</mat-sidenav-container>
