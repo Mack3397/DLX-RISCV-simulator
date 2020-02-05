@@ -39,7 +39,7 @@ export type InstructionType = 'R'|'RM'|'I'|'IB'|'IJ'|'IL'|'IS'|'J'|'LHI'|'NOP'|'
 export type Instruction = 'ADD'|'ADDI'|'ADDU'|'ADDUI'|'AND'|'ANDI'|'BEQZ'|'BNEZ'|'DIV'|'DIVI'|'J'|'JAL'|'JALR'|'JR'|'LB'|'LBU'|'LH'|'LHI'|'LHU'|'LW'|'MOVI2S'|'MOVS2I'|'MULT'|'MULTI'|'NOP'|'OR'|'ORI'|'RFE'|'SB'|'SEQ'|'SEQI'|'SGE'|'SGEI'|'SGT'|'SGTI'|'SH'|'SLE'|'SLEI'|'SLL'|'SLLI'|'SLT'|'SLTI'|'SNE'|'SNEI'|'SRA'|'SRAI'|'SRL'|'SRLI'|'SUB'|'SUBI'|'SUBU'|'SUBUI'|'SW'|'TRAP'|'XOR'|'XORI';
 
 export const instructions: {
-        [key in Instruction]?: {
+        [key in Instruction]: {
             type: InstructionType, 
             func: (registers: DLXRegistri, args?: number[]) => number,
             unsigned?: boolean
@@ -57,8 +57,8 @@ export const instructions: {
     DIV:    { type: 'R',   func: (registers) => registers.c = Math.floor(registers.a / registers.temp) },
     DIVI:   { type: 'I',   func: (registers) => registers.c = Math.floor(registers.a / registers.temp) },
     J:      { type: 'J',   func: (registers) => registers.pc += registers.temp },
-    JAL:    { type: 'J',   func: (registers) => { registers.r[31] = registers.pc + 4; return registers.pc += registers.temp; } },
-    JALR:   { type: 'IJ',  func: (registers) => { registers.r[31] = registers.pc + 4; return registers.pc = registers.a; } },
+    JAL:    { type: 'J',   func: (registers) => { registers.r[31] = registers.c = registers.pc + 4; return registers.pc += registers.temp; } },
+    JALR:   { type: 'IJ',  func: (registers) => { registers.r[31] = registers.c = registers.pc + 4; return registers.pc = registers.a; } },
     JR:     { type: 'IJ',  func: (registers) => registers.pc = registers.a },
     LB:     { type: 'IL',  func: (registers) => registers.c = signExtend(load(registers.mdr, registers.temp, 'byte'), 8) },
     LBU:    { type: 'IL',  func: (registers) => registers.c = load(registers.mdr, registers.temp, 'byte') },

@@ -1,4 +1,11 @@
-<div class="main">
-    <app-editor [mode]="editorMode" [(pc)]="registri.pc" (runLine)="onRun($event)" (doParseTags)="doParseTags($event)"></app-editor>
-    <app-registri [registri]="registri"></app-registri>
-</div>
+<mat-sidenav-container class="example-container">
+    <mat-sidenav #sidenav mode="side" [opened]="opened" (openedChange)="openedChange.emit($event)">
+        <app-documentazione></app-documentazione>
+    </mat-sidenav>
+    <section>
+        <div class="main">
+            <app-editor [mode]="editorMode" [(pc)]="registri.pc" (runLine)="onRun($event)" (doParseTags)="doParseTags($event)"></app-editor>
+            <app-registri [registri]="registri"></app-registri>
+        </div>
+    </section>
+</mat-sidenav-container>

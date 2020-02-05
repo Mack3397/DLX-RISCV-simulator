@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { MainPageComponent } from './main-page/main-page.component';
 
 @Component({
   selector: 'app-root',
@@ -6,5 +8,16 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.sass']
 })
 export class AppComponent {
-  title = 'DLX-RISCV-simulator';
+
+  sidebarOpened = false;
+
+  private mainPageComponent: MainPageComponent;
+  
+  public onRouterOutletActivate(event : MainPageComponent) {
+    this.mainPageComponent = event;
+  }
+
+  toggleSidenav() {
+    this.mainPageComponent.toggleSidenav();
+  }
 }
