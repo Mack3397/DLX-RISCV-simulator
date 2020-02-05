@@ -1,5 +1,9 @@
+
+<mat-form-field class="example-full-width">
+  <input matInput placeholder="Search" [(ngModel)]="search">
+</mat-form-field>
 <mat-accordion>
-  <mat-expansion-panel *ngFor="let instr of documentazione">
+  <mat-expansion-panel *ngFor="let instr of documentazioneFiltrata">
     <mat-expansion-panel-header>
       <mat-panel-title>{{instr.name}}</mat-panel-title>
       <mat-panel-description>{{instr.type}}</mat-panel-description>

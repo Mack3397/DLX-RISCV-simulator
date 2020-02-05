@@ -24,7 +24,7 @@ export class MainPageComponent implements OnInit {
 
   constructor(private route: ActivatedRoute) {
     this.memory = new Memory();
-    //inizializzo 2 mB di memoria;
+    //inizializzo 1 GB di memoria;
     this.memory.add('RAM', 0x10000000, 0x20000000);
   }
 
