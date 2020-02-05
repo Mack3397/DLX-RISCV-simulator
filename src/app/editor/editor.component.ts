@@ -24,7 +24,7 @@ export class EditorComponent implements AfterViewInit, OnChanges {
 
   private prePc: number = 0;
   private running: boolean = false;
-  content: string = '      ADDI R1, R0, 0008h\nloop: ADD R2, R2, R1\n      SUBI R1, R1, 0001h\n      BNEZ R1, loop';
+  content: string = '      ADDI R1, R0, 0003h\nloop: ADD R2, R2, R1\n      SUBI R1, R1, 0001h\n      BNEZ R1, loop\n      LHI R3, 4000h\n      SH 0002h(R3), R2\n      LW R4, 0000h(R3)';
 
   set start(val: string) {
     this.pcChange.emit(parseInt(val, 16));

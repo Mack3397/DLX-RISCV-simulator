@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
 import { Registri } from '../registri/registri';
 import { ActivatedRoute } from '@angular/router';
 import { Interpreter } from '../interpreters/interpreter';
 import { Memory } from '../memory/memory';
+import { MatSidenav } from '@angular/material/sidenav';
 
 @Component({
   selector: 'app-main-page',
@@ -15,6 +16,11 @@ export class MainPageComponent implements OnInit {
   interpreter: Interpreter;
   memory: Memory;
   registri: Registri;
+
+  @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
+
+  @Input() opened: boolean = false;
+  @Output() openedChange: EventEmitter<number> = new EventEmitter();
 
   constructor(private route: ActivatedRoute) {
     this.memory = new Memory();
@@ -36,5 +42,9 @@ export class MainPageComponent implements OnInit {
 
   doParseTags(code: string) {
     this.interpreter.parseTags(code);
+  }
+
+  toggleSidenav() {
+    this.sidenav.toggle();
   }
 }
