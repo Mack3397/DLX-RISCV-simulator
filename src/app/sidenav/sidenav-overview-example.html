@@ -8,6 +8,16 @@
   </mat-toolbar>
   <mat-sidenav #sidenav mode="side" [(opened)]="opened">
     <h3>DOCUMENTAZIONE</h3>
+    <mat-accordion >
+      <mat-expansion-panel *ngFor="let instr of documentation">
+        <mat-expansion-panel-header>
+          <mat-panel-title>{{instr.name}}</mat-panel-title>
+          <mat-panel-description>{{instr.type}}</mat-panel-description>
+          <mat-panel-description>{{instr.syntax}}</mat-panel-description>
+        </mat-expansion-panel-header>
+        <p>{{instr.description}}</p>
+      </mat-expansion-panel>
+    </mat-accordion>
   </mat-sidenav>
   <section><router-outlet></router-outlet></section>
 </mat-sidenav-container>

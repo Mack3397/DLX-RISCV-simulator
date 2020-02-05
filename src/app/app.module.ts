@@ -20,6 +20,7 @@ import { DemoMaterialModule } from './sidenav/material-module';
 import { SidenavOverviewExample } from './sidenav/sidenav-overview-example';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
+import { DocumentazioneComponent } from './documentazione/documentazione.component';
 
 @NgModule({
    declarations: [
@@ -29,7 +30,8 @@ import { HttpClientModule } from '@angular/common/http';
       RegistriComponent,
       FormatPipe,
       MemoryComponent,
-      SidenavOverviewExample
+      SidenavOverviewExample,
+      DocumentazioneComponent
    ],
    imports: [
       BrowserModule,
@@ -45,10 +47,12 @@ import { HttpClientModule } from '@angular/common/http';
       HttpClientModule,
       DemoMaterialModule
    ],
-   entryComponents: [SidenavOverviewExample],
+   entryComponents: [
+      SidenavOverviewExample
+   ],
    providers: [],
    bootstrap: [
-      AppComponent,
+      AppComponent
    ]
 })
 export class AppModule { }

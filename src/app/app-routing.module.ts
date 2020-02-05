@@ -5,6 +5,8 @@ import { DLXInterpreter } from './interpreters/dlx/dlx.interpreter';
 import { RV32Interpreter } from './interpreters/rv32i.interpreter';
 import { DLXRegistri } from './registri/dlx.registri';
 import { RV32IRegistri } from './registri/rv32i.registri';
+import { RV32IDocumentazione } from './documentazione/rv32i.documentazione';
+import { DLXDocumentazione } from './documentazione/dlx.documentazione';
 
 
 const routes: Routes = [
@@ -15,7 +17,8 @@ const routes: Routes = [
     data: {
       interpreter: new DLXInterpreter(),
       editorMode: 'dlx',
-      registri: new DLXRegistri()
+      registri: new DLXRegistri(),
+      documentation: DLXDocumentazione
     }
   },
   { 
@@ -24,7 +27,8 @@ const routes: Routes = [
     data: {
       interpreter: new RV32Interpreter(),
       editorMode: 'rv32i',
-      registri: new RV32IRegistri()
+      registri: new RV32IRegistri(),
+      documentation: RV32IDocumentazione
     }
   },
 ];

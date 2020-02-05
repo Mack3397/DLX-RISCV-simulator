@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 
 /** @title Basic sidenav */
 @Component({
@@ -10,6 +10,7 @@ import {Component} from '@angular/core';
 export class SidenavOverviewExample {
   opened: boolean;
   btnColour='#52A9E1';
+
   change() {
     if(this.opened) this.btnColour='#52A9E1';
     else this.btnColour= '#4E4E4E';
