@@ -1,4 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-documentazione',
@@ -7,11 +8,14 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class DocumentazioneComponent implements OnInit {
 
-@Input() documentazione;
+  documentazione: any[];
 
-  constructor() { }
-
-  ngOnInit() {
+  constructor(route: ActivatedRoute) {
+    route.data.subscribe(data => {
+      this.documentazione = data.documentation
+    })
   }
+
+  ngOnInit() { }
 
 }
