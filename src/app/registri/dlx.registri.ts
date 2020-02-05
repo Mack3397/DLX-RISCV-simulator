@@ -2,18 +2,19 @@ import { Registri } from "./registri";
 
 export class DLXRegistri extends Registri{
     
-    r : [0,     number, number, number, number, number, number, number,
+    r: [0,      number, number, number, number, number, number, number,
         number, number, number, number, number, number, number, number,
         number, number, number, number, number, number, number, number,
         number, number, number, number, number, number, number, number];
 
-    iar : number;
-    mar : number;
-    ir : number;
-    temp : number;
-    mdr : number;
-    a : number;
-    b : number;
+    iar: number;
+    mar: number;
+    ir: number;
+    temp: number;
+    mdr: number;
+    a: number;
+    b: number;
+    c: number;
 
     constructor() {
         super();
