@@ -15,7 +15,7 @@ const routes: Routes = [
     data: {
       interpreter: new DLXInterpreter(),
       editorMode: 'dlx',
-      registri : new DLXRegistri()
+      registri: new DLXRegistri()
     }
   },
   { 
@@ -24,7 +24,7 @@ const routes: Routes = [
     data: {
       interpreter: new RV32Interpreter(),
       editorMode: 'rv32i',
-      registri : new RV32IRegistri()
+      registri: new RV32IRegistri()
     }
   },
 ];

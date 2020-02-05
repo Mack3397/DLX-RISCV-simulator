@@ -2,18 +2,18 @@ import { Registri } from "./registri";
 
 export class RV32IRegistri extends Registri{
 
-    x : [0, number, number , number, number, number, number, number, 
+    x: [0, number, number , number, number, number, number, number, 
         number, number, number, number, number, number, number, number, 
         number, number, number, number, number, number, number, number, 
         number, number, number, number, number, number, number, number];
 
-    instruction : number;
-    opcode : number;
-    rd : number;
-    rs1 : number;
-    rs2 : number;
-    func3 : number;
-    func7 : number;
+    instruction: number;
+    opcode: number;
+    rd: number;
+    rs1: number;
+    rs2: number;
+    func3: number;
+    func7: number;
     immediate: number;
     jumpOffset: number;
 

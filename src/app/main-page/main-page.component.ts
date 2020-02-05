@@ -14,7 +14,7 @@ export class MainPageComponent implements OnInit {
   editorMode: string;
   interpreter: Interpreter;
   memory: Memory;
-  registri : Registri;
+  registri: Registri;
 
   constructor(private route: ActivatedRoute) {
     this.memory = new Memory();

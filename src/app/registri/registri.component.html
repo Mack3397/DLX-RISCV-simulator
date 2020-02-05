@@ -39,21 +39,21 @@
         <span>Instruction</span>
         <div class="registro">{{registri.instruction | format: fType}}</div>
         <span>Opcode</span>
-        <div class="registro">{{registri.opcode | format: fType : 7}}</div>
+        <div class="registro">{{registri.opcode | format: fType: 7}}</div>
         <span>RD</span>
-        <div class="registro">{{registri.rd | format: fType : 5}}</div>
+        <div class="registro">{{registri.rd | format: fType: 5}}</div>
         <span>RS1</span>
-        <div class="registro">{{registri.rs1 | format: fType : 5}}</div>
+        <div class="registro">{{registri.rs1 | format: fType: 5}}</div>
         <span>RS2</span>
-        <div class="registro">{{registri.rs2 | format: fType : 5}}</div>
+        <div class="registro">{{registri.rs2 | format: fType: 5}}</div>
         <span>Func3</span>
-        <div class="registro">{{registri.func3 | format: fType : 3}}</div>
+        <div class="registro">{{registri.func3 | format: fType: 3}}</div>
         <span>Func7</span>
-        <div class="registro">{{registri.func7 | format: fType : 7}}</div>
+        <div class="registro">{{registri.func7 | format: fType: 7}}</div>
         <span>Immediate</span>
-        <div class="registro">{{registri.immediate | format: fType : 20}}</div>
+        <div class="registro">{{registri.immediate | format: fType: 20}}</div>
         <span>Jump-Offset</span>
-        <div class="registro">{{registri.jumpOffset | format: fType : 20}}</div>
+        <div class="registro">{{registri.jumpOffset | format: fType: 20}}</div>
     </div>
 </div>
 <mat-button-toggle-group name="fType" [(ngModel)]="fType">

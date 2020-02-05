@@ -1,5 +1,5 @@
 export class Registri {
-    pc : number;
+    pc: number;
     
     constructor() {
         this.pc = 0;
