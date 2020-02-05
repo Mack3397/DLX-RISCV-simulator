@@ -16,6 +16,7 @@ export class MainPageComponent implements OnInit {
   interpreter: Interpreter;
   memory: Memory;
   registri: Registri;
+  documentazione;
 
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
@@ -33,6 +34,7 @@ export class MainPageComponent implements OnInit {
       this.editorMode = data.editorMode;
       this.interpreter = data.interpreter;
       this.registri = data.registri;
+      this.documentazione = data.documentazione;
     })
   }
 

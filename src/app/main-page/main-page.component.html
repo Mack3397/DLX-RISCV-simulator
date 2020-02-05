@@ -1,6 +1,6 @@
 <mat-sidenav-container class="example-container">
     <mat-sidenav #sidenav mode="side" [opened]="opened" (openedChange)="openedChange.emit($event)">
-        <app-documentazione></app-documentazione>
+        <app-documentazione [documentazione]="documentazione"></app-documentazione>
     </mat-sidenav>
     <section>
         <div class="main">
