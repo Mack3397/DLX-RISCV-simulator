@@ -9,6 +9,11 @@ import { ActivatedRoute } from '@angular/router';
 export class DocumentazioneComponent implements OnInit {
 
   documentazione: any[];
+  search: string = '';
+
+  get documentazioneFiltrata() {
+    return this.documentazione.filter(val => val.name.startsWith(this.search.toLocaleUpperCase()));
+  }
 
   constructor(route: ActivatedRoute) {
     route.data.subscribe(data => {
