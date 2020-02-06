@@ -10,7 +10,10 @@
             </div>
         </ng-container>
         <ng-container *ngIf="isRV32I">
-            <div class="registro" *ngFor="let x of registri.x">{{x | format: fType}}</div>
+            <div class="gpd-rv32i" *ngFor="let x of registri.x; index as i">
+                <div class="index-rv32i">x{{i}}</div>
+                <div class="registro">{{x | format: fType}}</div>
+            </div>
         </ng-container>
     </div>
     <div *ngIf="isDLX">
@@ -36,8 +39,6 @@
     <div *ngIf="isRV32I">
         <span>PC</span>
         <div class="registro">{{registri.pc | format: fType}}</div>
-        <span>Instruction</span>
-        <div class="registro">{{registri.instruction | format: fType}}</div>
         <span>Opcode</span>
         <div class="registro">{{registri.opcode | format: fType: 7}}</div>
         <span>RD</span>
