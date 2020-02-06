@@ -1,13 +1,12 @@
-<mat-toolbar id="navbar" class="mat-elevation-z6" color="primary">
-    <button mat-button mat-icon-button (click)="toggleSidenav()">
+<mat-toolbar id="navbar" color="primary">
+    <button mat-button mat-icon-button matTooltip="Documentation" (click)="toggleSidenav()">
         <span *ngIf="!sidebarOpened"><i class="fas fa-book"></i></span>
         <span *ngIf="sidebarOpened"><i class="fas fa-book-open"></i></span>
     </button>
-    <span>Simulatore</span>
+    <span>Simulator</span>
     <a mat-button routerLink="/dlx" routerLinkActive="active">DLX</a>
     <a mat-button routerLink="/rv32i" routerLinkActive="active">RV32I</a>
 </mat-toolbar>
 <div class="mat-app-background basic-container">
     <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
-    <!-- [(opened)]="sidebarOpened" -->
 </div>

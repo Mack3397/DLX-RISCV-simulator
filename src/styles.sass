@@ -29,3 +29,23 @@ mat-toolbar a
     &.active span::before
         visibility: visible
         transform: scaleX(1)
+
+::-webkit-scrollbar 
+    width:  6px
+    height: 6px
+
+::-webkit-scrollbar-thumb 
+    background: #5a5a5a
+    border-radius: 3px
+    &:hover
+        background: #707070
+
+::-webkit-scrollbar-track 
+    background: transparent
+::-webkit-scrollbar-track-piece 
+    &:start, &:end
+        &:hover
+            background: #ffffff10
+
+sup, sub
+    line-height: 0

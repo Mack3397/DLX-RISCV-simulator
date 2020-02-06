@@ -19,8 +19,8 @@ export class MainPageComponent implements OnInit {
 
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
-  @Input() opened: boolean = false;
-  @Output() openedChange: EventEmitter<number> = new EventEmitter();
+  @Input() sidebarOpened: boolean;
+  @Output() sidebarOpenedChange: EventEmitter<number> = new EventEmitter();
 
   constructor(private route: ActivatedRoute) {
     this.memory = new Memory();
