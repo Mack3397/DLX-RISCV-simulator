@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+export type Documentazione = {name: string, type: string, syntax: string, description: string};
+
 @Component({
   selector: 'app-documentazione',
   templateUrl: './documentazione.component.html',
@@ -8,7 +10,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class DocumentazioneComponent implements OnInit {
 
-  documentazione: any[];
+  documentazione: Documentazione[];
   search: string = '';
 
   get documentazioneFiltrata() {

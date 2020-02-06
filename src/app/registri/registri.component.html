@@ -1,6 +1,6 @@
 <div class="registri">
     <div>
-        <span>Registri</span>
+        <span>GPRD</span>
         <ng-container *ngIf="isDLX">
             <div class="gpd" *ngFor="let r of registri.r; index as i">
                 <div class="index">{{i}}</div>
@@ -17,23 +17,23 @@
         </ng-container>
     </div>
     <div *ngIf="isDLX">
-        <span>iar</span>
+        <span>IAR</span>
         <div class="registro">{{registri.iar | format: fType}}</div>
-        <span>pc</span>
+        <span>PC</span>
         <div class="registro">{{registri.pc | format: fType}}</div>
-        <span>mar</span>
+        <span>MAR</span>
         <div class="registro">{{registri.mar | format: fType}}</div>
-        <span>ir</span>
+        <span>IR</span>
         <div class="registro">{{registri.ir | format: fType}}</div>
-        <span>temp</span>
+        <span>TEMP</span>
         <div class="registro">{{registri.temp | format: fType}}</div>
-        <span>mdr</span>
+        <span>MDR</span>
         <div class="registro">{{registri.mdr | format: fType}}</div>
-        <span>a</span>
+        <span>A</span>
         <div class="registro">{{registri.a | format: fType}}</div>
-        <span>b</span>
+        <span>B</span>
         <div class="registro">{{registri.b | format: fType}}</div>
-        <span>c</span>
+        <span>C</span>
         <div class="registro">{{registri.c | format: fType}}</div>
     </div>
     <div *ngIf="isRV32I">

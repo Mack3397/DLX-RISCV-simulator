@@ -1,6 +1,7 @@
 cose da chiedere:
-rappresentazione esadecimale nell'editor
-MULT sulle slide si chiama MUL e nel libro dice che funziona con FPR e non GPR
-anche DIV nel libro usa FPR e non GPR
-MULTI e DIVI non ci sono nel libro al loro posto è definito MULTU e DIVU
-quali registri speciali sono utilizzabili da MOVI2S e MOVS2I
+-rappresentazione esadecimale nell'editor
+-MULT sulle slide si chiama MUL e nel libro dice che funziona con FPR e non GPR
+-anche DIV nel libro usa FPR e non GPR
+-MULTI e DIVI non ci sono nel libro al loro posto è definito MULTU e DIVU
+-quali registri speciali sono utilizzabili da MOVI2S e MOVS2I
+-cosa succede quando avviene una overflow exception
