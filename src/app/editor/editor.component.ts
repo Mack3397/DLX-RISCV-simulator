@@ -22,7 +22,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
   @Output() runLine: EventEmitter<string> = new EventEmitter();
   @Output() doParseTags: EventEmitter<string> = new EventEmitter();
 
-  private prePc: number = 0;
+  private previousLine: number = 0;
+  private runnedLine: number = 0;
   private running: boolean = false;
   start: string = 'main';
   content: string = '';
@@ -48,21 +49,21 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   @Input() 
   set pc(val: number) {
-    if (this.doc && val != this._pc) {
+    if (this.doc && (val != this._pc || !this.running)) {
       let pre = Math.floor(this._pc / 4);
       let cur = Math.floor(val / 4);
 
       if (!this.running) {
-        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
+        this.doc.removeLineClass(this.previousLine, 'wrap', 'runned');
         this.doc.removeLineClass(pre, 'wrap', 'next');
       } else {
-        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
+        this.doc.removeLineClass(this.previousLine, 'wrap', 'runned');
         this.doc.removeLineClass(pre, 'wrap', 'next');
-        this.doc.addLineClass(pre, 'wrap', 'runned');
+        this.doc.addLineClass(this.runnedLine, 'wrap', 'runned');
         if (cur < this.doc.lineCount()) {
           this.doc.addLineClass(cur, 'wrap', 'next');
         }
-        this.prePc = pre;
+        this.previousLine = this.runnedLine;
       }
     }
     this._pc = val;
@@ -106,8 +107,9 @@ export class EditorComponent implements OnInit, AfterViewInit {
       this.doParseTags.emit(this.content);
       this.running = true;
     }
+    this.runnedLine = this.currentLine;
     this.currentLine++;
-    this.runLine.emit(this.doc.getLine(this.currentLine - 1));
+    this.runLine.emit(this.doc.getLine(this.runnedLine));
   }
 
   onStop() {

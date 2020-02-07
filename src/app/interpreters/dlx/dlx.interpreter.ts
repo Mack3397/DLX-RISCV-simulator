@@ -6,14 +6,18 @@ import { decoder, inputs_decoder } from './dlx.decoder';
 import { instructions, InstructionType, signExtend } from './dlx.instructions';
 export class DLXInterpreter extends Interpreter{
 
-    readonly process_instruction: {
+    private readonly process_instruction: {
         [key in InstructionType]: 
             (args: number[], func: (registers: DLXRegistri, args?: number[]) => number, registers: DLXRegistri, memory?: Memory, unsigned?: boolean) => void
     } = {
         R: ([rd, rs1, rs2], func, registers) => {
             registers.a = registers.r[rs1];
             registers.temp = registers.b = registers.r[rs2];
-            func(registers);
+            try {
+                func(registers);
+            } catch(e) {
+                this.handleOverflow(e, registers);
+            }
             registers.r[rd] = registers.c;
         },
         RM: (args, func, registers) => {
@@ -23,7 +27,11 @@ export class DLXInterpreter extends Interpreter{
             registers.a = registers.r[rs1];
             registers.b = registers.r[rd];
             registers.temp = unsigned ? immediate : signExtend(immediate);
-            func(registers);
+            try {
+                func(registers);
+            } catch(e) {
+                this.handleOverflow(e, registers);
+            }
             registers.r[rd] = registers.c;
         },
         IB: ([rs1, name], func, registers) => {
@@ -63,6 +71,15 @@ export class DLXInterpreter extends Interpreter{
         NOP: () => {},
         RFE: (_args, func, registers) => {
             func(registers);
+        }
+    }
+
+    private handleOverflow(e: Error, registers: DLXRegistri) {
+        if (e.message) {
+            (registers as DLXRegistri).iar = registers.pc;
+            registers.pc = 0;
+        } else {
+            throw e;
         }
     }
 
