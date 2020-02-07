@@ -1,7 +1,7 @@
 import 'codemirror/addon/selection/active-line'
 import './modes/dlx.js';
 import './modes/rv32i.js';
-import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { EditorFromTextArea } from 'codemirror';
 
@@ -10,13 +10,13 @@ import { EditorFromTextArea } from 'codemirror';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.sass']
 })
-export class EditorComponent implements AfterViewInit, OnChanges {
+export class EditorComponent implements OnInit, AfterViewInit {
 
   @ViewChild('codeEditor', { static: false }) codeEditor: CodemirrorComponent;
 
   @Input() mode: string;
 
-  @Input() pc: number = 0;
+  private _pc: number;
   @Output() pcChange: EventEmitter<number> = new EventEmitter();
 
   @Output() runLine: EventEmitter<string> = new EventEmitter();
@@ -24,15 +24,8 @@ export class EditorComponent implements AfterViewInit, OnChanges {
 
   private prePc: number = 0;
   private running: boolean = false;
-  content: string = '      ADDI R1, R0, 0003h\nloop: ADD R2, R2, R1\n      SUBI R1, R1, 0001h\n      BNEZ R1, loop\n      LHI R3, 4000h\n      SH 0002h(R3), R2\n      LW R4, 0000h(R3)';
-
-  set start(val: string) {
-    this.pcChange.emit(parseInt(val, 16));
-  }
-
-  get start() {
-    return this.pc.toString(16);
-  }
+  start: string = 'main';
+  content: string = '';
 
   get options() {
     return {
@@ -47,6 +40,32 @@ export class EditorComponent implements AfterViewInit, OnChanges {
 
   get doc(): EditorFromTextArea {
     return this.codeEditor && this.codeEditor.codeMirror;
+  }
+
+  get pc(): number {
+    return this._pc;
+  }
+
+  @Input() 
+  set pc(val: number) {
+    if (this.doc && val != this._pc) {
+      let pre = Math.floor(this._pc / 4);
+      let cur = Math.floor(val / 4);
+
+      if (!this.running) {
+        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
+        this.doc.removeLineClass(pre, 'wrap', 'next');
+      } else {
+        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
+        this.doc.removeLineClass(pre, 'wrap', 'next');
+        this.doc.addLineClass(pre, 'wrap', 'runned');
+        if (cur < this.doc.lineCount()) {
+          this.doc.addLineClass(cur, 'wrap', 'next');
+        }
+        this.prePc = pre;
+      }
+    }
+    this._pc = val;
   }
   
   get currentLine(): number {
@@ -71,41 +90,33 @@ export class EditorComponent implements AfterViewInit, OnChanges {
 
   constructor() { }
 
-  ngAfterViewInit() {
-    this.doc.on("change", (event) => this.onStop());
+  ngOnInit() {
+    this.content = window.localStorage.getItem('code') || 'main: ';
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (this.doc) {
-      let pre = Math.floor(changes.pc.previousValue / 4);
-      let cur = Math.floor(changes.pc.currentValue / 4);
-      if (!this.running) {
-        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
-        this.doc.removeLineClass(pre, 'wrap', 'next');
-      } else if (changes.pc) {
-        this.doc.removeLineClass(this.prePc, 'wrap', 'runned');
-        this.doc.removeLineClass(pre, 'wrap', 'next');
-        this.doc.addLineClass(pre, 'wrap', 'runned');
-        if (cur < this.doc.lineCount()) {
-          this.doc.addLineClass(cur, 'wrap', 'next');
-        }
-        this.prePc = pre;
-      }
-    }
+  ngAfterViewInit() {
+    this.doc.on("change", (event) => {
+      this.onStop();
+    });
   }
 
   onRun() {
-    this.currentLine++;
     if (!this.running) {
+      this.currentLine = this.content.split('\n').findIndex((line) => RegExp('^'+this.start+':').test(line));
       this.doParseTags.emit(this.content);
       this.running = true;
     }
+    this.currentLine++;
     this.runLine.emit(this.doc.getLine(this.currentLine - 1));
   }
 
   onStop() {
-    this.currentLine = 0;
     this.running = false;
+    this.currentLine = 0;
+  }
+
+  onSave() {
+    window.localStorage.setItem('code', this.content);
   }
 
 }

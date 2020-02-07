@@ -3,9 +3,16 @@
     [options]="options"
 ></ngx-codemirror>
 <button mat-raised-button (click)="onRun()" [disabled]="isRunDisabled">
-    <span style="display: flex; align-items: center;">Run <i class="fas fa-play" style="color: #00ff00; margin-left: .5em;"></i></span>
+    <span class="btn">Run <i class="fas fa-play green"></i></span>
 </button>
 <button mat-raised-button (click)="onStop()" [disabled]="isStopDisabled">
-    <span style="display: flex; align-items: center;">Stop <i class="fas fa-square" style="color: #ff0000; margin-left: .5em;"></i></span>
+    <span class="btn">Stop <i class="fas fa-square red"></i></span>
 </button>
-<span>Start Line: </span><input type="text" [(ngModel)]="start">
+
+<mat-form-field>
+    <input matInput type="text" placeholder="Start tag" [(ngModel)]="start">
+</mat-form-field>
+
+<button mat-raised-button (click)="onSave()">
+    <span class="btn">Save <i class="fas fa-save"></i></span>
+</button>
