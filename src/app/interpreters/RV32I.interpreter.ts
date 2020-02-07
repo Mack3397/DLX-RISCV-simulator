@@ -17,7 +17,7 @@ export class RV32Interpreter extends Interpreter {
         },
         SLL: (args, registers) => {
             registers.func3 = 1; registers.func7 = 0;
-            return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs1 << (registers.rs2 & 0x1F);
+            return registers.rd = registers.x[this.prepR(args, registers)] = registers.rs2 > 31 ? 0 : (registers.rs1 << registers.rs2) >>> 0;
         },
         SLT: (args, registers) => {
             registers.func3 = 2; registers.func7 = 0;
@@ -75,7 +75,7 @@ export class RV32Interpreter extends Interpreter {
         },
         SLLI: (args, registers) => {
             registers.func3 = 1; registers.func7 = 0;  
-            return registers.rd = registers.x[this.prepI(args, registers, true)] = registers.rs1 << (registers.immediate & 0x1F);
+            return registers.rd = registers.x[this.prepI(args, registers, true)] = registers.immediate > 31 ? 0 : (registers.rs1 << registers.immediate) >>> 0;
         },
         SRLI: (args, registers) => {
             registers.func3 = 5; registers.func7 = 0;  
@@ -87,24 +87,24 @@ export class RV32Interpreter extends Interpreter {
         },
         // I-type instructions [LOAD]
         LB: (args, registers, memory) => {
-            registers.func3 = 0; registers.func7 = 0; 
-            return registers.rd = registers.x[this.prepI(args, registers)] = ((1<<7) & ((memory.load(registers.rs1 + registers.immediate)) & 0x000000FF)) ? (memory.load(registers.rs1 + registers.immediate) & 0x000000FF) | 0xFFFFFF00 : (memory.load(registers.rs1 + registers.immediate) & 0x000000FF);
+            registers.func3 = 0; registers.func7 = 0;
+            return registers.rd = registers.x[this.prepI_Load(args, registers)] = ((1<<7) & ((memory.load(Math.floor(registers.rs1 + registers.immediate) / 4)) & 0x000000FF)) ? (memory.load(Math.floor(registers.rs1 + registers.immediate) / 4) & 0x000000FF) | 0xFFFFFF00 : (memory.load(Math.floor(registers.rs1 + registers.immediate) / 4) & 0x000000FF);
         },
         LH: (args, registers, memory) => {
             registers.func3 = 1; registers.func7 = 0;
-            return registers.rd = registers.x[this.prepI(args, registers)] = ((1<<15) & (memory.load(registers.rs1 + registers.immediate) & 0x0000FFFF)) ? (memory.load(registers.rs1 + registers.immediate) & 0x0000FFFF) | 0xFFFF0000 : (memory.load(registers.rs1 + registers.immediate) & 0x00000FFFF);
+            return registers.rd = registers.x[this.prepI_Load(args, registers)] = ((1<<15) & (memory.load(Math.floor(registers.rs1 + registers.immediate) / 4) & 0x0000FFFF)) ? (memory.load(Math.floor(registers.rs1 + registers.immediate) / 4) & 0x0000FFFF) | 0xFFFF0000 : (memory.load(Math.floor(registers.rs1 + registers.immediate) / 4) & 0x00000FFFF);
         },
         LW: (args, registers, memory) => {
             registers.func3 = 2; registers.func7 = 0;  
-            return registers.rd = registers.x[this.prepI(args, registers)] = memory.load(registers.rs1 + registers.immediate);
+            return registers.rd = registers.x[this.prepI_Load(args, registers)] = memory.load(Math.floor(registers.rs1 + registers.immediate) / 4);
         },
         LBU: (args, registers, memory) => {
             registers.func3 = 4; registers.func7 = 0; 
-            return registers.rd = registers.x[this.prepI(args, registers)] = memory.load(registers.rs1 + registers.immediate) & 0x000000FF;
+            return registers.rd = registers.x[this.prepI_Load(args, registers)] = memory.load(Math.floor(registers.rs1 + registers.immediate) / 4) & 0x000000FF;
         },
         LHU: (args, registers, memory) => {
             registers.func3 = 5; registers.func7 = 0; 
-            return registers.rd = registers.x[this.prepI(args, registers)] = memory.load(registers.rs1 + registers.immediate) & 0x0000FFFF;
+            return registers.rd = registers.x[this.prepI_Load(args, registers)] = memory.load(Math.floor(registers.rs1 + registers.immediate) / 4) & 0x0000FFFF;
         },
         // I-type instructions [JUMP]
         JALR: (args, registers) => {
@@ -117,20 +117,21 @@ export class RV32Interpreter extends Interpreter {
         // S-type instructions 
         SB: (args, registers, memory) => {
             registers.func3 = 0; registers.func7 = 0;
-            let val = registers.x[this.prepS(args, registers)] & 0xFF;
-            memory.store(registers.rs1 + registers.immediate, val);
+            let val = registers.rs2 = registers.x[this.prepS(args, registers)] & 0xFF;
+            console.log(Math.floor(registers.rs1 + registers.immediate) / 4);
+            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, val);
             return 0;
         },
         SH: (args, registers, memory) => {
             registers.func3 = 1; registers.func7 = 0;
-            let val = registers.x[this.prepS(args, registers)] & 0xFFFF;
-            memory.store(registers.rs1 + registers.immediate, val);
+            let val = registers.rs2 =  registers.x[this.prepS(args, registers)] & 0xFFFF;
+            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, val);
             return 1;
         },
         SW: (args, registers, memory) => {
             registers.func3 = 2; registers.func7 = 0;
-            let val = registers.x[this.prepS(args, registers)] & 0xFFFFFFFF;
-            memory.store(registers.rs1 + registers.immediate, val);
+            let val = registers.rs2 =  registers.x[this.prepS(args, registers)] & 0xFFFFFFFF;
+            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, val);
             return 2;
         },
 
@@ -138,7 +139,7 @@ export class RV32Interpreter extends Interpreter {
         BEQ: (args, registers) => {
             registers.func3 = 0;
             let jumpOffset = this.prepB(args, registers);
-            return registers.pc = (registers.rs1 == registers.rs2 ? registers.jumpOffset : registers.pc);
+            return registers.pc = (registers.rs1 == registers.rs2 ? jumpOffset : registers.pc);
         },
         BNE: (args, registers) => {
             registers.func3 = 1;
@@ -203,26 +204,26 @@ export class RV32Interpreter extends Interpreter {
     }
 
     prepI ([rd, rs1, immediate]: number[], registers: RV32IRegistri, unsigned: boolean = false): number {
-        if (rd == 0 ) {
+        if (rd == 0) {
             window.alert('Cannot wirte in register x0');
             registers.pc = 0;
             return;
         }
         registers.opcode = 19; 
         registers.rs1 = registers.x[rs1];
-        registers.immediate = unsigned ? (immediate) : (this.signExtend(immediate));
+        registers.immediate = unsigned ? immediate : this.signExtend(immediate);
         return rd;
     }
 
     prepI_Load ([rd, immediate, rs1]: number[], registers: RV32IRegistri, unsigned: boolean = false): number {
-        if (rd == 0 ) {
+        if (rd == 0) {
             window.alert('Cannot wirte in register x0');
             registers.pc = 0;
             return;
         }
         registers.opcode = 3; 
         registers.rs1 = registers.x[rs1];
-        registers.immediate = (unsigned ? immediate : this.signExtend(immediate));
+        registers.immediate = unsigned ? immediate : this.signExtend(immediate);
         return rd;
     }
 
@@ -258,7 +259,7 @@ export class RV32Interpreter extends Interpreter {
     }
 
     signExtend(immediate: number): number {
-        if((1<<11) & immediate) return (immediate | 0xFFFFF000)>>>0;
+        if((1<<11) & immediate) return (immediate | 0xFFFFF000);
         else return immediate;
     }
 
