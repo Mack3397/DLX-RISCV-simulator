@@ -33,7 +33,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       lineNumbers: true,
       firstLineNumber: 0,
       lineNumberFormatter: (line: number) => (line * 4).toString(16),
-      theme: 'darktheme',
+      theme: 'dlx-riscv-theme',
       mode: this.mode,
       styleActiveLine: true
     }

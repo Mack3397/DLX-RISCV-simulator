@@ -2,17 +2,23 @@
     [(ngModel)]="content"
     [options]="options"
 ></ngx-codemirror>
-<button mat-raised-button (click)="onRun()" [disabled]="isRunDisabled">
-    <span class="btn">Run <i class="fas fa-play green"></i></span>
-</button>
-<button mat-raised-button (click)="onStop()" [disabled]="isStopDisabled">
-    <span class="btn">Stop <i class="fas fa-square red"></i></span>
-</button>
+<div class="btn-container">
+    <div>
+        <button mat-raised-button class="mr" (click)="onRun()" [disabled]="isRunDisabled">
+            <span class="btn">Run <i class="fas fa-play green"></i></span>
+        </button>
+        <button mat-raised-button class="mr" (click)="onStop()" [disabled]="isStopDisabled">
+            <span class="btn">Stop <i class="fas fa-square red"></i></span>
+        </button>
 
-<mat-form-field>
-    <input matInput type="text" placeholder="Start tag" [(ngModel)]="start">
-</mat-form-field>
-
-<button mat-raised-button (click)="onSave()">
-    <span class="btn">Save <i class="fas fa-save"></i></span>
-</button>
+        <mat-form-field>
+            <mat-label>Start tag</mat-label>
+            <input matInput type="text" [(ngModel)]="start">
+        </mat-form-field>
+    </div>
+    <div>
+        <button mat-raised-button (click)="onSave()">
+            <span class="btn">Save <i class="fas fa-save"></i></span>
+        </button>
+    </div>
+</div>
