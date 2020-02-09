@@ -1,9 +1,14 @@
 import { DLXRegistri } from 'src/app/registri/dlx.registri';
 
-function overflowCheck(n: number) {
-    if (n > 0x7FFFFFFF) {
-        // throw new Error('overflow');
-        console.log('overflow');
+function overflowCheck(n: number, negative: boolean = false) {
+    if (negative) {
+        if (n < -0x7FFFFFFF) {
+            throw new Error('overflow');
+        }
+    } else {
+        if (n > 0x7FFFFFFF) {
+            throw new Error('overflow');
+        }
     }
     return n;
 }
@@ -94,8 +99,8 @@ export const instructions: {
     SRAI:   { type: 'I',   func: (registers) => registers.c = registers.a >> (registers.temp & 0x1F) },
     SRL:    { type: 'R',   func: (registers) => registers.c = registers.a >>> (registers.temp & 0x1F) },
     SRLI:   { type: 'I',   func: (registers) => registers.c = registers.a >>> (registers.temp & 0x1F) },
-    SUB:    { type: 'R',   func: (registers) => overflowCheck(instructions['SUBUI'].func(registers)) },
-    SUBI:   { type: 'I',   func: (registers) => overflowCheck(instructions['SUBUI'].func(registers)) },
+    SUB:    { type: 'R',   func: (registers) => overflowCheck(instructions['SUBUI'].func(registers), true) },
+    SUBI:   { type: 'I',   func: (registers) => overflowCheck(instructions['SUBUI'].func(registers), true) },
     SUBU:   { type: 'R',   func: (registers) => registers.c = registers.a - registers.temp },
     SUBUI:  { type: 'I',   func: (registers) => registers.c = registers.a - registers.temp, unsigned: true },
     SW:     { type: 'IS',  func: (registers) => registers.mdr },

@@ -1,5 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ViewChild, OnInit } from '@angular/core';
 import { MainPageComponent } from './main-page/main-page.component';
 
 @Component({
@@ -7,11 +6,28 @@ import { MainPageComponent } from './main-page/main-page.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass']
 })
-export class AppComponent {
+export class AppComponent implements OnInit{
+  
+  private mainPageComponent: MainPageComponent;
+  private _theme: 'light'|'dark';
 
   sidebarOpened: boolean = false;
 
-  private mainPageComponent: MainPageComponent;
+  public get theme() : 'light'|'dark' {
+    return this._theme;
+  }
+  
+  public set theme(v : 'light'|'dark') {
+    this._theme = v;
+    const overlayContainerClasses = document.getElementsByTagName('html').item(0).classList;
+    const themeClassesToRemove = Array.from(overlayContainerClasses).filter((item: string) => item.includes('-theme'));
+    if (themeClassesToRemove.length) {
+      overlayContainerClasses.remove(...themeClassesToRemove);
+    }
+    overlayContainerClasses.add(v + '-theme');
+  }
+
+  constructor() {}
   
   public onRouterOutletActivate(event : MainPageComponent) {
     this.mainPageComponent = event;
@@ -21,8 +37,20 @@ export class AppComponent {
     })
   }
 
+  ngOnInit() {
+    this.theme = 'dark';
+  }
+
   toggleSidenav() {
     this.sidebarOpened = !this.sidebarOpened;
     this.mainPageComponent.toggleSidenav();
+  }
+
+  toggleTheme() {
+    if (this._theme == 'dark') {
+      this.theme = 'light';
+    } else {
+      this.theme = 'dark';
+    }
   }
 }

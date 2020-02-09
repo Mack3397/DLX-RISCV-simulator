@@ -1,12 +1,11 @@
-.cm-s-darktheme
-    &.CodeMirror
-        background-color: #212121
-        color: #EEFFFF
+@import '~@angular/material/theming'
 
+.dark-theme .CodeMirror
+    background-color: #212121
+    color: #EEFFFF
     .CodeMirror-gutters
-        background: #2f2f2f
+        background-color: #2c2c2c
         color: #BDBDBD
-        border: none
 
     .CodeMirror-guttermarker,
     .CodeMirror-guttermarker-subtle,
@@ -15,17 +14,6 @@
 
     .CodeMirror-cursor
         border-left: 1px solid #FAFAFA
-
-    div.CodeMirror-selected,
-    &.CodeMirror-focused div.CodeMirror-selected,
-    .CodeMirror-line::selection,
-    .CodeMirror-line>span::selection,
-    .CodeMirror-line>span>span::selection
-        background: #40C4FF33
-
-    .CodeMirror-gutter-background.CodeMirror-activeline-gutter,
-    .CodeMirror-activeline-background
-        background: #ffffff10
 
     .cm-keyword-r
         color: #00ffd5
@@ -40,58 +28,102 @@
     .cm-keyword-j
         color: #ff00dd
 
-    .cm-operator
-        color: #89DDFF
-
     .cm-variable
         color: #00ff00
-
     .cm-variable-2
         color: #b3ff00
-
     .cm-variable-3,
     .cm-type
         color: #f07178
-
-    .cm-builtin
-        color: #FFCB6B
-
-    .cm-atom
-        color: #F78C6C
 
     .cm-number
         color: #ffae00
-
-    .cm-def
-        color: #82AAFF
-
-    .cm-string
-        color: #C3E88D
-
-    .cm-string-2
-        color: #f07178
-
     .cm-comment
         color: #6f8d9b
-
     .cm-tag
         color: #ffeb3b
+    
+    .runned
+        background-color: #ffff002b
+        .CodeMirror-linenumber.CodeMirror-gutter-elt
+            background-color: #ffff002b
+    .next
+        background-color: #00ff002b
+        .CodeMirror-linenumber.CodeMirror-gutter-elt
+            background-color: #00ff002b
 
-    .cm-meta
-        color: #FF5370
+.light-theme .CodeMirror
+    background-color: #ffffff
+    color: #080808
+    .CodeMirror-gutters
+        background-color: #f0f0f0
+        color: #a0a0a0
 
-    .cm-attribute
-        color: #C792EA
+    .CodeMirror-guttermarker,
+    .CodeMirror-guttermarker-subtle,
+    .CodeMirror-linenumber
+        color: #a0a0a0
 
-    .cm-property
-        color: #C792EA
+    .CodeMirror-cursor
+        border-left: 1px solid #0A0A0A
 
-    .cm-qualifier
-        color: #DECB6B
+    .cm-keyword-r
+        color: darken(#00ffd5, 10%)
+    .cm-keyword-i
+        color: darken(#229bff, 10%)
+    .cm-keyword-s
+        color: darken(#afafff, 10%)
+    .cm-keyword-b
+        color: darken(#ff00dd, 10%)
+    .cm-keyword-u
+        color: darken(#5dbcd2, 10%)
+    .cm-keyword-j
+        color: darken(#ff00dd, 10%)
 
+    .cm-variable
+        color: darken(#00ff00, 10%)
+    .cm-variable-2
+        color: darken(#b3ff00, 10%)
     .cm-variable-3,
     .cm-type
-        color: #DECB6B
+        color: darken(#f07178, 10%)
+
+    .cm-number
+        color: darken(#ffae00, 5%)
+    .cm-comment
+        color: #6f8d9b
+    .cm-tag
+        color: darken(#ffeb3b, 20%)
+
+    .runned
+        background-color: #c8c8002b
+        .CodeMirror-linenumber.CodeMirror-gutter-elt
+            background-color: #c8c8002b
+    .next
+        background-color: #00c8002b
+        .CodeMirror-linenumber.CodeMirror-gutter-elt
+            background-color: #00c8002b
+
+.cm-s-dlx-riscv-theme.CodeMirror
+    border-radius: 5px
+    @include mat-elevation-transition
+    @include mat-elevation(4)
+    &.CodeMirror-focused
+        @include mat-elevation(8)
+
+    .CodeMirror-gutters
+        border: none
+
+    div.CodeMirror-selected,
+    &.CodeMirror-focused div.CodeMirror-selected,
+    .CodeMirror-line::selection,
+    .CodeMirror-line>span::selection,
+    .CodeMirror-line>span>span::selection
+        background: #40C4FF33
+
+    .CodeMirror-gutter-background.CodeMirror-activeline-gutter,
+    .CodeMirror-activeline-background
+        background: #ffffff10
 
     .cm-error
         color: rgba(255, 255, 255, 1.0)

@@ -19,13 +19,30 @@ $DLX-RISCV-simulator-accent: mat-palette($mat-amber, A200, A100, A400)
 $DLX-RISCV-simulator-warn: mat-palette($mat-red)
 
 // Create the theme object (a Sass map containing all of the palettes).
-$DLX-RISCV-simulator-theme: mat-dark-theme($DLX-RISCV-simulator-primary, $DLX-RISCV-simulator-accent, $DLX-RISCV-simulator-warn)
+$DLX-RISCV-simulator-dark-theme: mat-dark-theme($DLX-RISCV-simulator-primary, $DLX-RISCV-simulator-accent, $DLX-RISCV-simulator-warn)
+$DLX-RISCV-simulator-light-theme: mat-light-theme($DLX-RISCV-simulator-primary, $DLX-RISCV-simulator-accent, $DLX-RISCV-simulator-warn)
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
 // that you are using.
-@include angular-material-theme($DLX-RISCV-simulator-theme)
+.dark-theme
+    @include angular-material-theme($DLX-RISCV-simulator-dark-theme)
+    .mat-sidenav
+        background: #383838
+    ::-webkit-scrollbar-thumb 
+        background: #5a5a5a
+        border-radius: 3px
+        &:hover
+            background: #707070
 
+.light-theme
+    @include angular-material-theme($DLX-RISCV-simulator-light-theme)
+    
+    ::-webkit-scrollbar-thumb 
+        background: #bbbbbb
+        border-radius: 3px
+        &:hover
+            background: #aaaaaa
 
 html, body
     height: 100%

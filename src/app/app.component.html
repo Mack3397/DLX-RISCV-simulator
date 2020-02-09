@@ -6,6 +6,11 @@
     <span>Simulator</span>
     <a mat-button routerLink="/dlx" routerLinkActive="active">DLX</a>
     <a mat-button routerLink="/rv32i" routerLinkActive="active">RV32I</a>
+    <span class="spacer"></span>
+    <button mat-button mat-icon-button matTooltip="Theme" (click)="toggleTheme()">
+        <span *ngIf="theme == 'light'"><i class="fas fa-lightbulb"></i></span>
+        <span *ngIf="theme == 'dark'"><i class="far fa-lightbulb"></i></span>
+    </button>
 </mat-toolbar>
 <div class="mat-app-background basic-container">
     <router-outlet (activate)="onRouterOutletActivate($event)"></router-outlet>
