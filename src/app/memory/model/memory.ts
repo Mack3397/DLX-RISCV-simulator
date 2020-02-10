@@ -1,11 +1,16 @@
-import { Device } from './device';
+import { Device, IDevice } from './device';
+import { Injector } from '@angular/core';
 
 export class Memory {
     devices: Device[] = [];
 
-    public add(name: string, min_address: number, max_address: number): void {
+    public add(name: string|IDevice, min_address: number, max_address: number, injector?: Injector): void {
         if (this.devices.every(dev => !(dev.checkAddress(min_address) || dev.checkAddress(max_address)))) {
-            this.devices.push(new Device(name, min_address, max_address));
+            if (typeof name == 'string') {
+                this.devices.push(new Device(name, min_address, max_address));
+            } else {
+                this.devices.push(new name(min_address, max_address, injector))
+            }
         }
     }
 

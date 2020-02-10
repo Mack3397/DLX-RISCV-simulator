@@ -1,9 +1,10 @@
-import { Component, OnInit, ViewChild, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, Input, Output, EventEmitter, Injector } from '@angular/core';
 import { Registri } from '../registri/registri';
 import { ActivatedRoute } from '@angular/router';
 import { Interpreter } from '../interpreters/interpreter';
-import { Memory } from '../memory/memory';
+import { Memory } from '../memory/model/memory';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Eprom } from '../memory/model/eprom';
 
 @Component({
   selector: 'app-main-page',
@@ -22,10 +23,13 @@ export class MainPageComponent implements OnInit {
   @Input() sidebarOpened: boolean;
   @Output() sidebarOpenedChange: EventEmitter<number> = new EventEmitter();
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, injector: Injector) {
     this.memory = new Memory();
     //inizializzo 1 GB di memoria;
-    this.memory.add('RAM', 0x10000000, 0x20000000);
+    this.memory.add(Eprom, 0x00000000, 0x07FFFFFF, injector);
+    this.memory.add('RAM A', 0x10000000, 0x1FFFFFFF);
+    this.memory.add('RAM B', 0x20000000, 0x27FFFFFF);
+    this.memory.add('RL', 0x28000000, 0x29FFFFFF);
   }
 
   ngOnInit() {

@@ -1,1 +1,27 @@
-<p>memory works!</p>
+<span>Memory</span>
+
+<div class="memory">
+    <div class="dev" matRipple *ngFor="let device of memory.devices"
+        [style.left]="((device.min_address/1073741824)*100).toFixed(2)+'%'"
+        [style.right]="(100 - (device.max_address/1073741824)*100).toFixed(2)+'%'"
+        (click)="selected == device ? selected = null : selected = device"
+        [class.selected]="selected == device">
+        <span>{{ device.name }}</span>
+    </div>
+    <div class="gig-overlay">
+        <div class="gig"></div>
+        <div class="gig"></div>
+        <div class="gig"></div>
+        <div class="gig"></div>
+    </div>
+</div>
+<div class="container" *ngIf="selected" @myInsertRemoveTrigger>
+    <mat-form-field id="min" appearance="fill">
+        <mat-label>min</mat-label>
+        <input matInput [(ngModel)]="selected.min_address_hex" minlength="8" maxlength="8"/>
+    </mat-form-field>
+    <mat-form-field id="max" appearance="fill">
+        <mat-label>max</mat-label>
+        <input matInput [(ngModel)]="selected.max_address_hex" minlength="8" maxlength="8"/>
+    </mat-form-field>
+</div>
