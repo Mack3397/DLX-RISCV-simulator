@@ -27,6 +27,8 @@ $DLX-RISCV-simulator-light-theme: mat-light-theme($DLX-RISCV-simulator-primary, 
 // that you are using.
 .dark-theme
     @include angular-material-theme($DLX-RISCV-simulator-dark-theme)
+    .memory
+        background-color: map-get($mat-gray, 800)
     .mat-sidenav
         background: #383838
     ::-webkit-scrollbar-thumb 
@@ -37,12 +39,16 @@ $DLX-RISCV-simulator-light-theme: mat-light-theme($DLX-RISCV-simulator-primary, 
 
 .light-theme
     @include angular-material-theme($DLX-RISCV-simulator-light-theme)
-    
+    .memory
+        background-color: white
     ::-webkit-scrollbar-thumb 
         background: #bbbbbb
         border-radius: 3px
         &:hover
             background: #aaaaaa
+
+.device-size
+    font-size: 1rem
 
 html, body
     height: 100%
