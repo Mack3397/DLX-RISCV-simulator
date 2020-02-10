@@ -83,7 +83,7 @@ export class DLXInterpreter extends Interpreter{
         }
     }
 
-    run(line: string, registers: Registri, memory: Memory): void {
+    public processLine(line: string): [string, number[]]{
         let tokens: string[];
 
         if (!line || line.match(/^;/)) {
@@ -106,6 +106,12 @@ export class DLXInterpreter extends Interpreter{
                 return this.tags[arg];
             } else return 0;
         });
+
+        return [instruction, argsFixed];
+    }
+
+    run(line: string, registers: Registri, memory: Memory): void {
+        let [instruction, argsFixed] = this.processLine(line);
 
         if (instructions[instruction]) {
             let inst = instructions[instruction];

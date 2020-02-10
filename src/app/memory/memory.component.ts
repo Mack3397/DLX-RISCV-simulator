@@ -1,7 +1,7 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { Memory } from './model/memory';
+import { Component, OnInit } from '@angular/core';
 import { Device } from './model/device';
-import { trigger, state, style, transition, animate } from '@angular/animations';
+import { trigger, style, transition, animate } from '@angular/animations';
+import { MemoryService } from '../services/memory.service';
 
 @Component({
   selector: 'app-memory',
@@ -20,13 +20,21 @@ import { trigger, state, style, transition, animate } from '@angular/animations'
   ],
 })
 export class MemoryComponent implements OnInit {
-
-  @Input() memory: Memory;
   selected: Device;
 
-  constructor() { }
+  constructor(public memoryService: MemoryService) { }
 
   ngOnInit() {
+  }
+
+  onAdd() {
+    let firstFreeAddr = this.memoryService.memory.firstFreeAddr;
+    this.memoryService.add('New', firstFreeAddr, firstFreeAddr + 0x01FFFFFF)
+  }
+
+  onDelete(dev: Device) {
+    this.memoryService.remove(dev);
+    this.selected = null;
   }
 
 }

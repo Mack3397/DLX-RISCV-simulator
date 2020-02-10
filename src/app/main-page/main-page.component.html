@@ -6,7 +6,7 @@
         <div class="main">
             <div class="left">
                 <app-editor [mode]="editorMode" [(pc)]="registri.pc" (runLine)="onRun($event)" (doParseTags)="doParseTags($event)"></app-editor>
-                <app-memory [memory]="memory"></app-memory>
+                <app-memory></app-memory>
             </div>
             <app-registri [registri]="registri"></app-registri>
         </div>

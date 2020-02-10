@@ -1,16 +1,18 @@
 import 'codemirror/addon/selection/active-line'
 import './modes/dlx.js';
 import './modes/rv32i.js';
-import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { EditorFromTextArea } from 'codemirror';
+import { CodeService } from '../services/code.service.js';
+import { MemoryService } from '../services/memory.service.js';
 
 @Component({
   selector: 'app-editor',
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.sass']
 })
-export class EditorComponent implements OnInit, AfterViewInit {
+export class EditorComponent implements AfterViewInit {
 
   @ViewChild('codeEditor', { static: false }) codeEditor: CodemirrorComponent;
 
@@ -26,7 +28,6 @@ export class EditorComponent implements OnInit, AfterViewInit {
   private runnedLine: number = 0;
   private running: boolean = false;
   start: string = 'main';
-  content: string = '';
 
   get options() {
     return {
@@ -36,7 +37,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
       theme: 'dlx-riscv-theme',
       mode: this.mode,
       styleActiveLine: true
-    }
+    };
   }
 
   get doc(): EditorFromTextArea {
@@ -89,11 +90,7 @@ export class EditorComponent implements OnInit, AfterViewInit {
     return !this.running;
   }
 
-  constructor() { }
-
-  ngOnInit() {
-    this.content = window.localStorage.getItem('code') || 'main: ';
-  }
+  constructor(public codeService: CodeService, private memoryService: MemoryService) { }
 
   ngAfterViewInit() {
     this.doc.on("change", (event) => {
@@ -103,8 +100,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
 
   onRun() {
     if (!this.running) {
-      this.currentLine = this.content.split('\n').findIndex((line) => RegExp('^'+this.start+':').test(line));
-      this.doParseTags.emit(this.content);
+      this.currentLine = this.codeService.content.split('\n').findIndex((line) => RegExp('^'+this.start+':').test(line));
+      this.doParseTags.emit(this.codeService.content);
       this.running = true;
     }
     this.runnedLine = this.currentLine;
@@ -118,7 +115,8 @@ export class EditorComponent implements OnInit, AfterViewInit {
   }
 
   onSave() {
-    window.localStorage.setItem('code', this.content);
+    this.codeService.save();
+    this.memoryService.save();
   }
 
 }

@@ -1,25 +1,46 @@
 @import '~@angular/material/theming'
-$gig-width: 8rem
+$mem-heigth: 8rem
 $color-value: A200
 
 @mixin bg-color($palette, $hue)
     background-color: map-get($palette, $hue)
     color: mat-contrast($palette, $hue)
 
+.main-container
+    width: 100%
+    display: grid
+    margin-top: 1rem
+    grid-template-columns: auto 2rem
+    grid-column-gap: .5rem
+    grid-row-gap: .5rem
+    #add
+        z-index: 1
+        min-width: 2rem
+        width: 2rem
+        height: $mem-heigth
+        padding: .5rem
+        margin: auto 0
+        @include mat-elevation(4)
+        &:active
+            @include mat-elevation(10)
+    #del
+        min-width: 2rem
+        width: 2rem
+        height: 3.9rem
+        padding: .5rem
+
 .memory
     position: relative
     z-index: 1
-    margin: 1rem 0
-    background-color: map-get($mat-gray, 800)
-    width: $gig-width * 4
-    height: $gig-width
+    width: 100%
+    height: $mem-heigth
     border-radius: .5rem
     overflow: hidden
     @include mat-elevation(4)
     .dev
         display: flex
         position: absolute
-        height: $gig-width
+        height: $mem-heigth
         justify-content: center
         align-items: center
         @include mat-elevation-transition
@@ -33,24 +54,26 @@ $color-value: A200
             @include bg-color($mat-blue, $color-value)
         &.selected
             z-index: 3
-            @include mat-elevation(8)
+            box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.4)
         
     .gig-overlay
         position: absolute
         z-index: 2
+        width: 100%
         pointer-events: none
         .gig
             display: inline-block
-            width: calc(#{$gig-width} - 2px)
-            height: $gig-width
+            width: calc(25% - 2px)
+            height: $mem-heigth
             border-right: 2px solid map-get($mat-gray, 300)
             pointer-events: none
             &:last-child
+                width: 25%
                 border-right: none
 
 .container
     display: flex
-    width: $gig-width * 4
+    width: 100%
     justify-content: space-between
     #max, #min
         width: 6em
