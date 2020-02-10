@@ -1,7 +1,7 @@
 import { Interpreter } from './interpreter';
 import { Registri } from '../registri/registri';
 import { RV32IRegistri } from '../registri/rv32i.registri';
-import { Memory } from '../memory/memory';
+import { Memory } from '../memory/model/memory';
 
 export class RV32Interpreter extends Interpreter {
 

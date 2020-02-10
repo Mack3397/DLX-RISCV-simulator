@@ -1,7 +1,7 @@
 import { Interpreter } from '../interpreter';
 import { Registri } from '../../registri/registri';
 import { DLXRegistri } from '../../registri/dlx.registri';
-import { Memory } from 'src/app/memory/memory';
+import { Memory } from 'src/app/memory/model/memory';
 import { decoder, inputs_decoder } from './dlx.decoder';
 import { instructions, InstructionType, signExtend } from './dlx.instructions';
 export class DLXInterpreter extends Interpreter{

@@ -1,0 +1,56 @@
+@import '~@angular/material/theming'
+$gig-width: 8rem
+$color-value: A200
+
+@mixin bg-color($palette, $hue)
+    background-color: map-get($palette, $hue)
+    color: mat-contrast($palette, $hue)
+
+.memory
+    position: relative
+    z-index: 1
+    margin: 1rem 0
+    background-color: map-get($mat-gray, 800)
+    width: $gig-width * 4
+    height: $gig-width
+    border-radius: .5rem
+    overflow: hidden
+    @include mat-elevation(4)
+    .dev
+        display: flex
+        position: absolute
+        height: $gig-width
+        justify-content: center
+        align-items: center
+        @include mat-elevation-transition
+        span
+            user-select: none
+        &:nth-child(3n)
+            @include bg-color($mat-red, $color-value)
+        &:nth-child(3n+1)
+            @include bg-color($mat-light-green, $color-value)
+        &:nth-child(3n+2)
+            @include bg-color($mat-blue, $color-value)
+        &.selected
+            z-index: 3
+            @include mat-elevation(8)
+        
+    .gig-overlay
+        position: absolute
+        z-index: 2
+        pointer-events: none
+        .gig
+            display: inline-block
+            width: calc(#{$gig-width} - 2px)
+            height: $gig-width
+            border-right: 2px solid map-get($mat-gray, 300)
+            pointer-events: none
+            &:last-child
+                border-right: none
+
+.container
+    display: flex
+    width: $gig-width * 4
+    justify-content: space-between
+    #max, #min
+        width: 6em
