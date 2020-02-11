@@ -8,7 +8,9 @@
                 <app-editor [mode]="editorMode" [(pc)]="registri.pc" (runLine)="onRun($event)" (doParseTags)="doParseTags($event)"></app-editor>
                 <app-memory></app-memory>
             </div>
-            <app-registri [registri]="registri"></app-registri>
+            <div class="right">
+                <app-registri [registri]="registri"></app-registri>
+            </div>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>

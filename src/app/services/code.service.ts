@@ -21,10 +21,7 @@ export class CodeService {
   }
 
   dlxDecode(lineN: number): number {
-    let [instruction, argsFixed] = (this.interpreter as DLXInterpreter).processLine(this.content.split('\n')[lineN]);
-    let inst = instructions[instruction];
-    let [opcode, alucode] = decoder[instruction];
-    return parseInt(opcode + inputs_decoder[inst.type](argsFixed) + alucode, 2)
+    return this.interpreter.decode(this.content.split('\n')[lineN]);
   }
 
   log() {

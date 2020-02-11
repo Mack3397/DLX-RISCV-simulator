@@ -285,4 +285,8 @@ export class RV32Interpreter extends Interpreter {
         if (this.instructions[instruction])
             this.instructions[instruction](argsFixed, registers as RV32IRegistri, memory);  
     }
+    
+    decode(line: string): number {
+        return 0;
+    }
 }

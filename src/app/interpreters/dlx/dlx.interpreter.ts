@@ -121,4 +121,11 @@ export class DLXInterpreter extends Interpreter{
             this.process_instruction[inst.type](argsFixed, inst.func, registers as DLXRegistri, memory, inst.unsigned);
         }
     }
+
+    decode(line: string): number {
+        let [instruction, argsFixed] = this.processLine(line);
+        let inst = instructions[instruction];
+        let [opcode, alucode] = decoder[instruction];
+        return parseInt(opcode + inputs_decoder[inst.type](argsFixed) + alucode, 2)
+    }
 }
