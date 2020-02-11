@@ -23,15 +23,15 @@
     <div class="container" *ngIf="selected" @myInsertRemoveTrigger>
         <mat-form-field id="min" appearance="fill">
             <mat-label>min</mat-label>
-            <input matInput (change)="onChange($event)" [(ngModel)]="selected.min_address_hex" minlength="8" maxlength="8" [disabled]="selected.name == 'EPROM'"/>
+            <input matInput (change)="onChange($event, 'min')" [(ngModel)]="selected.min_address_hex" minlength="8" maxlength="8" [disabled]="selected.name == 'EPROM'"/>
         </mat-form-field>
         <mat-form-field id="name" appearance="fill">
             <mat-label>name</mat-label>
-            <input matInput (change)="onChange($event)" [(ngModel)]="selected.name" [disabled]="selected.name == 'EPROM'"/>
+            <input matInput (change)="onChange($event, 'name')" [(ngModel)]="selected.name" [disabled]="selected.name == 'EPROM'"/>
         </mat-form-field>
         <mat-form-field id="max" appearance="fill">
             <mat-label>max</mat-label>
-            <input matInput (change)="onChange($event)" [(ngModel)]="selected.max_address_hex" minlength="8" maxlength="8"/>
+            <input matInput (change)="onChange($event, 'max')" [(ngModel)]="selected.max_address_hex" minlength="8" maxlength="8"/>
         </mat-form-field>
     </div>
     <button mat-raised-button *ngIf="selected" id="del" (click)="onDelete(selected)" [disabled]="selected.name == 'EPROM'" @myInsertRemoveTrigger><i class="fas fa-trash"></i></button>
