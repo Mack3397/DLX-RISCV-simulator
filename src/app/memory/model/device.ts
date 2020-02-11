@@ -53,10 +53,10 @@ export class Device {
     }
 
     public load(address: number): number {
-        return this.memory[address];
+        return this.memory[address - this.min_address];
     }
     
     public store(address: number, word: number): void {
-        this.memory[address] = word;
+        this.memory[address - this.min_address] = word;
     }
 }
