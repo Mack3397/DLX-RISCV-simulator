@@ -116,7 +116,6 @@ export class EditorComponent implements AfterViewInit {
 
   onSave() {
     this.codeService.save();
-    this.memoryService.save();
   }
 
 }

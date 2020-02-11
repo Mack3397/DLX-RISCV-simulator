@@ -117,21 +117,20 @@ export class RV32Interpreter extends Interpreter {
         // S-type instructions 
         SB: (args, registers, memory) => {
             registers.func3 = 0; registers.func7 = 0;
-            let val = registers.rs2 = registers.x[this.prepS(args, registers)] & 0xFF;
-            console.log(Math.floor(registers.rs1 + registers.immediate) / 4);
-            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, val);
+            registers.rs2 = registers.x[this.prepS(args, registers)] & 0x000000FF;
+            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, registers.rs2);
             return 0;
         },
         SH: (args, registers, memory) => {
             registers.func3 = 1; registers.func7 = 0;
-            let val = registers.rs2 =  registers.x[this.prepS(args, registers)] & 0xFFFF;
-            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, val);
+            registers.rs2 =  registers.x[this.prepS(args, registers)] & 0x0000FFFF;
+            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, registers.rs2);
             return 1;
         },
         SW: (args, registers, memory) => {
             registers.func3 = 2; registers.func7 = 0;
-            let val = registers.rs2 =  registers.x[this.prepS(args, registers)] & 0xFFFFFFFF;
-            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, val);
+            registers.rs2 =  registers.x[this.prepS(args, registers)] & 0xFFFFFFFF;
+            memory.store(Math.floor(registers.rs1 + registers.immediate) / 4, registers.rs2);
             return 2;
         },
 
@@ -191,6 +190,7 @@ export class RV32Interpreter extends Interpreter {
         },
     };
 
+    // PREP, Prepares args in the right format to be executed by the instructions
     prepR ([rd, rs1, rs2]: number[], registers: RV32IRegistri): number {
         if (rd == 0 ) {
             window.alert('Cannot wirte in register x0');
@@ -264,6 +264,7 @@ export class RV32Interpreter extends Interpreter {
     }
 
     run(line: string, registers: Registri, memory: Memory): void {
+        // Decoding the input line 
         let tokens = line.split(/\W+/);
         if (!tokens[0] || line.match(/\w+:/)) tokens.shift();
 
