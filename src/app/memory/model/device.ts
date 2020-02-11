@@ -38,7 +38,7 @@ export class Device {
     public get size(): string {
         //1 address = 4 byte so
         //262144 = 1024 * 1024 / 4
-        return ((this.max_address - this.min_address + 1) / 262144)+'MB'
+        return Math.ceil(((this.max_address - this.min_address + 1) / 262144))+'MB'
     }
 
     constructor(name: string, min_address: number, max_address: number) {

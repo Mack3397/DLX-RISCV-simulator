@@ -35,6 +35,7 @@ export class Memory {
             } else {
                 this.devices.push(new name(min_address, max_address, injector))
             }
+            this.devices = this.devices.sort((a,b) => a.min_address - b.min_address);
         }
     }
 

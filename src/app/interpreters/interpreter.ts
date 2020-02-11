@@ -8,6 +8,8 @@ export abstract class Interpreter {
 
     abstract run(line: string, registri: Registri, memory: Memory): void;
 
+    abstract decode(line: string): number;
+
     parseTags(code: string) {
         code.split('\n').forEach((line, index) => {
             let tag = /^(\w+):/.exec(line);
