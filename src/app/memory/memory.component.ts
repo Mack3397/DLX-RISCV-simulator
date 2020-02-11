@@ -22,6 +22,20 @@ import { MemoryService } from '../services/memory.service';
 export class MemoryComponent implements OnInit {
   selected: Device;
 
+  get canMoveSelectedLeft(): boolean {
+    let devices = this.memoryService.memory.devices;
+    let index = devices.indexOf(this.selected);
+    return (this.selected.name !== 'EPROM') && 
+      (index > 0);
+  }
+  get canMoveSelectedRight(): boolean {
+    let devices = this.memoryService.memory.devices;
+    let index = devices.indexOf(this.selected);
+    return (this.selected.name !== 'EPROM') && 
+      (index < devices.length - 1);
+  }
+
+
   constructor(public memoryService: MemoryService) { }
 
   ngOnInit() {
@@ -45,4 +59,11 @@ export class MemoryComponent implements OnInit {
     parseInt(this.selected.size) >= 128 ? this.memoryService.save() : window.alert("Memory is less than 128MB");
   }
 
+  moveSelectedLeft() {
+
+  }
+
+  moveSelectedRight() {
+
+  }
 }

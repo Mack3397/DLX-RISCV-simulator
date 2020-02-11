@@ -23,7 +23,7 @@ $color-value: A200
         @include mat-elevation(4)
         &:active
             @include mat-elevation(10)
-    #del
+    #del, #move-right, #move-left
         min-width: 2rem
         width: 2rem
         height: 3.9rem
@@ -75,5 +75,9 @@ $color-value: A200
     display: flex
     width: 100%
     justify-content: space-between
-    #max, #min
-        width: 6em
+    .group
+        display: flex
+        width: 8.5em
+        justify-content: space-between
+        #max, #min
+            width: 6em
