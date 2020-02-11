@@ -53,9 +53,10 @@ export class MemoryComponent implements OnInit {
     this.memoryService.save();
   }
 
-  onChange(event:any) {
-    // ((this.memoryService.memory.devices.find((dev) => dev.checkAddress(this.selected.max_address)) != this.selected) || (this.memoryService.memory.devices.find((dev) => dev.checkAddress(this.selected.min_address)) != this.selected)) ? window.alert("Error") : (parseInt(this.selected.size) >= 128 ? this.memoryService.save() : window.alert("Error"));
-    this.memoryService.memory.devices.some((dev) => ((this.selected.checkAddress(dev.min_address) || this.selected.checkAddress(dev.max_address)) && dev.name != this.selected.name)) ? window.alert("Error") : (parseInt(this.selected.size) >= 128 ? this.memoryService.save() : window.alert("Memory is less than 128 MB"));
+  onChange(event:any, side: string) {
+    let indexSelectedDevice = this.memoryService.memory.devices.indexOf(this.selected);
+    side == "min" ? this.selected.min_address = this.memoryService.memory.devices[indexSelectedDevice - 1].max_address + 1 : (side == "max" ? this.selected.max_address = this.memoryService.memory.devices[indexSelectedDevice + 1].min_address - 1 : (window.alert(event.target.value + ' name changed.')));
+    parseInt(this.selected.size) >= 128 ? this.memoryService.save() : window.alert("Memory is less than 128MB");
   }
 
   moveSelectedLeft() {
