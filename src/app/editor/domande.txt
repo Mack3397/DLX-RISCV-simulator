@@ -13,6 +13,6 @@ cose da chiedere:
 3. Parole in inglese [decimale, binario, esadecimale] - ok
 4. Spazio fisso per rete logica
 5. Posizionare un blocco di Ram alla fine - ok
-6. Bottone per esecuzione automatica 
+6. Bottone per esecuzione automatica - ok
 7. Implementare interrupt
 8. Realizzare RL con Led
