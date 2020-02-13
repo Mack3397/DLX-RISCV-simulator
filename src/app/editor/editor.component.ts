@@ -24,10 +24,13 @@ export class EditorComponent implements AfterViewInit {
   @Output() runLine: EventEmitter<string> = new EventEmitter();
   @Output() doParseTags: EventEmitter<string> = new EventEmitter();
 
+  private timeout;
   private previousLine: number = 0;
   private runnedLine: number = 0;
   private running: boolean = false;
+  private continuousRunning = false;
   start: string = 'main';
+  interval: number = 1000;
 
   get options() {
     return {
@@ -79,9 +82,16 @@ export class EditorComponent implements AfterViewInit {
     this.pcChange.emit(this.pc);
   }
 
+  get isContinuousRunDisabled(): boolean {
+    if(this.doc)
+      return (this.currentLine >= this.doc.lineCount());
+    else
+      return false;
+  }
+
   get isRunDisabled(): boolean {
     if(this.doc)
-      return this.currentLine >= this.doc.lineCount();
+      return (this.currentLine >= this.doc.lineCount()) || this.continuousRunning;
     else
       return false;
   }
@@ -98,6 +108,16 @@ export class EditorComponent implements AfterViewInit {
     });
   }
 
+  continuousRun() {
+    this.continuousRunning = true;
+    this.timeout = setTimeout(() => {
+      if(this._pc < this.codeService.content.split('\n').length * 4) {
+        this.onRun();
+        this.continuousRun();
+      }
+    }, this.interval);
+  }
+
   onRun() {
     if (!this.running) {
       this.currentLine = this.codeService.content.split('\n').findIndex((line) => RegExp('^'+this.start+':').test(line));
@@ -112,6 +132,8 @@ export class EditorComponent implements AfterViewInit {
   onStop() {
     this.running = false;
     this.currentLine = 0;
+    clearTimeout(this.timeout);
+    this.continuousRunning = false;
   }
 
   onSave() {

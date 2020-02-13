@@ -5,13 +5,19 @@
 <div class="btn-container">
     <div>
         <button mat-raised-button class="mr" (click)="onRun()" [disabled]="isRunDisabled">
+            <span class="btn">Step <i class="fas fa-step-forward fa-lg green"></i></span>
+        </button>
+        <button mat-raised-button class="mr" (click)="continuousRun()" [disabled]="isContinuousRunDisabled">
             <span class="btn">Run <i class="fas fa-play green"></i></span>
         </button>
+        <mat-form-field class="input-interval">
+            <mat-label>Set Interval (ms)</mat-label>
+            <input matInput type="text" [(ngModel)]="interval">
+        </mat-form-field>
         <button mat-raised-button class="mr" (click)="onStop()" [disabled]="isStopDisabled">
             <span class="btn">Stop <i class="fas fa-square red"></i></span>
         </button>
-
-        <mat-form-field>
+        <mat-form-field class="input-label">
             <mat-label>Start tag</mat-label>
             <input matInput type="text" [(ngModel)]="start">
         </mat-form-field>
