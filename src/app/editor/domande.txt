@@ -5,3 +5,14 @@ cose da chiedere:
 -MULTI e DIVI non ci sono nel libro al loro posto è definito MULTU e DIVU
 -quali registri speciali sono utilizzabili da MOVI2S e MOVS2I
 -cosa succede quando avviene una overflow exception
+
+
+- ToDo post incontro Mattoccia
+1. Includere h nella parte laterale dell'editor (?) - ok
+2. Numeri esadecimali con 0x all'inizio anzichè h finale
+3. Parole in inglese [decimale, binario, esadecimale] - ok
+4. Spazio fisso per rete logica
+5. Posizionare un blocco di Ram alla fine - ok
+6. Bottone per esecuzione automatica 
+7. Implementare interrupt
+8. Realizzare RL con Led
