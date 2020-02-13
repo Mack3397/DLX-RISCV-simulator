@@ -5,14 +5,13 @@ import { Eprom } from './eprom';
 export class Memory {
     devices: Device[] = [];
 
-    public get firstFreeAddr(): number {
-        let firstFreeAddr = 0;
-        this.devices.forEach(dev => {
-            if (dev.checkAddress(firstFreeAddr)) {
-                firstFreeAddr = dev.max_address + 1;
+    public firstFreeAddr(): number {
+        for(let i = 0; i < this.devices.length - 1; i++) {
+            if((this.devices[i+1].min_address - this.devices[i].max_address) >= 33554432) {
+                return this.devices[i].max_address;
             }
-        });
-        return firstFreeAddr;
+        }
+        return 0;
     }
 
     constructor(struct?: string, injector?: Injector) {

@@ -19,8 +19,8 @@ export class MemoryService {
       this.memory = new Memory();
       this.memory.add(Eprom, 0x00000000, 0x07FFFFFF, injector);
       this.memory.add('RAM A', 0x10000000, 0x1FFFFFFF);
-      this.memory.add('RAM B', 0x20000000, 0x27FFFFFF);
       this.memory.add('RL', 0x28000000, 0x29FFFFFF);
+      this.memory.add('RAM B', 0x38000000, 0x3FFFFFFF);
     }
   }
 

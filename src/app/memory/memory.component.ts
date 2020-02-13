@@ -25,7 +25,7 @@ export class MemoryComponent implements OnInit {
   get canMoveSelectedLeft(): boolean {
     let devices = this.memoryService.memory.devices;
     let index = devices.indexOf(this.selected);
-    return (this.selected.name !== 'EPROM') && 
+    return (this.selected.name !== 'EPROM' && this.selected.name != 'RAM B') && 
       (index > 0);
   }
   get canMoveSelectedRight(): boolean {
@@ -42,8 +42,8 @@ export class MemoryComponent implements OnInit {
   }
 
   onAdd() {
-    let firstFreeAddr = this.memoryService.memory.firstFreeAddr;
-    this.memoryService.add('New', firstFreeAddr, firstFreeAddr + 0x01FFFFFF)
+    let firstAdd = this.memoryService.memory.firstFreeAddr() + 1;
+    this.memoryService.add('New', firstAdd, firstAdd + 0x01FFFFFF)
     this.memoryService.save();
   }
 
@@ -54,9 +54,18 @@ export class MemoryComponent implements OnInit {
   }
 
   onChange(event:any, side: string) {
+    let devices = this.memoryService.memory.devices;
     let indexSelectedDevice = this.memoryService.memory.devices.indexOf(this.selected);
-    side == "min" ? this.selected.min_address = this.memoryService.memory.devices[indexSelectedDevice - 1].max_address + 1 : (side == "max" ? this.selected.max_address = this.memoryService.memory.devices[indexSelectedDevice + 1].min_address - 1 : (window.alert(event.target.value + ' name changed.')));
-    parseInt(this.selected.size) >= 128 ? this.memoryService.save() : window.alert("Memory is less than 128MB");
+    if (side == 'min') {
+      if (this.selected.min_address <= devices[indexSelectedDevice - 1].max_address) {
+        this.selected.min_address = devices[indexSelectedDevice - 1].max_address + 1;
+      }
+    } else if (side == 'max') {
+      if (this.selected.max_address >= devices[indexSelectedDevice + 1].min_address) {
+        this.selected.max_address = devices[indexSelectedDevice + 1].min_address - 1;
+      }
+    }
+    parseInt(this.selected.size) >= 128 ? this.memoryService.save() : window.alert("Memory is less than 128MB");		     
   }
 
   moveSelectedLeft() {
@@ -67,12 +76,10 @@ export class MemoryComponent implements OnInit {
     if(spaceBeforeFirstDevice >= 33554432) {
       this.selected.max_address -= 33554432;
       this.selected.min_address -= 33554432;
-    } 
-    //   else if ((endAddress = this.spaceBetweenDevices(indexSelectedDevice, sizeOfSelected, 'right')) != 0) {
-    //   console.log(endAddress);
-    //   this.selected.max_address = endAddress - 1;
-    //   this.selected.min_address = this.selected.max_address - sizeOfSelected;
-    // }
+    } else if ((endAddress = this.spaceBetweenDevices(indexSelectedDevice, sizeOfSelected, 'left')) != 0) {
+      this.selected.max_address = endAddress - 1;
+      this.selected.min_address = this.selected.max_address - sizeOfSelected;
+    }
     this.memoryService.memory.devices = this.memoryService.memory.devices.sort((a,b) => a.min_address - b.min_address);
     this.memoryService.save();
   }
@@ -87,10 +94,8 @@ export class MemoryComponent implements OnInit {
       this.selected.max_address += 33554432;
       this.selected.min_address += 33554432;
     } else if ((startAddress = this.spaceBetweenDevices(indexSelectedDevice, sizeOfSelected, 'right')) != 0) {   // Muovi tra due device avanti a me
+      console.log(startAddress);
       this.selected.min_address = startAddress + 1;
-      this.selected.max_address = this.selected.min_address + sizeOfSelected;
-    } else if (4294967295 - lastDevice.max_address >= sizeOfSelected) {                                 // Passa oltre l'ultimo device
-      this.selected.min_address = lastDevice.max_address + 1;
       this.selected.max_address = this.selected.min_address + sizeOfSelected;
     }
     this.memoryService.memory.devices = this.memoryService.memory.devices.sort((a,b) => a.min_address - b.min_address);
@@ -99,14 +104,13 @@ export class MemoryComponent implements OnInit {
 
   private spaceBetweenDevices(indexSelectedDevice: number, sizeOfSelected: number, side: string): number {
     for(let i = indexSelectedDevice; i < this.memoryService.memory.devices.length - 2 && side == 'right'; i++) {
-      if((this.memoryService.memory.devices[i + 1].min_address - this.memoryService.memory.devices[i].max_address) >= sizeOfSelected) {
-        return this.memoryService.memory.devices[i].max_address;
+      if((this.memoryService.memory.devices[i + 2].min_address - this.memoryService.memory.devices[i + 1].max_address) >= sizeOfSelected) {
+        return this.memoryService.memory.devices[i + 1].max_address;
       }
     }
-
     for(let i = indexSelectedDevice; i > 1 && side == 'left'; i--) {
-      if((this.memoryService.memory.devices[i].min_address - this.memoryService.memory.devices[i - 1].max_address) >= sizeOfSelected) {
-        return this.memoryService.memory.devices[i].min_address;
+      if((this.memoryService.memory.devices[i - 1].min_address - this.memoryService.memory.devices[i - 2].max_address) >= sizeOfSelected) {
+        return this.memoryService.memory.devices[i - 1].min_address;
       }
     }
     return 0;
