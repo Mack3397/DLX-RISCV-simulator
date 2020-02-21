@@ -1,60 +1,60 @@
 <div class="registri">
-    <div>
+    <div class="gpr">
         <span>GPR</span>
-        <ng-container *ngIf="isDLX">
-            <div class="gpd" *ngFor="let r of registri.r; index as i">
-                <div class="index">{{i}}</div>
+        <div class="gpr-back" *ngIf="isDLX">
+            <div class="gpr-row" *ngFor="let r of registri.r; index as i">
+                <div class="index">R{{i}}</div>
                 <div class="registro">
                     {{r | format: fType}}
                 </div>
             </div>
-        </ng-container>
-        <ng-container *ngIf="isRV32I">
-            <div class="gpd-rv32i" *ngFor="let x of registri.x; index as i">
-                <div class="index-rv32i">x{{i}}</div>
+        </div>
+        <div class="gpr-back" *ngIf="isRV32I">
+            <div class="gpr-row" *ngFor="let x of registri.x; index as i">
+                <div class="index">x{{i}}</div>
                 <div class="registro">{{x | format: fType}}</div>
             </div>
-        </ng-container>
+        </div>
     </div>
     <div *ngIf="isDLX">
         <span>PC</span>
-        <div class="registro">{{registri.pc | format: fType}}</div>
+        <div class="registro special">{{registri.pc | format: fType}}</div>
         <span>IAR</span>
-        <div class="registro">{{registri.iar | format: fType}}</div>
+        <div class="registro special">{{registri.iar | format: fType}}</div>
         <span>MAR</span>
-        <div class="registro">{{registri.mar | format: fType}}</div>
+        <div class="registro special">{{registri.mar | format: fType}}</div>
         <span>IR</span>
-        <div class="registro">{{registri.ir | format: fType}}</div>
+        <div class="registro special">{{registri.ir | format: fType}}</div>
         <!-- <span>TEMP</span>
         <div class="registro">{{registri.temp | format: fType}}</div> -->
         <span>MDR</span>
-        <div class="registro">{{registri.mdr | format: fType}}</div>
+        <div class="registro special">{{registri.mdr | format: fType}}</div>
         <span>A</span>
-        <div class="registro">{{registri.a | format: fType}}</div>
+        <div class="registro special">{{registri.a | format: fType}}</div>
         <span>B</span>
-        <div class="registro">{{registri.b | format: fType}}</div>
+        <div class="registro special">{{registri.b | format: fType}}</div>
         <span>C</span>
-        <div class="registro">{{registri.c | format: fType}}</div>
+        <div class="registro special">{{registri.c | format: fType}}</div>
     </div>
     <div *ngIf="isRV32I">
         <span>PC</span>
-        <div class="registro">{{registri.pc | format: fType}}</div>
+        <div class="registro special">{{registri.pc | format: fType}}</div>
         <span>Opcode</span>
-        <div class="registro">{{registri.opcode | format: fType: 7}}</div>
+        <div class="registro special">{{registri.opcode | format: fType: 7}}</div>
         <span>RD</span>
-        <div class="registro">{{registri.rd | format: fType: 5}}</div>
+        <div class="registro special">{{registri.rd | format: fType: 5}}</div>
         <span>RS1</span>
-        <div class="registro">{{registri.rs1 | format: fType: 5}}</div>
+        <div class="registro special">{{registri.rs1 | format: fType: 5}}</div>
         <span>RS2</span>
-        <div class="registro">{{registri.rs2 | format: fType: 5}}</div>
+        <div class="registro special">{{registri.rs2 | format: fType: 5}}</div>
         <span>Func3</span>
-        <div class="registro">{{registri.func3 | format: fType: 3}}</div>
+        <div class="registro special">{{registri.func3 | format: fType: 3}}</div>
         <span>Func7</span>
-        <div class="registro">{{registri.func7 | format: fType: 7}}</div>
+        <div class="registro special">{{registri.func7 | format: fType: 7}}</div>
         <span>Immediate</span>
-        <div class="registro">{{registri.immediate | format: fType: 20}}</div>
+        <div class="registro special">{{registri.immediate | format: fType: 20}}</div>
         <span>Jump-Offset</span>
-        <div class="registro">{{registri.jumpOffset | format: fType: 20}}</div>
+        <div class="registro special">{{registri.jumpOffset | format: fType: 20}}</div>
     </div>
 </div>
 <mat-button-toggle-group name="fType" [(ngModel)]="fType">

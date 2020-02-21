@@ -39,7 +39,8 @@ export class EditorComponent implements AfterViewInit {
       lineNumberFormatter: (line: number) => (line * 4).toString(16) + 'h',
       theme: 'dlx-riscv-theme',
       mode: this.mode,
-      styleActiveLine: true
+      styleActiveLine: true,
+      viewportMargin: Infinity
     };
   }
 
@@ -110,6 +111,7 @@ export class EditorComponent implements AfterViewInit {
 
   continuousRun() {
     this.continuousRunning = true;
+    if (this.timeout) clearTimeout(this.timeout);
     this.timeout = setTimeout(() => {
       if(this._pc < this.codeService.content.split('\n').length * 4) {
         this.onRun();

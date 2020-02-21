@@ -1,26 +1,54 @@
+@import '~@angular/material/theming'
+
+:host
+    display: flex
+    flex-direction: column
+    justify-content: space-between
+    align-items: flex-end
+    height: 100%
+
 .registri
     display: grid
     grid-template-columns: auto auto
-    margin-left: 1rem
-    .gpd
-        display: grid
-        grid-template-columns: 2ch auto
-        .index
-            font-family: monospace
-            width: 2ch
-            text-align: right
-            padding: 2px 0
-    .gpd-rv32i
-        display: grid
-        grid-template-columns: 3ch auto
-        .index-rv32i
-            font-family: monospace
-            width: 3ch
-            text-align: right
-            padding: 2px 0
+    grid-column-gap: .5rem
+    margin-bottom: 1rem
+    .gpr-back
+        overflow: hidden
+        border-radius: 5px
+        margin: .5rem 0
+        @include mat-elevation(4)
+        .registro
+            border-radius: 0
+        &>:not(:last-of-type)
+            border-bottom: 1px solid map-get($mat-gray, 700)
+        .gpr-row
+            display: grid
+            grid-template-columns: auto auto
+            .index
+                font-family: monospace
+                width: 3ch
+                text-align: right
+                height: 1em
+                padding: .2rem
     .registro
         font-family: monospace
         width:  32ch
         height: 1em
-        border: 1px solid grey
-        padding: 2px
+        padding: .2rem
+        border-radius: 5px
+        &.special
+            @include mat-elevation(4)
+            margin: .5rem 0
+
+
+.registro, .index
+    font-size: 1rem
+    transition: font-size 300ms, width 300ms, height 300ms
+
+@media screen and (min-height: 866px)
+    .registro, .index
+        font-size: 1.1rem
+
+@media screen and (min-height: 906px)
+    .registro, .index
+        font-size: 1.2rem

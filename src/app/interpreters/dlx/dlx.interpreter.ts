@@ -83,7 +83,7 @@ export class DLXInterpreter extends Interpreter{
         }
     }
 
-    public processLine(line: string): [string, number[]]{
+    private processLine(line: string): [string, number[]]{
         let tokens: string[];
 
         if (!line || line.match(/^;/)) {
@@ -98,10 +98,8 @@ export class DLXInterpreter extends Interpreter{
         let argsFixed = args.map<number>(arg => {
             if (arg.match(/^R[123]?\d/i)) {
                 return parseInt(arg.substr(1));
-            } else if (arg.match(/^[0-9A-F]{4}H/i)) {
-                return parseInt(arg.substr(0, 4), 16)
-            } else if (arg.match(/^[01]{16}B/i)) {
-                return parseInt(arg.substr(0, 4), 2)
+            } else if (arg.match(/^0x([0-9A-F]{4})/i)) {
+                return parseInt(arg.substr(2, 4), 16);
             } else if (this.tags[arg]) {
                 return this.tags[arg];
             } else return 0;
@@ -110,7 +108,7 @@ export class DLXInterpreter extends Interpreter{
         return [instruction, argsFixed];
     }
 
-    run(line: string, registers: Registri, memory: Memory): void {
+    public run(line: string, registers: Registri, memory: Memory): void {
         let [instruction, argsFixed] = this.processLine(line);
 
         if (instructions[instruction]) {
@@ -122,7 +120,7 @@ export class DLXInterpreter extends Interpreter{
         }
     }
 
-    decode(line: string): number {
+    public decode(line: string): number {
         let [instruction, argsFixed] = this.processLine(line);
         let inst = instructions[instruction];
         let [opcode, alucode] = decoder[instruction];

@@ -51,7 +51,7 @@
             style += '-2';
             state.first = false;
           }
-        } else if (stream.match(/^(([0-9A-F]{4}H)|([01]{16}B))/i)) {
+        } else if (stream.match(/^0x([0-9A-F]{4})/i)) {
           style = 'number';
         } else if (state.j_instruction && stream.match(/^\w+/)) {
           style = 'tag';

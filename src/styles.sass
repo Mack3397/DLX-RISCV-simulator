@@ -3,7 +3,10 @@
 
 .CodeMirror
     font-size: 1.5rem
-    height: calc( 100% - 6rem)
+    min-width: 100%
+    max-width: 100%
+    min-height: 100%
+    max-height: 100%
 
 .mat-drawer-content.mat-sidenav-content .main
     height: 100%
@@ -36,6 +39,12 @@ mat-toolbar a
     &:start, &:end
         &:hover
             background: #ffffff10
+::-webkit-scrollbar-corner
+    background: transparent
 
 sup, sub
     line-height: 0
+
+@media screen and (max-width: 360px)
+    .CodeMirror
+        font-size: 1.2rem
