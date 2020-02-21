@@ -41,7 +41,7 @@ function store(n: number, dest: number, offset: number, dim: ('byte'|'halfword')
 }
 
 export type InstructionType = 'R'|'RM'|'I'|'IB'|'IJ'|'IL'|'IS'|'J'|'LHI'|'NOP'|'RFE';
-export type Instruction = 'ADD'|'ADDI'|'ADDU'|'ADDUI'|'AND'|'ANDI'|'BEQZ'|'BNEZ'|'DIV'|'DIVI'|'J'|'JAL'|'JALR'|'JR'|'LB'|'LBU'|'LH'|'LHI'|'LHU'|'LW'|'MOVI2S'|'MOVS2I'|'MULT'|'MULTI'|'NOP'|'OR'|'ORI'|'RFE'|'SB'|'SEQ'|'SEQI'|'SGE'|'SGEI'|'SGT'|'SGTI'|'SH'|'SLE'|'SLEI'|'SLL'|'SLLI'|'SLT'|'SLTI'|'SNE'|'SNEI'|'SRA'|'SRAI'|'SRL'|'SRLI'|'SUB'|'SUBI'|'SUBU'|'SUBUI'|'SW'|'TRAP'|'XOR'|'XORI';
+export type Instruction = 'ADD'|'ADDI'|'ADDU'|'ADDUI'|'AND'|'ANDI'|'BEQZ'|'BNEZ'|'J'|'JAL'|'JALR'|'JR'|'LB'|'LBU'|'LH'|'LHI'|'LHU'|'LW'|'MOVI2S'|'MOVS2I'|'NOP'|'OR'|'ORI'|'RFE'|'SB'|'SEQ'|'SEQI'|'SGE'|'SGEI'|'SGT'|'SGTI'|'SH'|'SLE'|'SLEI'|'SLL'|'SLLI'|'SLT'|'SLTI'|'SNE'|'SNEI'|'SRA'|'SRAI'|'SRL'|'SRLI'|'SUB'|'SUBI'|'SUBU'|'SUBUI'|'SW'|'TRAP'|'XOR'|'XORI';
 
 export const instructions: {
         [key in Instruction]: {
@@ -59,8 +59,6 @@ export const instructions: {
     ANDI:   { type: 'I',   func: (registers) => registers.c = registers.a & registers.temp, unsigned: true },
     BEQZ:   { type: 'IB',  func: (registers) => registers.a === 0 ? registers.pc = registers.temp : 0 },
     BNEZ:   { type: 'IB',  func: (registers) => registers.a !== 0 ? registers.pc = registers.temp : 0 },
-    DIV:    { type: 'R',   func: (registers) => registers.c = Math.floor(registers.a / registers.temp) },
-    DIVI:   { type: 'I',   func: (registers) => registers.c = Math.floor(registers.a / registers.temp) },
     J:      { type: 'J',   func: (registers) => registers.pc = registers.temp },
     JAL:    { type: 'J',   func: (registers) => { registers.r[31] = registers.c = registers.pc + 4; return registers.pc = registers.temp; } },
     JALR:   { type: 'IJ',  func: (registers) => { registers.r[31] = registers.c = registers.pc + 4; return registers.pc = registers.a; } },
@@ -71,10 +69,8 @@ export const instructions: {
     LHI:    { type: 'LHI', func: (registers) => registers.c = registers.temp << 16 },
     LHU:    { type: 'IL',  func: (registers) => registers.c = load(registers.mdr, registers.temp, 'halfword') },
     LW:     { type: 'IL',  func: (registers) => registers.c = registers.mdr },
-    MOVI2S: { type: 'RM',  func: (registers, [rd, rs1]) => registers[rd] = registers.a = registers.r[rs1] },
-    MOVS2I: { type: 'RM',  func: (registers, [rd, rs1]) => registers.r[rs1] = registers.c = registers[rd] },
-    MULT:   { type: 'R',   func: (registers) => registers.c = registers.a * registers.temp },
-    MULTI:  { type: 'R',   func: (registers) => registers.c = registers.a * registers.temp },
+    MOVI2S: { type: 'RM',  func: (registers, [rd, rs1]) => registers.iar = registers.a = registers.r[rs1] },
+    MOVS2I: { type: 'RM',  func: (registers, [rd, rs1]) => rd ? registers.r[rd] = registers.c = registers.iar : 0 },
     NOP:    { type: 'NOP', func: () => null },
     OR:     { type: 'R',   func: (registers) => registers.c = registers.a | registers.temp },
     ORI:    { type: 'I',   func: (registers) => registers.c = registers.a | registers.temp, unsigned: true },

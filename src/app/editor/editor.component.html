@@ -3,7 +3,7 @@
     [options]="options"
 ></ngx-codemirror>
 <div class="btn-container">
-    <div>
+    <div class="left">
         <button mat-raised-button class="mr" (click)="onRun()" [disabled]="isRunDisabled">
             <span class="btn">Step <i class="fas fa-step-forward fa-lg green"></i></span>
         </button>
@@ -11,8 +11,8 @@
             <span class="btn">Run <i class="fas fa-play green"></i></span>
         </button>
         <mat-form-field class="input-interval">
-            <mat-label>Set Interval (ms)</mat-label>
-            <input matInput type="text" [(ngModel)]="interval">
+            <mat-label>Interval (ms)</mat-label>
+            <input matInput type="number" [(ngModel)]="interval" min="1">
         </mat-form-field>
         <button mat-raised-button class="mr" (click)="onStop()" [disabled]="isStopDisabled">
             <span class="btn">Stop <i class="fas fa-square red"></i></span>
@@ -22,7 +22,7 @@
             <input matInput type="text" [(ngModel)]="start">
         </mat-form-field>
     </div>
-    <div>
+    <div class="right">
         <button mat-raised-button class="mr">
             <span class="btn">Interrupt <i class="fas fa-bolt amber"></i></span>
         </button>

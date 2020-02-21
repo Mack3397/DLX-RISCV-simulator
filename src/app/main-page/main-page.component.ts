@@ -5,6 +5,7 @@ import { Interpreter } from '../interpreters/interpreter';
 import { MatSidenav } from '@angular/material/sidenav';
 import { CodeService } from '../services/code.service';
 import { MemoryService } from '../services/memory.service';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-main-page',
@@ -16,6 +17,7 @@ export class MainPageComponent implements OnInit {
   editorMode: string;
   interpreter: Interpreter;
   registri: Registri;
+  sidebarMode: string = 'side';
 
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
 
@@ -26,7 +28,16 @@ export class MainPageComponent implements OnInit {
     private route: ActivatedRoute,
     private codeService: CodeService,
     private memoryService: MemoryService,
-  ) {}
+    breakpointObserver: BreakpointObserver
+  ) {
+    breakpointObserver.observe('(max-width: 935px)').subscribe(result => {
+      if (result.matches) {
+        this.sidebarMode = 'over'
+      } else {
+        this.sidebarMode = 'side'
+      }
+    })
+  }
 
   ngOnInit() {
     this.route.data.subscribe(data => {

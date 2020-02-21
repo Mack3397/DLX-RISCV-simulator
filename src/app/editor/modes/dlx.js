@@ -11,8 +11,8 @@
   /** elenco istruzioni diviso per tipo, register, immediate e jump
     * IJ sarebbero le istruzioni di tipo immediate che però si comportano come jump
   */
-  const instructions_R = 'ADDU|ADD|AND|DIV|MOVI2S|MOVS2I|MULT|NOP|OR|SEQ|SGE|SGT|SLE|SLL|SLT|SNE|SRA|SRL|SUBU|SUB|XOR';
-  const instructions_I = 'ADDI|ADDUI|ANDI|DIVI|LBU|LB|LHI|LHU|LH|LW|MULTI|ORI|SB|SEQI|SGEI|SGTI|SH|SLEI|SLLI|SLTI|SNEI|SRAI|SRLI|SUBI|SUBUI|SW|XORI';
+  const instructions_R = 'ADDU|ADD|AND|MOVI2S|MOVS2I|NOP|OR|SEQ|SGE|SGT|SLE|SLL|SLT|SNE|SRA|SRL|SUBU|SUB|XOR';
+  const instructions_I = 'ADDI|ADDUI|ANDI|LBU|LB|LHI|LHU|LH|LW|ORI|SB|SEQI|SGEI|SGTI|SH|SLEI|SLLI|SLTI|SNEI|SRAI|SRLI|SUBI|SUBUI|SW|XORI';
   const instructions_IJ = 'BEQZ|BNEZ|JALR|JR';
   const instructions_J = 'JAL|J|RFE|TRAP';
 
@@ -45,13 +45,13 @@
           style = 'keyword-i';
         } else if (stream.match(RegExp('^('+instructions_R+')', 'i'))) {
           style = 'keyword-r';
-        } else if (stream.match(/^R[123]?\d/i)) {
+        } else if (stream.match(/^(R[123]?\d|IAR)/i)) {
           style = 'variable';
           if (state.first) {
             style += '-2';
             state.first = false;
           }
-        } else if (stream.match(/^(([0-9A-F]{4}H)|([01]{16}B))/i)) {
+        } else if (stream.match(/^0x([0-9A-F]{4})/i)) {
           style = 'number';
         } else if (state.j_instruction && stream.match(/^\w+/)) {
           style = 'tag';

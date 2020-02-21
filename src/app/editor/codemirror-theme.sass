@@ -12,6 +12,9 @@
     .CodeMirror-linenumber
         color: #BDBDBD
 
+    .CodeMirror-linenumber:after
+        color: #7d7d7d
+
     .CodeMirror-cursor
         border-left: 1px solid #FAFAFA
 
@@ -57,12 +60,15 @@
     color: #080808
     .CodeMirror-gutters
         background-color: #f0f0f0
-        color: #a0a0a0
-
+        color: #606060
+    
     .CodeMirror-guttermarker,
     .CodeMirror-guttermarker-subtle,
     .CodeMirror-linenumber
-        color: #a0a0a0
+        color: #606060
+    
+    .CodeMirror-linenumber:after
+        color: #b0b0b0
 
     .CodeMirror-cursor
         border-left: 1px solid #0A0A0A
@@ -106,13 +112,14 @@
 
 .cm-s-dlx-riscv-theme.CodeMirror
     border-radius: 5px
-    @include mat-elevation-transition
+    transition: background .4s cubic-bezier(.25,.8,.25,1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1)
     @include mat-elevation(4)
     &.CodeMirror-focused
         @include mat-elevation(8)
 
     .CodeMirror-gutters
         border: none
+        transition: background .4s cubic-bezier(.25,.8,.25,1)
 
     div.CodeMirror-selected,
     &.CodeMirror-focused div.CodeMirror-selected,
