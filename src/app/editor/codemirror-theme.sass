@@ -106,13 +106,14 @@
 
 .cm-s-dlx-riscv-theme.CodeMirror
     border-radius: 5px
-    @include mat-elevation-transition
+    transition: background .4s cubic-bezier(.25,.8,.25,1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1)
     @include mat-elevation(4)
     &.CodeMirror-focused
         @include mat-elevation(8)
 
     .CodeMirror-gutters
         border: none
+        transition: background .4s cubic-bezier(.25,.8,.25,1)
 
     div.CodeMirror-selected,
     &.CodeMirror-focused div.CodeMirror-selected,
