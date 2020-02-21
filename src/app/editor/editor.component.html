@@ -2,6 +2,9 @@
     [(ngModel)]="codeService.content"
     [options]="options"
 ></ngx-codemirror>
+<div class="error-message" *ngIf="errorMessage" @myInsertRemoveTrigger>
+    <mat-card>{{errorMessage}}</mat-card>
+</div>
 <div class="btn-container">
     <div class="left">
         <button mat-raised-button class="mr" (click)="onRun()" [disabled]="isRunDisabled">

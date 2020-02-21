@@ -28,13 +28,13 @@ export class MemoryComponent implements OnInit {
     return (this.selected.name !== 'EPROM' && this.selected.name != 'RAM B') && 
       (index > 0);
   }
+
   get canMoveSelectedRight(): boolean {
     let devices = this.memoryService.memory.devices;
     let index = devices.indexOf(this.selected);
     return (this.selected.name !== 'EPROM') && 
       (index < devices.length - 1);
   }
-
 
   constructor(public memoryService: MemoryService) { }
 
@@ -52,7 +52,6 @@ export class MemoryComponent implements OnInit {
     this.selected = null;
     this.memoryService.save();
   }
-
 
   onChange(event:any, side: string) {
     let devices = this.memoryService.memory.devices;
