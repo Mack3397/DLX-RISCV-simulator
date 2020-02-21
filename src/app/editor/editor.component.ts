@@ -36,7 +36,7 @@ export class EditorComponent implements AfterViewInit {
     return {
       lineNumbers: true,
       firstLineNumber: 0,
-      lineNumberFormatter: (line: number) => (line * 4).toString(16) + 'h',
+      lineNumberFormatter: (line: number) => (line * 4).toString(16).toUpperCase(),
       theme: 'dlx-riscv-theme',
       mode: this.mode,
       styleActiveLine: true,
@@ -101,11 +101,21 @@ export class EditorComponent implements AfterViewInit {
     return !this.running;
   }
 
-  constructor(public codeService: CodeService, private memoryService: MemoryService) { }
+  constructor(public codeService: CodeService, private memoryService: MemoryService) {
+    try {
+      let editor_settings = JSON.parse(window.localStorage.getItem('editor_settings'));
+      if (editor_settings && editor_settings.start && editor_settings.interval) {
+        this.start = editor_settings.start;
+        this.interval = editor_settings.interval;
+      }
+    } catch (error) {
+      window.localStorage.removeItem('editor_settings');
+    }
+  }
 
   ngAfterViewInit() {
     this.doc.on("change", (event) => {
-      this.onStop();
+      if(this.running) this.onStop();
     });
   }
 
@@ -140,6 +150,7 @@ export class EditorComponent implements AfterViewInit {
 
   onSave() {
     this.codeService.save();
+    window.localStorage.setItem('editor_settings', `{"start": "${this.start}", "interval": ${this.interval}}`);
   }
 
 }

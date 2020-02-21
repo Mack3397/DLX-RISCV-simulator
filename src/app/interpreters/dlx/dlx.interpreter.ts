@@ -18,7 +18,9 @@ export class DLXInterpreter extends Interpreter{
             } catch(e) {
                 this.handleOverflow(e, registers);
             }
-            registers.r[rd] = registers.c;
+            if (rd) {
+                registers.r[rd] = registers.c;
+            }
         },
         RM: (args, func, registers) => {
             func(registers, args);
@@ -32,7 +34,9 @@ export class DLXInterpreter extends Interpreter{
             } catch(e) {
                 this.handleOverflow(e, registers);
             }
-            registers.r[rd] = registers.c;
+            if (rd) {
+                registers.r[rd] = registers.c;
+            }
         },
         IB: ([rs1, name], func, registers) => {
             registers.a = registers.r[rs1];
@@ -50,7 +54,9 @@ export class DLXInterpreter extends Interpreter{
             registers.mdr = memory.load(registers.mar);
             registers.temp = offset;
             func(registers);
-            registers.r[rd] = registers.c;
+            if (rd) {
+                registers.r[rd] = registers.c;
+            }
         },
         IS: ([offset, rs1, rd], func, registers, memory) => {
             registers.a = registers.r[rs1];
@@ -66,7 +72,9 @@ export class DLXInterpreter extends Interpreter{
         LHI: ([rd, immediate], func, registers) => {
             registers.temp = immediate;
             func(registers);
-            registers.r[rd] = registers.c;
+            if (rd) {
+                registers.r[rd] = registers.c;
+            }
         },
         NOP: () => {},
         RFE: (_args, func, registers) => {
@@ -94,10 +102,13 @@ export class DLXInterpreter extends Interpreter{
         }
 
         let [instruction, ... args] = tokens;
+        let specialRegisters = ['IAR'];
 
         let argsFixed = args.map<number>(arg => {
             if (arg.match(/^R[123]?\d/i)) {
                 return parseInt(arg.substr(1));
+            } else if (specialRegisters.includes(arg.toUpperCase())) {
+                return specialRegisters.indexOf(arg.toUpperCase()) + 1;
             } else if (arg.match(/^0x([0-9A-F]{4})/i)) {
                 return parseInt(arg.substr(2, 4), 16);
             } else if (this.tags[arg]) {
