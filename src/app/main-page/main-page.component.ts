@@ -16,7 +16,7 @@ export class MainPageComponent implements OnInit {
 
   editorMode: string;
   interpreter: Interpreter;
-  registri: Registri;
+  registers: Registri;
   sidebarMode: string = 'side';
 
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
@@ -43,13 +43,9 @@ export class MainPageComponent implements OnInit {
     this.route.data.subscribe(data => {
       this.editorMode = data.editorMode;
       this.interpreter = data.interpreter;
-      this.registri = data.registri;
+      this.registers = data.registri;
       this.codeService.interpreter = data.interpreter;
     })
-  }
-
-  onRun(line: string) {
-    this.interpreter.run(line, this.registri, this.memoryService.memory);
   }
 
   doParseTags(code: string) {

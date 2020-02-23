@@ -5,11 +5,11 @@
     <mat-sidenav-content>
         <div class="main">
             <div class="left">
-                <app-editor [mode]="editorMode" [(pc)]="registri.pc" (runLine)="onRun($event)" (doParseTags)="doParseTags($event)"></app-editor>
+                <app-editor [mode]="editorMode" [(pc)]="registers.pc" [interpreter]="interpreter" [registers]="registers" (doParseTags)="doParseTags($event)"></app-editor>
                 <app-memory></app-memory>
             </div>
             <div class="right">
-                <app-registri [registri]="registri"></app-registri>
+                <app-registri [registri]="registers"></app-registri>
             </div>
         </div>
     </mat-sidenav-content>

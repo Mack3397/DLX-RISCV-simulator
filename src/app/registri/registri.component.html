@@ -57,8 +57,9 @@
         <div class="registro special">{{registri.jumpOffset | format: fType: 20}}</div>
     </div>
 </div>
-<mat-button-toggle-group name="fType" [(ngModel)]="fType">
-    <mat-button-toggle value="dec">Decimal</mat-button-toggle>
-    <mat-button-toggle value="bin">Binary</mat-button-toggle>
-    <mat-button-toggle value="hex">Hexadecimal</mat-button-toggle>
+<mat-button-toggle-group id="fType" name="fType" [(ngModel)]="fType">
+    <mat-button-toggle value="hex" style="width: 25%">Hexadecimal</mat-button-toggle>
+    <mat-button-toggle value="dec" style="width: 25%">Decimal</mat-button-toggle>
+    <mat-button-toggle value="oct" style="width: 25%">Octal</mat-button-toggle>
+    <mat-button-toggle value="bin" style="width: 25%">Binary</mat-button-toggle>
 </mat-button-toggle-group>
