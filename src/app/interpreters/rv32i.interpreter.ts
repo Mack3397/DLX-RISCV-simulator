@@ -290,4 +290,8 @@ export class RV32Interpreter extends Interpreter {
     decode(line: string): number {
         return 0;
     }
+
+    public interrupt(registers: Registri): void {
+        //TODO to be implemented
+    }
 }

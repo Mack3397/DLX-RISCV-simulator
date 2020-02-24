@@ -1,6 +1,7 @@
 import { Device, IDevice } from './device';
 import { Injector } from '@angular/core';
 import { Eprom } from './eprom';
+import { StartLogicalNetwork } from './start.logical-network';
 
 export class Memory {
     devices: Device[] = [];
@@ -20,6 +21,8 @@ export class Memory {
                 switch (el.proto) {
                     case Eprom.name: this.add(Eprom, el.min_address, el.max_address, injector);
                         break;
+                    case StartLogicalNetwork.name: this.add(StartLogicalNetwork, el.min_address, el.max_address, injector);
+                        break;
                     default: this.add(el.name, el.min_address, el.max_address);
                         break;
                 }
@@ -32,7 +35,7 @@ export class Memory {
             if (typeof name == 'string') {
                 this.devices.push(new Device(name, min_address, max_address));
             } else {
-                this.devices.push(new name(min_address, max_address, injector))
+                this.devices.push(new name(min_address, max_address, injector));
             }
             this.devices = this.devices.sort((a,b) => a.min_address - b.min_address);
         }

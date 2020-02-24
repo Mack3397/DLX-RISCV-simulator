@@ -17,6 +17,7 @@ import { MaterialModule } from './material.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
 import { DocumentazioneComponent } from './documentazione/documentazione.component';
+import { MessageDialogComponent } from './message-dialog/message-dialog.component';
 
 @NgModule({
    declarations: [
@@ -26,7 +27,8 @@ import { DocumentazioneComponent } from './documentazione/documentazione.compone
       RegistriComponent,
       FormatPipe,
       MemoryComponent,
-      DocumentazioneComponent
+      DocumentazioneComponent,
+      MessageDialogComponent
    ],
    imports: [
       BrowserModule,
@@ -39,7 +41,9 @@ import { DocumentazioneComponent } from './documentazione/documentazione.compone
       HttpClientModule,
       MaterialModule
    ],
-   entryComponents: [],
+   entryComponents: [
+      MessageDialogComponent
+   ],
    providers: [],
    bootstrap: [
       AppComponent
