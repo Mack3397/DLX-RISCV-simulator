@@ -8,33 +8,32 @@
         <mat-card>{{errorMessage}}</mat-card>
     </div>
     <div class="btn-container">
-        <div class="left">
-            <button mat-raised-button class="mr" (click)="onRun()" [disabled]="isRunDisabled">
-                <span class="btn">Step <i class="fas fa-step-forward fa-lg green"></i></span>
-            </button>
-            <button mat-raised-button class="mr" (click)="continuousRunning ? onPause() : continuousRun()" [disabled]="isContinuousRunDisabled">
-                <span class="btn" *ngIf="!continuousRunning">Run <i class="fas fa-play green"></i></span>
-                <span class="btn" *ngIf="continuousRunning">Pause <i class="fas fa-pause green"></i></span>
-            </button>
-            <mat-form-field class="input-interval">
-                <mat-label>Interval (ms)</mat-label>
-                <input matInput type="number" name="interval" [(ngModel)]="interval" min="1">
-            </mat-form-field>
-            <button mat-raised-button class="mr" (click)="onStop()" [disabled]="isStopDisabled">
-                <span class="btn">Stop <i class="fas fa-square red"></i></span>
-            </button>
-            <mat-form-field class="input-label">
-                <mat-label>Start tag</mat-label>
-                <input matInput type="text" name="start" [(ngModel)]="start">
-            </mat-form-field>
-        </div>
         <div class="right">
-            <button mat-raised-button (click)="onInterrupt()" class="mr">
+            <button mat-raised-button class="mr" (click)="onInterrupt()">
                 <span class="btn">Interrupt <i class="fas fa-bolt amber"></i></span>
             </button>
             <button mat-raised-button (click)="onSave()" [disabled]="form.pristine">
                 <span class="btn">Save <i class="fas fa-save"></i></span>
             </button>
         </div>
+        <button mat-raised-button class="mr" (click)="onRun()" [disabled]="isRunDisabled">
+            <span class="btn">Step <i class="fas fa-step-forward fa-lg green"></i></span>
+        </button>
+        <button mat-raised-button class="mr" (click)="continuousRunning ? onPause() : continuousRun()" [disabled]="isContinuousRunDisabled">
+            <span class="btn" *ngIf="!continuousRunning">Run <i class="fas fa-play green"></i></span>
+            <span class="btn" *ngIf="continuousRunning">Pause <i class="fas fa-pause green"></i></span>
+        </button>
+        <mat-form-field class="input-interval">
+            <mat-label>Interval (ms)</mat-label>
+            <input matInput type="number" name="interval" [(ngModel)]="interval" min="1">
+        </mat-form-field>
+        <button mat-raised-button class="mr" (click)="onStop()" [disabled]="isStopDisabled">
+            <span class="btn">Stop <i class="fas fa-square red"></i></span>
+        </button>
+        <mat-form-field class="input-label">
+            <mat-label>Start tag</mat-label>
+            <input matInput type="text" name="start" [(ngModel)]="start">
+        </mat-form-field>
+        <div style="clear:both"></div>
     </div>
 </form>
