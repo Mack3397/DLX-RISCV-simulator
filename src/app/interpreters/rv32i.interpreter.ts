@@ -341,4 +341,8 @@ export class RV32Interpreter extends Interpreter {
             return 0;
         }
     }
+
+    public interrupt(registers: Registri): void {
+        //TODO to be implemented
+    }
 }

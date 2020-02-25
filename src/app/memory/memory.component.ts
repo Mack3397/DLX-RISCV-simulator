@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Device } from './model/device';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { MemoryService } from '../services/memory.service';
+import { LogicalNetwork } from './model/logical-network';
+import { MatDialog } from '@angular/material/dialog';
+import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
 
 @Component({
   selector: 'app-memory',
@@ -36,7 +39,7 @@ export class MemoryComponent implements OnInit {
       (index < devices.length - 1);
   }
 
-  constructor(public memoryService: MemoryService) { }
+  constructor(public memoryService: MemoryService, private dialog: MatDialog) { }
 
   ngOnInit() {
   }
@@ -53,7 +56,7 @@ export class MemoryComponent implements OnInit {
     this.memoryService.save();
   }
 
-  onChange(event:any, side: string) {
+  onChange(event: any, side: string) {
     let devices = this.memoryService.memory.devices;
     let indexSelectedDevice = this.memoryService.memory.devices.indexOf(this.selected);
     if (side == 'min') {
@@ -65,7 +68,13 @@ export class MemoryComponent implements OnInit {
         this.selected.max_address = devices[indexSelectedDevice + 1].min_address - 1;
       }
     }
-    parseInt(this.selected.size) >= 128 ? this.memoryService.save() : window.alert("Memory is less than 128MB");		     
+    if (parseInt(this.selected.size) >= 128 || this.selected instanceof LogicalNetwork)
+      this.memoryService.save();
+    else {
+      this.dialog.open(MessageDialogComponent, {
+        data: {message: 'Memory is less than 128MB'}
+      });
+    }
   }
 
   moveSelectedLeft() {
@@ -114,5 +123,9 @@ export class MemoryComponent implements OnInit {
       }
     }
     return 0;
+  }
+
+  isLN(dev: Device) {
+    return dev instanceof LogicalNetwork;
   }
 }

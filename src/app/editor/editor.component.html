@@ -1,36 +1,39 @@
-<ngx-codemirror #codeEditor
-    [(ngModel)]="codeService.content"
-    [options]="options"
-></ngx-codemirror>
-<div class="error-message" *ngIf="errorMessage" @myInsertRemoveTrigger>
-    <mat-card>{{errorMessage}}</mat-card>
-</div>
-<div class="btn-container">
-    <div class="left">
+<form #form="ngForm">
+    <ngx-codemirror #codeEditor
+        name="content"
+        [(ngModel)]="codeService.content"
+        [options]="options"
+    ></ngx-codemirror>
+    <div class="error-message" *ngIf="errorMessage" @myInsertRemoveTrigger>
+        <mat-card>{{errorMessage}}</mat-card>
+    </div>
+    <div class="btn-container">
+        <div class="right">
+            <button mat-raised-button class="mr" (click)="onInterrupt()">
+                <span class="btn">Interrupt <i class="fas fa-bolt amber"></i></span>
+            </button>
+            <button mat-raised-button (click)="onSave()" [disabled]="form.pristine">
+                <span class="btn">Save <i class="fas fa-save"></i></span>
+            </button>
+        </div>
         <button mat-raised-button class="mr" (click)="onRun()" [disabled]="isRunDisabled">
             <span class="btn">Step <i class="fas fa-step-forward fa-lg green"></i></span>
         </button>
-        <button mat-raised-button class="mr" (click)="continuousRun()" [disabled]="isContinuousRunDisabled">
-            <span class="btn">Run <i class="fas fa-play green"></i></span>
+        <button mat-raised-button class="mr" (click)="continuousRunning ? onPause() : continuousRun()" [disabled]="isContinuousRunDisabled">
+            <span class="btn" *ngIf="!continuousRunning">Run <i class="fas fa-play green"></i></span>
+            <span class="btn" *ngIf="continuousRunning">Pause <i class="fas fa-pause green"></i></span>
         </button>
         <mat-form-field class="input-interval">
             <mat-label>Interval (ms)</mat-label>
-            <input matInput type="number" [(ngModel)]="interval" min="1">
+            <input matInput type="number" name="interval" [(ngModel)]="interval" min="1">
         </mat-form-field>
         <button mat-raised-button class="mr" (click)="onStop()" [disabled]="isStopDisabled">
             <span class="btn">Stop <i class="fas fa-square red"></i></span>
         </button>
         <mat-form-field class="input-label">
             <mat-label>Start tag</mat-label>
-            <input matInput type="text" [(ngModel)]="start">
+            <input matInput type="text" name="start" [(ngModel)]="start">
         </mat-form-field>
+        <div style="clear:both"></div>
     </div>
-    <div class="right">
-        <button mat-raised-button class="mr">
-            <span class="btn">Interrupt <i class="fas fa-bolt amber"></i></span>
-        </button>
-        <button mat-raised-button (click)="onSave()">
-            <span class="btn">Save <i class="fas fa-save"></i></span>
-        </button>
-    </div>
-</div>
+</form>

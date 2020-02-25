@@ -42,15 +42,11 @@ $color-value: A200
     overflow: hidden
     transition: background .4s cubic-bezier(.25,.8,.25,1)
     @include mat-elevation(4)
-    .dev
-        display: flex
+    
+    .dev, .ln
         position: absolute
         height: $mem-height
-        justify-content: center
-        align-items: center
         @include mat-elevation-transition
-        span
-            user-select: none
         &:nth-child(3n)
             @include bg-color($mat-red, $color-value)
         &:nth-child(3n+1)
@@ -60,7 +56,17 @@ $color-value: A200
         &.selected
             z-index: 3
             box-shadow: 0 0 8px 0px rgba(0, 0, 0, 0.4)
-        
+
+    .dev
+        display: flex
+        justify-content: center
+        align-items: center
+        span
+            user-select: none
+
+    .ln
+        width: 4px
+
     .gig-overlay
         position: absolute
         z-index: 2
@@ -70,7 +76,7 @@ $color-value: A200
             display: inline-block
             width: calc(25% - 2px)
             height: $mem-height
-            border-right: 2px solid map-get($mat-gray, 300)
+            border-right: 2px solid map-get($mat-gray, 500)
             pointer-events: none
             &:last-child
                 width: 25%
