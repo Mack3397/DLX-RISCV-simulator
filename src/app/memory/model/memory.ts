@@ -49,6 +49,7 @@ export class Memory {
     public load(address: number): number {
         let device = this.devices.find(dev => dev.checkAddress(address));
         if (device) {
+            console.log("Device trovato LOAD " + address);
             return device.load(address);
         }
         return 0;
@@ -57,6 +58,7 @@ export class Memory {
     public store(address: number, word: number): number {
         let device = this.devices.find(dev => dev.checkAddress(address));
         if (device) {
+            console.log("Device trovato STORE " + address + ' number: ' + word);
             device.store(address, word);
         }
         return word;

@@ -2,9 +2,22 @@ import { Interpreter } from './interpreter';
 import { Registri } from '../registri/registri';
 import { RV32IRegistri } from '../registri/rv32i.registri';
 import { Memory } from '../memory/model/memory';
+import { ThrowStmt } from '@angular/compiler';
+
+const instructions_R  = 'ADD|SUB|SLL|SLT|SLTU|XOR|SRL|SRA|OR|AND';
+const instructions_I  = 'ADDI|SLTI|SLTIU|XORI|ORI|ANDI|SLLI|SRLI|SRAI';
+const instructions_IL = 'LB|LH|LW|LBU|LHU';
+const instructions_IJ = 'JALR';
+const instructions_S  = 'SB|SH|SW';
+const instructions_B  = 'BEQ|BNE|BLT|BGE|BLTU|BGEU';
+const instructions_U  = 'LUI|AUIPC';
+const instructions_J  = 'JAL';
+const instructions = instructions_R + '|' + instructions_I + '|' + instructions_IL + '|' + instructions_IJ + '|' + instructions_S + '|' + instructions_B + '|' + instructions_U + '|' + instructions_J;
 
 export class RV32Interpreter extends Interpreter {
 
+    tmpRegisters: RV32IRegistri = new RV32IRegistri;
+    myMem: Memory = new Memory;
     readonly instructions: {[key: string]: (args: number[], registers: RV32IRegistri, memory: Memory, usnigned ?: boolean) => number} = {
         // R-type instructions
         ADD: (args, registers) => { 
@@ -264,30 +277,68 @@ export class RV32Interpreter extends Interpreter {
     }
 
     run(line: string, registers: Registri, memory: Memory): void {
-        // Decoding the input line 
-        let tokens = line.split(/\W+/);
-        if (!tokens[0] || line.match(/\w+:/)) tokens.shift();
+        let tokens: string[];
+        let lineFixed: string;
+
+        if (!line || line.match(/^;/)) {
+            tokens = ['NOP'];
+        } else {
+            lineFixed = line.split(';')[0].replace(/^(\w+:)?\s+/, '');
+            tokens = lineFixed.split(/\W+/);
+        }
 
         let [instruction, ... args] = tokens;
+        let argsFixed: number[] = [];
+        let size = args.length;
+        // Controllo se l'istruione è valida
+        console.log(instruction);
+        if(!instructions.split('|').includes(instruction)) {
+             throw new Error ("Instruction doesn't exist");
+        } else if(instructions_R.split('|').includes(instruction)) {
+            if(!args[0].match(/^R[123]?\d/i) || !args[1].match(/^R[123]?\d/i) || !args[2].match(/^R[123]?\d/i) || (size > 3 && args[3] != '')) 
+                throw new Error(instruction + " RD, RS1, RS2");
+        } else if(instructions_I.split('|').includes(instruction) || instructions_IJ.split('|').includes(instruction) || instructions_B.split('|').includes(instruction)) {
+            if(!args[0].match(/^R[123]?\d/i) || !args[1].match(/^R[123]?\d/i) || !args[2].match(/^0x([0-9A-F]{4})/i) || (size > 3 && args[3] != '')) 
+                throw new Error(instruction + " RD, RS1, Immediate");
+        } else if(instructions_S.split('|').includes(instruction) || instructions_IL.split('|').includes(instruction)) {
+            if(!args[0].match(/^R[123]?\d/i) || !args[1].match(/^0x([0-9A-F]{4})/i) || !args[2].match(/^R[123]?\d/i) || (size > 3 && args[3] != '')) 
+                throw new Error(instruction + " RD, Immediate, RS1");
+        } else if(instructions_U.split('|').includes(instruction)) {
+            if(!args[0].match(/^R[123]?\d/i) || !args[1].match(/^0x([0-9A-F]{4})/i) || (size > 2 && args[2] != '')) 
+                throw new Error(instruction + " RD, Immediate");
+        } else if(instructions_IJ.split('|').includes(instruction)) {
+            if(!args[0].match(/^R[123]?\d/i) || !args[1].match(/^R[123]?\d/i) || (size > 3 && args[3] != '')) 
+                throw new Error(instruction + " RD, RS1, Tag");
+        } else if(instructions_J.split('|').includes(instruction) || (size > 2 && args[2] != '')) {
+            if(!args[0].match(/^R[123]?\d/i)) 
+                throw new Error(instruction + " RD, Tag");
+        }
 
-        let argsFixed = args.map<number>(arg => {
+        argsFixed = args.map<number>(arg => {
             if (arg.match(/^R[123]?\d/i)) {
                 return parseInt(arg.substr(1));
-            } else if (arg.match(/^[0-9A-F]{4}H/i)) {
-                return parseInt(arg.substr(0, 4), 16)
-            } else if (arg.match(/^[01]{16}B/i)) {
-                return parseInt(arg.substr(0, 4), 2)
+            } else if (arg.match(/^0x([0-9A-F]{4})/i)) {
+                //console.log(parseInt(arg.substr(2, 4), 16));
+                return parseInt(arg.substr(2, 4), 16);
             } else if (this.tags[arg]) {
                 return this.tags[arg];
             } else return 0;
         });
 
         console.log(argsFixed);
+        this.myMem = memory;
         if (this.instructions[instruction])
             this.instructions[instruction](argsFixed, registers as RV32IRegistri, memory);  
     }
     
-    decode(line: string): number {
-        return 0;
+    decode(line: string): number {    
+        try{   
+            this.run(line, this.tmpRegisters, this.myMem);
+            this.tmpRegisters.instruction = this.tmpRegisters.opcode + this.tmpRegisters.rd + this.tmpRegisters.rs1 + this.tmpRegisters.rs2 + this.tmpRegisters.func3 + this.tmpRegisters.func7 + this.tmpRegisters.jumpOffset +  + this.tmpRegisters.immediate;
+            console.log(this.tmpRegisters.instruction);
+            return this.tmpRegisters.instruction;
+        } catch (error) {
+            return 0;
+        }
     }
 }
