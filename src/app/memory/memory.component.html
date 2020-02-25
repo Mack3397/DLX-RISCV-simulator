@@ -1,17 +1,27 @@
 <span>Memory</span>
 <div class="main-container">
     <div class="memory">
-        <div class="dev" matRipple *ngFor="let device of memoryService.memory.devices"
-            [style.left]="((device.min_address/1073741824)*100).toFixed(2)+'%'"
-            [style.right]="(100 - (device.max_address/1073741824)*100).toFixed(2)+'%'"
-            (click)="selected == device ? selected = null : selected = device"
-            [class.selected]="selected == device"
-            [matTooltip]="device.size"
-            matTooltipPosition="above"
-            matTooltipClass="device-size"
-            >
-            <span>{{ device.name }}</span>
-        </div>
+        <ng-container *ngFor="let device of memoryService.memory.devices">
+            <div class="dev" matRipple *ngIf="!isLN(device)"
+                [style.left]="((device.min_address/1073741824)*100).toFixed(2)+'%'"
+                [style.right]="(100 - (device.max_address/1073741824)*100).toFixed(2)+'%'"
+                (click)="selected == device ? selected = null : selected = device"
+                [class.selected]="selected == device"
+                [matTooltip]="device.size"
+                matTooltipPosition="above"
+                matTooltipClass="device-size"
+                >
+                <span>{{ device.name }}</span>
+            </div>
+            <div class="ln" *ngIf="isLN(device)"
+                [style.left]="((device.min_address/1073741824)*100).toFixed(2)+'%'"
+                (click)="selected == device ? selected = null : selected = device"
+                [class.selected]="selected == device"
+                [matTooltip]="device.name+' '+(device.ffd?'0':'1')"
+                matTooltipPosition="above"
+                matTooltipClass="device-size">
+            </div>
+        </ng-container>
         <div class="gig-overlay">
             <div class="gig"></div>
             <div class="gig"></div>
@@ -40,5 +50,5 @@
             <button mat-raised-button id="move-right" (click)="moveSelectedRight()" [disabled]="!canMoveSelectedRight"><i class="fas fa-caret-right"></i></button>
         </div>
     </div>
-    <button mat-raised-button *ngIf="selected" id="del" (click)="onDelete(selected)" [disabled]="selected.name == 'EPROM'" @myInsertRemoveTrigger><i class="fas fa-trash"></i></button>
+    <button mat-raised-button *ngIf="selected" id="del" (click)="onDelete(selected)" [disabled]="selected.name == 'EPROM' || selected.name =='Start'" @myInsertRemoveTrigger><i class="fas fa-trash"></i></button>
 </div>

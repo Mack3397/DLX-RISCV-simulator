@@ -56,8 +56,8 @@ export class DLXInterpreter extends Interpreter{
             if (!(/\w+\s+R[123]?\d\s*,\s*0x([0-9A-F]{4})\s*\(\s*R[123]?\d\s*\)\s*/i.test(line))) throw new WrongArgumentsError(instruction);
             registers.a = registers.r[rs1];
             registers.b = registers.r[rd];
-            registers.mar = Math.floor((signExtend(offset) + registers.a) / 4);
-            registers.mdr = memory.load(registers.mar);
+            registers.mar = signExtend(offset) + registers.a;
+            registers.mdr = memory.load(Math.floor((registers.mar >>> 0) / 4) >>> 0);
             registers.temp = offset;
             func(registers);
             if (rd) {
@@ -68,9 +68,9 @@ export class DLXInterpreter extends Interpreter{
             if (!(/\w+\s+0x([0-9A-F]{4})\s*\(\s*R[123]?\d\s*\)\s*,\s*R[123]?\d/i.test(line))) throw new WrongArgumentsError(instruction);
             registers.a = registers.r[rs1];
             registers.mdr = registers.b = registers.r[rd];
-            registers.mar = Math.floor((signExtend(offset) + registers.a) / 4);
+            registers.mar = signExtend(offset) + registers.a;
             registers.temp = offset;
-            memory.store(registers.mar, func(registers, [memory.load(registers.mar)]));
+            memory.store(Math.floor((registers.mar >>> 0) / 4) >>> 0, func(registers, [memory.load(registers.mar)]));
         },
         J: (line, instruction, [name], func, registers, _memory, unsigned = false) => {
             if (!(/\w+\s+\w+/i.test(line))) throw new WrongArgumentsError(instruction);
@@ -89,11 +89,13 @@ export class DLXInterpreter extends Interpreter{
         RFE: (_line, instruction, args, func, registers) => {
             if (args.length) throw new WrongArgumentsError(instruction);
             func(registers);
+            this.interruptEnabled = true;
         }
     }
 
     private handleOverflow(e: Error, registers: DLXRegistri) {
-        if (e.message) {
+        if (['overflow', 'fault'].includes(e.message)) {
+            this.interruptEnabled = false;
             (registers as DLXRegistri).iar = registers.pc;
             registers.pc = 0;
         } else {
@@ -156,6 +158,14 @@ export class DLXInterpreter extends Interpreter{
             return parseInt(opcode + inputs_decoder[inst.type](argsFixed) + alucode, 2)
         } catch(error) {
             return 0;
+        }
+    }
+
+    public interrupt(registers: Registri): void {
+        if (this.interruptEnabled) {
+            (registers as DLXRegistri).iar = registers.pc;
+            registers.pc = 0;
+            this.interruptEnabled = false;
         }
     }
 }

@@ -5,7 +5,7 @@
     <mat-sidenav-content>
         <div class="main">
             <div class="left">
-                <app-editor [mode]="editorMode" [(pc)]="registers.pc" [interpreter]="interpreter" [registers]="registers" (doParseTags)="doParseTags($event)"></app-editor>
+                <app-editor [(pc)]="registers.pc" [registers]="registers" [codeService]="codeService"></app-editor>
                 <app-memory></app-memory>
             </div>
             <div class="right">

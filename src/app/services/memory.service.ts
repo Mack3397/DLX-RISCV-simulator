@@ -2,6 +2,7 @@ import { Injectable, Injector } from '@angular/core';
 import { Memory } from '../memory/model/memory';
 import { Eprom } from '../memory/model/eprom';
 import { Device, IDevice } from '../memory/model/device';
+import { StartLogicalNetwork } from '../memory/model/start.logical-network';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class MemoryService {
       this.memory = new Memory();
       this.memory.add(Eprom, 0x00000000, 0x07FFFFFF, injector);
       this.memory.add('RAM A', 0x10000000, 0x1FFFFFFF);
-      this.memory.add('RL', 0x28000000, 0x29FFFFFF);
+      this.memory.add(StartLogicalNetwork, 0x30000000, 0x30000001, injector);
       this.memory.add('RAM B', 0x38000000, 0x3FFFFFFF);
     }
   }

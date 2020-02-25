@@ -29,13 +29,13 @@ const mask = {
 
 function load(n: number, offset: number, dim: ('byte'|'halfword')) {
     if (n == 0) return 0;
-    if (dim === 'halfword' && offset % 2 != 0) { console.log('fault'); return 0 }
+    if (dim === 'halfword' && offset % 2 != 0) throw new Error('fault');
     return n & mask[dim][offset % 4];
 }
 
 function store(n: number, dest: number, offset: number, dim: ('byte'|'halfword')) {
     if (n == 0) return 0;
-    if (dim === 'halfword' && offset % 2 != 0) { console.log('fault'); return 0 }
+    if (dim === 'halfword' && offset % 2 != 0) throw new Error('fault');
     let m = mask[dim];
     return ((n & m[0]) << ((offset % 4)*8)) | (dest & ~m[offset % 4]);
 }
@@ -100,7 +100,7 @@ export const instructions: {
     SUBU:   { type: 'R',   func: (registers) => registers.c = registers.a - registers.temp },
     SUBUI:  { type: 'I',   func: (registers) => registers.c = registers.a - registers.temp, unsigned: true },
     SW:     { type: 'IS',  func: (registers) => registers.mdr },
-    TRAP:   { type: 'J',   func: (registers) => { registers.iar = registers.pc + 8; return registers.pc = registers.temp; }, unsigned: true },
+    TRAP:   { type: 'J',   func: (registers) => { registers.iar = registers.pc + 4; return registers.pc = registers.temp; }, unsigned: true },
     XOR:    { type: 'R',   func: (registers) => registers.c = registers.a ^ registers.temp },
     XORI:   { type: 'I',   func: (registers) => registers.c = registers.a ^ registers.temp, unsigned: true },
 };

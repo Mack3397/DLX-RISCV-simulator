@@ -6,9 +6,11 @@ import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { EditorFromTextArea } from 'codemirror';
 import { CodeService } from '../services/code.service.js';
 import { MemoryService } from '../services/memory.service.js';
-import { Interpreter } from '../interpreters/interpreter.js';
 import { Registri } from '../registri/registri.js';
 import { trigger, transition, style, animate, query, group } from "@angular/animations";
+import { NgForm } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { StartLogicalNetwork } from '../memory/model/start.logical-network.js';
 
 @Component({
   selector: 'app-editor',
@@ -40,15 +42,13 @@ import { trigger, transition, style, animate, query, group } from "@angular/anim
 export class EditorComponent implements AfterViewInit {
 
   @ViewChild('codeEditor', { static: false }) codeEditor: CodemirrorComponent;
-
-  @Input() mode: string;
-  @Input() interpreter: Interpreter;
+  @ViewChild('form', { static: false }) form: NgForm;
+  
+  @Input() public codeService: CodeService;
   @Input() registers: Registri;
 
   private _pc: number;
   @Output() pcChange: EventEmitter<number> = new EventEmitter();
-
-  @Output() doParseTags: EventEmitter<string> = new EventEmitter();
 
   private timeout;
   private previousLine: number = 0;
@@ -65,7 +65,7 @@ export class EditorComponent implements AfterViewInit {
       firstLineNumber: 0,
       lineNumberFormatter: (line: number) => (line * 4).toString(16).toUpperCase(),
       theme: 'dlx-riscv-theme',
-      mode: this.mode,
+      mode: this.codeService.editorMode,
       styleActiveLine: true,
       viewportMargin: Infinity
     };
@@ -128,7 +128,7 @@ export class EditorComponent implements AfterViewInit {
     return !this.running;
   }
 
-  constructor(public codeService: CodeService, private memoryService: MemoryService) {
+  constructor(private memoryService: MemoryService, route: ActivatedRoute) {
     try {
       let editor_settings = JSON.parse(window.localStorage.getItem('editor_settings'));
       if (editor_settings && editor_settings.start && editor_settings.interval) {
@@ -150,6 +150,7 @@ export class EditorComponent implements AfterViewInit {
   continuousRun() {
     this.continuousRunning = true;
     if (this.timeout) clearTimeout(this.timeout);
+    this.onRun();
     this.timeout = setInterval(() => {
       if(this._pc >= this.codeService.content.split('\n').length * 4) {
         clearTimeout(this.timeout);
@@ -158,22 +159,32 @@ export class EditorComponent implements AfterViewInit {
     }, this.interval);
   }
 
+  onPause() {
+    if (this.timeout) clearTimeout(this.timeout);
+    this.continuousRunning = false;
+  }
+
   onRun() {
     if (!this.running) {
       this.doc.removeLineClass(this.runnedLine, 'wrap', 'error');
       this.errorMessage = undefined;
-      this.currentLine = this.codeService.content.split('\n').findIndex((line) => RegExp('^'+this.start+':').test(line));
-      this.doParseTags.emit(this.codeService.content);
+      this.codeService.interpreter.parseTags(this.codeService.content, this.start);
+      if (this.codeService.editorMode === 'dlx') {
+        (this.memoryService.memory.devices.find(v => v.name == 'Start') as StartLogicalNetwork).a_set();
+      } else {
+        this._pc = this.codeService.interpreter.getTag('start_tag');
+      }
       this.running = true;
     }
     this.runnedLine = this.currentLine;
     this.currentLine++;
     try {
-      this.interpreter.run(this.doc.getLine(this.runnedLine), this.registers, this.memoryService.memory);
+      this.codeService.interpreter.run(this.doc.getLine(this.runnedLine), this.registers, this.memoryService.memory);
     } catch (error) {
       this.onStop();
       this.doc.addLineClass(this.runnedLine, 'wrap', 'error');
       this.errorMessage = error.message;
+      console.error(error);
     }
   }
 
@@ -187,6 +198,11 @@ export class EditorComponent implements AfterViewInit {
   onSave() {
     this.codeService.save();
     window.localStorage.setItem('editor_settings', `{"start": "${this.start}", "interval": ${this.interval}}`);
+    this.form.form.markAsPristine();
+  }
+
+  onInterrupt() {
+    this.codeService.interpreter.interrupt(this.registers);
   }
 
 }
