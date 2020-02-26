@@ -7,7 +7,7 @@
     align-items: flex-end
     height: 100%
 
-.registri
+.registers
     display: grid
     grid-template-columns: auto auto
     grid-column-gap: .5rem
@@ -17,7 +17,7 @@
         border-radius: 5px
         margin: .5rem 0
         @include mat-elevation(2)
-        .registro
+        .register
             border-radius: 0
         &>:not(:last-of-type)
             border-bottom: 1px solid map-get($mat-gray, 700)
@@ -30,7 +30,7 @@
                 text-align: right
                 height: 1em
                 padding: .2rem
-    .registro
+    .register
         font-family: monospace
         width:  32ch
         height: 1em
@@ -41,7 +41,7 @@
             margin: .5rem 0
 
 
-.registro, .index
+.register, .index
     font-size: 1rem
     transition: font-size 300ms, width 300ms, height 300ms, background .4s cubic-bezier(.25,.8,.25,1)
 
@@ -51,9 +51,9 @@
     width: 100%
 
 @media screen and (min-height: 866px)
-    .registro, .index
+    .register, .index
         font-size: 1.1rem
 
 @media screen and (min-height: 906px)
-    .registro, .index
+    .register, .index
         font-size: 1.2rem

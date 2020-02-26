@@ -1,4 +1,4 @@
-export class Registri {
+export class Registers {
     pc: number;
     
     constructor() {

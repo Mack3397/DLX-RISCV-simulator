@@ -3,10 +3,10 @@ import { Routes, RouterModule } from '@angular/router';
 import { MainPageComponent } from './main-page/main-page.component';
 import { DLXInterpreter } from './interpreters/dlx/dlx.interpreter';
 import { RV32Interpreter } from './interpreters/rv32i.interpreter';
-import { DLXRegistri } from './registri/dlx.registri';
-import { RV32IRegistri } from './registri/rv32i.registri';
-import { RV32IDocumentazione } from './documentazione/rv32i.documentazione';
-import { DLXDocumentazione } from './documentazione/dlx.documentazione';
+import { DLXRegisters } from './registers/dlx.registers';
+import { RV32IRegisters } from './registers/rv32i.registers';
+import { RV32IDocumentation } from './documentation/rv32i.documentation';
+import { DLXDocumentation } from './documentation/dlx.documentation';
 
 
 const routes: Routes = [
@@ -17,8 +17,8 @@ const routes: Routes = [
     data: {
       interpreter: new DLXInterpreter(),
       editorMode: 'dlx',
-      registri: new DLXRegistri(),
-      documentation: DLXDocumentazione
+      registers: new DLXRegisters(),
+      documentation: DLXDocumentation
     }
   },
   { 
@@ -27,8 +27,8 @@ const routes: Routes = [
     data: {
       interpreter: new RV32Interpreter(),
       editorMode: 'rv32i',
-      registri: new RV32IRegistri(),
-      documentation: RV32IDocumentazione
+      registers: new RV32IRegisters(),
+      documentation: RV32IDocumentation
     }
   },
 ];

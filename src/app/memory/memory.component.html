@@ -30,7 +30,7 @@
         </div>
     </div>
     <button mat-raised-button id="add" (click)="onAdd()"><i class="fas fa-plus"></i></button>
-    <div class="container" *ngIf="selected" @myInsertRemoveTrigger>
+    <div class="container" *ngIf="selected" @showHideTrigger>
         <div class="group">
             <button mat-raised-button id="move-left" (click)="moveSelectedLeft()" [disabled]="!canMoveSelectedLeft"><i class="fas fa-caret-left"></i></button>
             <mat-form-field id="min" appearance="fill">

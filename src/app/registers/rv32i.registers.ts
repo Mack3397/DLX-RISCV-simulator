@@ -1,6 +1,6 @@
-import { Registri } from "./registri";
+import { Registers } from "./registers";
 
-export class RV32IRegistri extends Registri{
+export class RV32IRegisters extends Registers{
 
     x: [0, number, number , number, number, number, number, number, 
         number, number, number, number, number, number, number, number, 

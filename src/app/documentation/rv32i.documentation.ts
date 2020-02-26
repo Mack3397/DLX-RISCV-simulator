@@ -1,6 +1,6 @@
-import { Documentazione } from './documentazione.component';
+import { Documentation } from './documentation.component';
 
-export const RV32IDocumentazione: Documentazione[] = [
+export const RV32IDocumentation: Documentation[] = [
     // Register-Register Operations
   //{name: 'R-Type',type: 'R', syntax: 'INSTR RD, RS1, RS2',description: 'All operations read the RS1 and RS2 as source operands and write the result into register RD'},
     {name: 'ADD',   type: 'R', syntax: 'ADD RD, RS1, RS2',  description: 'ADD performs the addition of RS1 and RS2'},

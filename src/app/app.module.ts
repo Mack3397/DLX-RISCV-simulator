@@ -9,14 +9,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { EditorComponent } from './editor/editor.component';
 import { MainPageComponent } from './main-page/main-page.component';
-import { RegistriComponent } from './registri/registri.component';
+import { RegistersComponent } from './registers/registers.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormatPipe } from './pipes/format.pipe';
 import { MemoryComponent } from './memory/memory.component';
 import { MaterialModule } from './material.module';
 import { MatNativeDateModule } from '@angular/material/core';
 import { HttpClientModule } from '@angular/common/http';
-import { DocumentazioneComponent } from './documentazione/documentazione.component';
+import { DocumentationComponent } from './documentation/documentation.component';
 import { MessageDialogComponent } from './message-dialog/message-dialog.component';
 
 @NgModule({
@@ -24,10 +24,10 @@ import { MessageDialogComponent } from './message-dialog/message-dialog.componen
       AppComponent,
       EditorComponent,
       MainPageComponent,
-      RegistriComponent,
+      RegistersComponent,
       FormatPipe,
       MemoryComponent,
-      DocumentazioneComponent,
+      DocumentationComponent,
       MessageDialogComponent
    ],
    imports: [

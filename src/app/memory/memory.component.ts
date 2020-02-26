@@ -11,7 +11,7 @@ import { MessageDialogComponent } from '../message-dialog/message-dialog.compone
   templateUrl: './memory.component.html',
   styleUrls: ['./memory.component.sass'],
   animations: [
-    trigger('myInsertRemoveTrigger', [
+    trigger('showHideTrigger', [
       transition(':enter', [
         style({ transform: 'translateY(-100%)' }),
         animate('200ms ease-out', style({ transform: 'translateY(0)' })),

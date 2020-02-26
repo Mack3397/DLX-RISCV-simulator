@@ -1,6 +1,6 @@
-import { Documentazione } from './documentazione.component';
+import { Documentation } from './documentation.component';
 
-export const DLXDocumentazione: Documentazione[] = [
+export const DLXDocumentation: Documentation[] = [
     {name: 'ADD',    type: 'R', syntax: 'ADD rd, rs1, rs2',         description: "<h4>Integer Add</h4><center>rd &larr;<sub>32</sub> ( rs<sub>1</sub> ) + ( rs<sub>2</sub> )</center><br/>The contents of GPR rs<sub>1</sub> and the contents of GPR rs<sub>2</sub> are arithmetically added to form a 32-bit two's complement result, which is then placed into GPR rd. An overflow exception occurs when the result of the addition operation is greater than 2<sup>31</sup> - 1 (i.e., > 0x7FFFFFFF)."},
     {name: 'ADDI',   type: 'I', syntax: 'ADDI rd, rs1, immediate',  description: "<h4>Integer Add Immediate</h4><center>rd &larr;<sub>32</sub> ( rs<sub>1</sub> ) + [ ( immediate<sub>0</sub> )<sup>16</sup> || immediate ]</center><br/>The 16-bit immediate is sign-extended and arithmetically added to the contents of GPR rs<sub>1</sub> to form a 32-bit two's complement result, which is then placed into GPR rd. An overflow exception occurs when the result of the addition operation is greater than 2<sup>31</sup> - 1 (i.e., > 0x7FFFFFFF)."},
     {name: 'ADDU',   type: 'R', syntax: 'ADDU rd, rs1, rs2',        description: "<h4>Integer Add Unsigned</h4><center>rd &larr;<sub>32</sub> ( rs<sub>1</sub> ) + ( rs<sub>2</sub> )</center><br/>The contents of GPR rs<sub>1</sub> and the contents of GPR rs<sub>2</sub> are arithmetically added to form a 32-bit unsigned result, which is then placed into GPR rd. No overflow exception occurs under any circumstance. As a result, this is the only difference between this instruction and the ADD instruction."},

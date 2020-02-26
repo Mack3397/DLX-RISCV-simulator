@@ -1,4 +1,4 @@
-import { Registri } from '../registri/registri';
+import { Registers } from '../registers/registers';
 import { Memory } from '../memory/model/memory';
 
 export abstract class Interpreter {
@@ -8,11 +8,11 @@ export abstract class Interpreter {
     //dizionario tag -> numero riga
     protected tags: {[key: string]: number} = {};
 
-    abstract run(line: string, registri: Registri, memory: Memory): void;
+    abstract run(line: string, registers: Registers, memory: Memory): void;
 
     abstract decode(line: string): number;
 
-    abstract interrupt(registers: Registri): void;
+    abstract interrupt(registers: Registers): void;
 
     parseTags(code: string, startTag: string) {
         code.split('\n').forEach((line, index) => {

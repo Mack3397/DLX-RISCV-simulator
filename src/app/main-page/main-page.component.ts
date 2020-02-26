@@ -1,5 +1,5 @@
 import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { Registri } from '../registri/registri';
+import { Registers } from '../registers/registers';
 import { ActivatedRoute } from '@angular/router';
 import { MatSidenav } from '@angular/material/sidenav';
 import { CodeService } from '../services/code.service';
@@ -12,7 +12,7 @@ import { BreakpointObserver } from '@angular/cdk/layout';
 })
 export class MainPageComponent {
 
-  registers: Registri;
+  registers: Registers;
   sidebarMode: string = 'side';
 
   @ViewChild('sidenav', {static: true}) sidenav: MatSidenav;
@@ -33,7 +33,7 @@ export class MainPageComponent {
       }
     });
     route.data.subscribe(data => {
-      this.registers = data.registri;
+      this.registers = data.registers;
       this.codeService.interpreter = data.interpreter;
       this.codeService.editorMode = data.editorMode;
       this.codeService.load();
