@@ -1,8 +1,7 @@
-import { Interpreter } from './interpreter';
+import { Memory } from '../memory/model/memory';
 import { Registers } from '../registers/registers';
 import { RV32IRegisters } from '../registers/rv32i.registers';
-import { Memory } from '../memory/model/memory';
-import { ThrowStmt } from '@angular/compiler';
+import { Interpreter } from './interpreter';
 
 const instructions_R  = 'ADD|SUB|SLL|SLT|SLTU|XOR|SRL|SRA|OR|AND';
 const instructions_I  = 'ADDI|SLTI|SLTIU|XORI|ORI|ANDI|SLLI|SRLI|SRAI';

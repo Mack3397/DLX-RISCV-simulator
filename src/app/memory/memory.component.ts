@@ -1,10 +1,10 @@
+import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { Device } from './model/device';
-import { trigger, style, transition, animate } from '@angular/animations';
-import { MemoryService } from '../services/memory.service';
-import { LogicalNetwork } from './model/logical-network';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
+import { MemoryService } from '../services/memory.service';
+import { Device } from './model/device';
+import { LogicalNetwork } from './model/logical-network';
 
 @Component({
   selector: 'app-memory',

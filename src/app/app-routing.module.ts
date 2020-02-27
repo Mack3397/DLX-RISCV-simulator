@@ -1,12 +1,12 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { MainPageComponent } from './main-page/main-page.component';
+import { RouterModule, Routes } from '@angular/router';
+import { DLXDocumentation } from './documentation/dlx.documentation';
+import { RV32IDocumentation } from './documentation/rv32i.documentation';
 import { DLXInterpreter } from './interpreters/dlx/dlx.interpreter';
 import { RV32Interpreter } from './interpreters/rv32i.interpreter';
+import { MainPageComponent } from './main-page/main-page.component';
 import { DLXRegisters } from './registers/dlx.registers';
 import { RV32IRegisters } from './registers/rv32i.registers';
-import { RV32IDocumentation } from './documentation/rv32i.documentation';
-import { DLXDocumentation } from './documentation/dlx.documentation';
 
 
 const routes: Routes = [

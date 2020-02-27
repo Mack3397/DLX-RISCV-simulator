@@ -1,16 +1,16 @@
-import 'codemirror/addon/selection/active-line'
-import './modes/dlx.js';
-import './modes/rv32i.js';
-import { Component, ViewChild, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
-import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
-import { EditorFromTextArea } from 'codemirror';
-import { CodeService } from '../services/code.service.js';
-import { MemoryService } from '../services/memory.service.js';
-import { Registers } from '../registers/registers.js';
-import { trigger, transition, style, animate, query, group } from "@angular/animations";
+import { animate, group, query, style, transition, trigger } from "@angular/animations";
+import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
+import { EditorFromTextArea } from 'codemirror';
+import 'codemirror/addon/selection/active-line';
 import { StartLogicalNetwork } from '../memory/model/start.logical-network.js';
+import { Registers } from '../registers/registers.js';
+import { CodeService } from '../services/code.service.js';
+import { MemoryService } from '../services/memory.service.js';
+import './modes/dlx.js';
+import './modes/rv32i.js';
 
 @Component({
   selector: 'app-editor',

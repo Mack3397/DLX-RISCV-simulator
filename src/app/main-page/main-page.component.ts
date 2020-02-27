@@ -1,9 +1,9 @@
-import { Component, ViewChild, Input, Output, EventEmitter } from '@angular/core';
-import { Registers } from '../registers/registers';
-import { ActivatedRoute } from '@angular/router';
-import { MatSidenav } from '@angular/material/sidenav';
-import { CodeService } from '../services/code.service';
 import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { MatSidenav } from '@angular/material/sidenav';
+import { ActivatedRoute } from '@angular/router';
+import { Registers } from '../registers/registers';
+import { CodeService } from '../services/code.service';
 
 @Component({
   selector: 'app-main-page',

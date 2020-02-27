@@ -1,7 +1,7 @@
 import { Injectable, Injector } from '@angular/core';
-import { Memory } from '../memory/model/memory';
-import { Eprom } from '../memory/model/eprom';
 import { Device, IDevice } from '../memory/model/device';
+import { Eprom } from '../memory/model/eprom';
+import { Memory } from '../memory/model/memory';
 import { StartLogicalNetwork } from '../memory/model/start.logical-network';
 
 @Injectable({

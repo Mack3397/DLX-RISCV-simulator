@@ -1,10 +1,10 @@
-import { Interpreter } from '../interpreter';
-import { Registers } from '../../registers/registers';
-import { DLXRegisters } from '../../registers/dlx.registers';
 import { Memory } from 'src/app/memory/model/memory';
+import { DLXRegisters } from '../../registers/dlx.registers';
+import { Registers } from '../../registers/registers';
+import { Interpreter } from '../interpreter';
+import { NotExistingInstructionError, WrongArgumentsError } from '../interpreter-errors';
 import { decoder, inputs_decoder } from './dlx.decoder';
 import { instructions, InstructionType, signExtend } from './dlx.instructions';
-import { NotExistingInstructionError, WrongArgumentsError } from '../interpreter-errors';
 export class DLXInterpreter extends Interpreter{
 
     private readonly process_instruction: {

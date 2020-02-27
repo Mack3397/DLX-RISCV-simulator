@@ -1,5 +1,5 @@
-import { Registers } from '../registers/registers';
 import { Memory } from '../memory/model/memory';
+import { Registers } from '../registers/registers';
 
 export abstract class Interpreter {
 

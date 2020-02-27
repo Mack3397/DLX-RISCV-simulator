@@ -1,6 +1,6 @@
-import { Device } from './device';
 import { Injector } from '@angular/core';
 import { CodeService } from 'src/app/services/code.service';
+import { Device } from './device';
 
 export class Eprom extends Device {
     private codeService: CodeService;
