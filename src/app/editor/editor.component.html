@@ -4,7 +4,7 @@
         [(ngModel)]="codeService.content"
         [options]="options"
     ></ngx-codemirror>
-    <div class="error-message" *ngIf="errorMessage" @myInsertRemoveTrigger>
+    <div class="error-message" *ngIf="errorMessage" @showHideTrigger>
         <mat-card>{{errorMessage}}</mat-card>
     </div>
     <div class="btn-container">

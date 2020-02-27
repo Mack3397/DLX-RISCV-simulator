@@ -1,6 +1,6 @@
 import { Interpreter } from '../interpreter';
-import { Registri } from '../../registri/registri';
-import { DLXRegistri } from '../../registri/dlx.registri';
+import { Registers } from '../../registers/registers';
+import { DLXRegisters } from '../../registers/dlx.registers';
 import { Memory } from 'src/app/memory/model/memory';
 import { decoder, inputs_decoder } from './dlx.decoder';
 import { instructions, InstructionType, signExtend } from './dlx.instructions';
@@ -9,7 +9,7 @@ export class DLXInterpreter extends Interpreter{
 
     private readonly process_instruction: {
         [key in InstructionType]: 
-            (line: string, instruction: string, args: number[], func: (registers: DLXRegistri, args?: number[]) => number, registers: DLXRegistri, memory?: Memory, unsigned?: boolean) => void
+            (line: string, instruction: string, args: number[], func: (registers: DLXRegisters, args?: number[]) => number, registers: DLXRegisters, memory?: Memory, unsigned?: boolean) => void
     } = {
         R: (line, instruction, [rd, rs1, rs2], func, registers) => {
             if (!(/\w+\s+R[123]?\d\s*,\s*R[123]?\d\s*,\s*R[123]?\d/i.test(line))) throw new WrongArgumentsError(instruction);
@@ -93,10 +93,10 @@ export class DLXInterpreter extends Interpreter{
         }
     }
 
-    private handleOverflow(e: Error, registers: DLXRegistri) {
+    private handleOverflow(e: Error, registers: DLXRegisters) {
         if (['overflow', 'fault'].includes(e.message)) {
             this.interruptEnabled = false;
-            (registers as DLXRegistri).iar = registers.pc;
+            (registers as DLXRegisters).iar = registers.pc;
             registers.pc = 0;
         } else {
             throw e;
@@ -138,15 +138,15 @@ export class DLXInterpreter extends Interpreter{
         return [instruction, argsFixed, lineFixed];
     }
 
-    public run(line: string, registers: Registri, memory: Memory): void {
+    public run(line: string, registers: Registers, memory: Memory): void {
         let [instruction, argsFixed, lineFixed] = this.processLine(line);
 
         let inst = instructions[instruction];
         if(inst) {
             let [opcode, alucode] = decoder[instruction];
 
-            (registers as DLXRegistri).ir = parseInt(opcode + inputs_decoder[inst.type](argsFixed) + alucode, 2);
-            this.process_instruction[inst.type](lineFixed, instruction, argsFixed, inst.func, registers as DLXRegistri, memory, inst.unsigned);
+            (registers as DLXRegisters).ir = parseInt(opcode + inputs_decoder[inst.type](argsFixed) + alucode, 2);
+            this.process_instruction[inst.type](lineFixed, instruction, argsFixed, inst.func, registers as DLXRegisters, memory, inst.unsigned);
         }
     }
 
@@ -161,9 +161,9 @@ export class DLXInterpreter extends Interpreter{
         }
     }
 
-    public interrupt(registers: Registri): void {
+    public interrupt(registers: Registers): void {
         if (this.interruptEnabled) {
-            (registers as DLXRegistri).iar = registers.pc;
+            (registers as DLXRegisters).iar = registers.pc;
             registers.pc = 0;
             this.interruptEnabled = false;
         }

@@ -1,6 +1,6 @@
 import { Interpreter } from './interpreter';
-import { Registri } from '../registri/registri';
-import { RV32IRegistri } from '../registri/rv32i.registri';
+import { Registers } from '../registers/registers';
+import { RV32IRegisters } from '../registers/rv32i.registers';
 import { Memory } from '../memory/model/memory';
 import { ThrowStmt } from '@angular/compiler';
 
@@ -16,9 +16,9 @@ const instructions = instructions_R + '|' + instructions_I + '|' + instructions_
 
 export class RV32Interpreter extends Interpreter {
 
-    tmpRegisters: RV32IRegistri = new RV32IRegistri;
+    tmpRegisters: RV32IRegisters = new RV32IRegisters;
     myMem: Memory = new Memory;
-    readonly instructions: {[key: string]: (args: number[], registers: RV32IRegistri, memory: Memory, usnigned ?: boolean) => number} = {
+    readonly instructions: {[key: string]: (args: number[], registers: RV32IRegisters, memory: Memory, usnigned ?: boolean) => number} = {
         // R-type instructions
         ADD: (args, registers) => { 
             registers.func3 = 0; registers.func7 = 0;
@@ -204,7 +204,7 @@ export class RV32Interpreter extends Interpreter {
     };
 
     // PREP, Prepares args in the right format to be executed by the instructions
-    prepR ([rd, rs1, rs2]: number[], registers: RV32IRegistri): number {
+    prepR ([rd, rs1, rs2]: number[], registers: RV32IRegisters): number {
         if (rd == 0 ) {
             window.alert('Cannot wirte in register x0');
             registers.pc = 0;
@@ -216,7 +216,7 @@ export class RV32Interpreter extends Interpreter {
         return rd;
     }
 
-    prepI ([rd, rs1, immediate]: number[], registers: RV32IRegistri, unsigned: boolean = false): number {
+    prepI ([rd, rs1, immediate]: number[], registers: RV32IRegisters, unsigned: boolean = false): number {
         if (rd == 0) {
             window.alert('Cannot wirte in register x0');
             registers.pc = 0;
@@ -228,7 +228,7 @@ export class RV32Interpreter extends Interpreter {
         return rd;
     }
 
-    prepI_Load ([rd, immediate, rs1]: number[], registers: RV32IRegistri, unsigned: boolean = false): number {
+    prepI_Load ([rd, immediate, rs1]: number[], registers: RV32IRegisters, unsigned: boolean = false): number {
         if (rd == 0) {
             window.alert('Cannot wirte in register x0');
             registers.pc = 0;
@@ -240,21 +240,21 @@ export class RV32Interpreter extends Interpreter {
         return rd;
     }
 
-    prepI_Jump ([rd, rs1, immediate]: number[], registers: RV32IRegistri) {
+    prepI_Jump ([rd, rs1, immediate]: number[], registers: RV32IRegisters) {
         registers.opcode = 111;
         registers.rs1 = registers.x[rs1];
         registers.jumpOffset = this.signExtend(immediate);
         return rd;
     }
 
-    prepS ([rs2, immediate, rs1]: number[], registers: RV32IRegistri): number {
+    prepS ([rs2, immediate, rs1]: number[], registers: RV32IRegisters): number {
         registers.opcode = 35;
         registers.rs1 = registers.x[rs1];
         registers.immediate = this.signExtend(immediate);
         return rs2;
     }
 
-    prepU ([rd, immediate]: number[], registers: RV32IRegistri): number {
+    prepU ([rd, immediate]: number[], registers: RV32IRegisters): number {
         if (rd == 0 ) {
             window.alert('Cannot wirte in register x0');
             registers.pc = 0;
@@ -264,7 +264,7 @@ export class RV32Interpreter extends Interpreter {
         return rd;
     }
 
-    prepB ([rs1, rs2, immediate]: number[], registers: RV32IRegistri): number {
+    prepB ([rs1, rs2, immediate]: number[], registers: RV32IRegisters): number {
         registers.opcode = 99; registers.func7 = 0;
         registers.rs1 = registers.x[rs1];
         registers.rs2 = registers.x[rs2];
@@ -276,7 +276,7 @@ export class RV32Interpreter extends Interpreter {
         else return immediate;
     }
 
-    run(line: string, registers: Registri, memory: Memory): void {
+    run(line: string, registers: Registers, memory: Memory): void {
         let tokens: string[];
         let lineFixed: string;
 
@@ -328,7 +328,7 @@ export class RV32Interpreter extends Interpreter {
         console.log(argsFixed);
         this.myMem = memory;
         if (this.instructions[instruction])
-            this.instructions[instruction](argsFixed, registers as RV32IRegistri, memory);  
+            this.instructions[instruction](argsFixed, registers as RV32IRegisters, memory);  
     }
     
     decode(line: string): number {    
@@ -342,7 +342,7 @@ export class RV32Interpreter extends Interpreter {
         }
     }
 
-    public interrupt(registers: Registri): void {
+    public interrupt(registers: Registers): void {
         //TODO to be implemented
     }
 }

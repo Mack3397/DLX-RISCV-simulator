@@ -27,8 +27,4 @@ export class CodeService {
   dlxDecode(lineN: number): number {
     return this.interpreter.decode(this.content.split('\n')[lineN]);
   }
-
-  log() {
-    console.log('ciao');
-  }
 }

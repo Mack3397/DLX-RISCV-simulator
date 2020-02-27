@@ -1,4 +1,4 @@
-import { DLXRegistri } from 'src/app/registri/dlx.registri';
+import { DLXRegisters } from 'src/app/registers/dlx.registers';
 
 function overflowCheck(n: number, negative: boolean = false) {
     if (negative) {
@@ -46,7 +46,7 @@ export type Instruction = 'ADD'|'ADDI'|'ADDU'|'ADDUI'|'AND'|'ANDI'|'BEQZ'|'BNEZ'
 export const instructions: {
         [key in Instruction]: {
             type: InstructionType, 
-            func: (registers: DLXRegistri, args?: number[]) => number,
+            func: (registers: DLXRegisters, args?: number[]) => number,
             unsigned?: boolean
         }
     } = {

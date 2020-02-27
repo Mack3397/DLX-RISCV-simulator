@@ -1,6 +1,6 @@
-import { Registri } from "./registri";
+import { Registers } from "./registers";
 
-export class DLXRegistri extends Registri{
+export class DLXRegisters extends Registers{
     
     r: [0,      number, number, number, number, number, number, number,
         number, number, number, number, number, number, number, number,

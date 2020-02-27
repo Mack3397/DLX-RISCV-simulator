@@ -1,0 +1,65 @@
+<div class="registers">
+    <div class="gpr">
+        <span>GPR</span>
+        <div class="gpr-back" *ngIf="isDLX">
+            <div class="gpr-row" *ngFor="let r of registers.r; index as i">
+                <div class="index">R{{i}}</div>
+                <div class="register">
+                    {{r | format: fType}}
+                </div>
+            </div>
+        </div>
+        <div class="gpr-back" *ngIf="isRV32I">
+            <div class="gpr-row" *ngFor="let x of registers.x; index as i">
+                <div class="index">x{{i}}</div>
+                <div class="register">{{x | format: fType}}</div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="isDLX">
+        <span>PC</span>
+        <div class="register special">{{registers.pc | format: fType}}</div>
+        <span>IAR</span>
+        <div class="register special">{{registers.iar | format: fType}}</div>
+        <span>MAR</span>
+        <div class="register special">{{registers.mar | format: fType}}</div>
+        <span>IR</span>
+        <div class="register special">{{registers.ir | format: fType}}</div>
+        <!-- <span>TEMP</span>
+        <div class="register">{{registers.temp | format: fType}}</div> -->
+        <span>MDR</span>
+        <div class="register special">{{registers.mdr | format: fType}}</div>
+        <span>A</span>
+        <div class="register special">{{registers.a | format: fType}}</div>
+        <span>B</span>
+        <div class="register special">{{registers.b | format: fType}}</div>
+        <span>C</span>
+        <div class="register special">{{registers.c | format: fType}}</div>
+    </div>
+    <div *ngIf="isRV32I">
+        <span>PC</span>
+        <div class="register special">{{registers.pc | format: fType}}</div>
+        <span>Opcode</span>
+        <div class="register special">{{registers.opcode | format: fType: 7}}</div>
+        <span>RD</span>
+        <div class="register special">{{registers.rd | format: fType: 5}}</div>
+        <span>RS1</span>
+        <div class="register special">{{registers.rs1 | format: fType: 5}}</div>
+        <span>RS2</span>
+        <div class="register special">{{registers.rs2 | format: fType: 5}}</div>
+        <span>Func3</span>
+        <div class="register special">{{registers.func3 | format: fType: 3}}</div>
+        <span>Func7</span>
+        <div class="register special">{{registers.func7 | format: fType: 7}}</div>
+        <span>Immediate</span>
+        <div class="register special">{{registers.immediate | format: fType: 20}}</div>
+        <span>Jump-Offset</span>
+        <div class="register special">{{registers.jumpOffset | format: fType: 20}}</div>
+    </div>
+</div>
+<mat-button-toggle-group id="fType" name="fType" [(ngModel)]="fType">
+    <mat-button-toggle value="hex" style="width: 25%">Hexadecimal</mat-button-toggle>
+    <mat-button-toggle value="dec" style="width: 25%">Decimal</mat-button-toggle>
+    <mat-button-toggle value="oct" style="width: 25%">Octal</mat-button-toggle>
+    <mat-button-toggle value="bin" style="width: 25%">Binary</mat-button-toggle>
+</mat-button-toggle-group>

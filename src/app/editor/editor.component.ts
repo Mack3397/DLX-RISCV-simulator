@@ -6,7 +6,7 @@ import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { EditorFromTextArea } from 'codemirror';
 import { CodeService } from '../services/code.service.js';
 import { MemoryService } from '../services/memory.service.js';
-import { Registri } from '../registri/registri.js';
+import { Registers } from '../registers/registers.js';
 import { trigger, transition, style, animate, query, group } from "@angular/animations";
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -17,7 +17,7 @@ import { StartLogicalNetwork } from '../memory/model/start.logical-network.js';
   templateUrl: './editor.component.html',
   styleUrls: ['./editor.component.sass'],
   animations: [
-    trigger('myInsertRemoveTrigger', [
+    trigger('showHideTrigger', [
       transition(':enter', [
         group([
           style({ height: '0'}),
@@ -45,7 +45,7 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('form', { static: false }) form: NgForm;
   
   @Input() public codeService: CodeService;
-  @Input() registers: Registri;
+  @Input() registers: Registers;
 
   private _pc: number;
   @Output() pcChange: EventEmitter<number> = new EventEmitter();
