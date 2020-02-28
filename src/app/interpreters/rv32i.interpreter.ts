@@ -1,8 +1,7 @@
-import { Interpreter } from './interpreter';
+import { Memory } from '../memory/model/memory';
 import { Registers } from '../registers/registers';
 import { RV32IRegisters } from '../registers/rv32i.registers';
-import { Memory } from '../memory/model/memory';
-import { ThrowStmt } from '@angular/compiler';
+import { Interpreter } from './interpreter';
 
 const instructions_R  = 'ADD|SUB|SLL|SLT|SLTU|XOR|SRL|SRA|OR|AND';
 const instructions_I  = 'ADDI|SLTI|SLTIU|XORI|ORI|ANDI|SLLI|SRLI|SRAI';
@@ -311,7 +310,7 @@ export class RV32Interpreter extends Interpreter {
             this.instructions[instruction](argsFixed, registers as RV32IRegisters, memory);  
     }
     
-    decode(line: string): number {    
+    encode(line: string): number {    
         try{   
             this.run(line, this.tmpRegisters, this.myMem);
             this.tmpRegisters.instruction = this.tmpRegisters.opcode + this.tmpRegisters.rd + this.tmpRegisters.rs1 + this.tmpRegisters.rs2 + this.tmpRegisters.func3 + this.tmpRegisters.func7 + this.tmpRegisters.jumpOffset +  + this.tmpRegisters.immediate;

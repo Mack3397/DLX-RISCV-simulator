@@ -25,14 +25,11 @@
             display: grid
             grid-template-columns: auto auto
             .index
-                font-family: monospace
                 width: 3ch
                 text-align: right
                 height: 1em
                 padding: .2rem
     .register
-        font-family: monospace
-        width:  32ch
         height: 1em
         padding: .2rem
         border-radius: 5px
@@ -42,8 +39,16 @@
 
 
 .register, .index
-    font-size: 1rem
+    font-family: 'Fira Code', monospace
+    font-size: .8rem
+    font-weight: 300
     transition: font-size 300ms, width 300ms, height 300ms, background .4s cubic-bezier(.25,.8,.25,1)
+
+.bin .register
+    width: 32ch
+.oct, .dec, .hex
+    .register
+        width: 22ch
 
 #fType
     @include mat-elevation(2)
@@ -52,8 +57,8 @@
 
 @media screen and (min-height: 866px)
     .register, .index
-        font-size: 1.1rem
+        font-size: .9rem
 
 @media screen and (min-height: 906px)
     .register, .index
-        font-size: 1.2rem
+        font-size: 1rem

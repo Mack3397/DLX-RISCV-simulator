@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
 import { MessageDialogComponent } from './message-dialog.component';
+
 
 describe('MessageDialogComponent', () => {
   let component: MessageDialogComponent;

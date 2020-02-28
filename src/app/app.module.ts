@@ -1,23 +1,23 @@
-import "../polyfills"
-import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatNativeDateModule } from '@angular/material/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
-
+import "../polyfills";
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { DocumentationComponent } from './documentation/documentation.component';
 import { EditorComponent } from './editor/editor.component';
 import { MainPageComponent } from './main-page/main-page.component';
-import { RegistersComponent } from './registers/registers.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormatPipe } from './pipes/format.pipe';
-import { MemoryComponent } from './memory/memory.component';
 import { MaterialModule } from './material.module';
-import { MatNativeDateModule } from '@angular/material/core';
-import { HttpClientModule } from '@angular/common/http';
-import { DocumentationComponent } from './documentation/documentation.component';
+import { MemoryComponent } from './memory/memory.component';
 import { MessageDialogComponent } from './message-dialog/message-dialog.component';
+import { FormatPipe } from './pipes/format.pipe';
+import { RegistersComponent } from './registers/registers.component';
+
+
 
 @NgModule({
    declarations: [

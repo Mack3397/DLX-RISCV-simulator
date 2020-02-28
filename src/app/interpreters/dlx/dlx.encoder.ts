@@ -1,21 +1,21 @@
 import { Instruction, InstructionType } from './dlx.instructions';
 
-export const inputs_decoder: {[key in InstructionType]: (args: number[]) => string} = {
+export const inputs_encoder: {[key in InstructionType]: (args: number[]) => string} = {
     R: ([rd, rs1, rs2]) => rs1.toString(2).padStart(5, '0') + rs2.toString(2).padStart(5, '0') + rd.toString(2).padStart(5, '0') + '00000',
-    RM: ([rd, rs1]) => inputs_decoder['R']([rd, rs1, 0]),
+    RM: ([rd, rs1]) => inputs_encoder['R']([rd, rs1, 0]),
     I: ([rd, rs1, immediate]) => rs1.toString(2).padStart(5, '0') + rd.toString(2).padStart(5, '0') + immediate.toString(2).padStart(16, '0'),
-    IB: ([rs1, name]) => inputs_decoder['I']([0, rs1, name]),
-    IJ: ([rs1]) => inputs_decoder['I']([rs1, 0, 0]),
-    IL: ([rd, offset, rs1]) => inputs_decoder['I']([rd, rs1, offset]),
-    IS: ([offset, rs1, rd]) => inputs_decoder['I']([rd, rs1, offset]),
+    IB: ([rs1, name]) => inputs_encoder['I']([0, rs1, name]),
+    IJ: ([rs1]) => inputs_encoder['I']([rs1, 0, 0]),
+    IL: ([rd, offset, rs1]) => inputs_encoder['I']([rd, rs1, offset]),
+    IS: ([offset, rs1, rd]) => inputs_encoder['I']([rd, rs1, offset]),
     J: ([name]) => name.toString(2).padStart(26, '0'),
-    LHI: ([rd, immediate]) => inputs_decoder['I']([rd, 0, immediate]),
+    LHI: ([rd, immediate]) => inputs_encoder['I']([rd, 0, immediate]),
     NOP: () => '',
     RFE: () => '00000000000000000000000000'
 };
 
 //https://www.csd.uoc.gr/~hy425/2002s/dlxmap.html
-export const decoder: {[key in Instruction]: [string, string]} = {
+export const encoder: {[key in Instruction]: [string, string]} = {
     ADD:    ['000000', '100000'],
     ADDI:   ['001000', ''],
     ADDU:   ['000000', '100001'],

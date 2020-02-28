@@ -1,6 +1,6 @@
-import { Device } from './device';
 import { Injector } from '@angular/core';
 import { CodeService } from 'src/app/services/code.service';
+import { Device } from './device';
 
 export class Eprom extends Device {
     private codeService: CodeService;
@@ -17,7 +17,7 @@ export class Eprom extends Device {
     }
 
     public load(address: number): number {
-        return this.codeService.dlxDecode(address);
+        return this.codeService.encode(address);
     }
 
     public store(address: number, word: number): void {}

@@ -1,5 +1,5 @@
-import { Device, IDevice } from './device';
 import { Injector } from '@angular/core';
+import { Device, IDevice } from './device';
 import { Eprom } from './eprom';
 import { StartLogicalNetwork } from './start.logical-network';
 

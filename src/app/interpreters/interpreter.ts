@@ -1,5 +1,5 @@
-import { Registers } from '../registers/registers';
 import { Memory } from '../memory/model/memory';
+import { Registers } from '../registers/registers';
 
 export abstract class Interpreter {
 
@@ -10,7 +10,7 @@ export abstract class Interpreter {
 
     abstract run(line: string, registers: Registers, memory: Memory): void;
 
-    abstract decode(line: string): number;
+    abstract encode(line: string): number;
 
     abstract interrupt(registers: Registers): void;
 

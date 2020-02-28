@@ -35,23 +35,23 @@
         } else if (matched = stream.match(/^\w+:/)) {
           style = 'tag';
           state.indent = matched[0].length + 1;
-        } else if (stream.match(RegExp('^('+instructions_J+')', 'i'))) {
+        } else if (stream.match(RegExp('^('+instructions_J+')(\\s+|$)'))) {
           style = 'keyword-j';
           state.j_instruction = true;
-        } else if (stream.match(RegExp('^('+instructions_IJ+')', 'i'))) {
+        } else if (stream.match(RegExp('^('+instructions_IJ+')(\\s+|$)'))) {
           style = 'keyword-j';
           state.j_instruction = true;
-        } else if (stream.match(RegExp('^('+instructions_I+')', 'i'))) {
+        } else if (stream.match(RegExp('^('+instructions_I+')(\\s+|$)'))) {
           style = 'keyword-i';
-        } else if (stream.match(RegExp('^('+instructions_R+')', 'i'))) {
+        } else if (stream.match(RegExp('^('+instructions_R+')(\\s+|$)'))) {
           style = 'keyword-r';
-        } else if (stream.match(/^(R[123]?\d|IAR)/i)) {
+        } else if (stream.match(/^(R([12]?\d|3[01])|IAR)(?=\W|$)/i)) {
           style = 'variable';
           if (state.first) {
             style += '-2';
             state.first = false;
           }
-        } else if (stream.match(/^0x([0-9A-F]{4})/i)) {
+        } else if (stream.match(/^0x([0-9A-F]{4})(?=\W|$)/i)) {
           style = 'number';
         } else if (state.j_instruction && stream.match(/^\w+/)) {
           style = 'tag';

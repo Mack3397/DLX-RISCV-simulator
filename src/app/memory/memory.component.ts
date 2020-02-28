@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Device } from './model/device';
-import { trigger, style, transition, animate } from '@angular/animations';
-import { MemoryService } from '../services/memory.service';
-import { LogicalNetwork } from './model/logical-network';
+import { animate, style, transition, trigger } from '@angular/animations';
+import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
+import { MemoryService } from '../services/memory.service';
+import { Device } from './model/device';
+import { LogicalNetwork } from './model/logical-network';
 
 @Component({
   selector: 'app-memory',
@@ -24,6 +24,7 @@ import { MessageDialogComponent } from '../message-dialog/message-dialog.compone
 })
 export class MemoryComponent implements OnInit {
   selected: Device;
+  @Input() memoryService: MemoryService;
 
   get canMoveSelectedLeft(): boolean {
     let devices = this.memoryService.memory.devices;
@@ -39,7 +40,7 @@ export class MemoryComponent implements OnInit {
       (index < devices.length - 1);
   }
 
-  constructor(public memoryService: MemoryService, private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit() {
   }

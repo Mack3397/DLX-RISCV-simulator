@@ -1,5 +1,5 @@
-import { LogicalNetwork } from './logical-network';
 import { Injector } from '@angular/core';
+import { LogicalNetwork } from './logical-network';
 
 export class StartLogicalNetwork extends LogicalNetwork {
     //ffd( name, d, a_res, a_set, clk)
