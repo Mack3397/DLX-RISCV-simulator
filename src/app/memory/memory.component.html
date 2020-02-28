@@ -17,7 +17,7 @@
                 [style.left]="((device.min_address/1073741824)*100).toFixed(2)+'%'"
                 (click)="selected == device ? selected = null : selected = device"
                 [class.selected]="selected == device"
-                [matTooltip]="device.name+' '+(device.ffd?'0':'1')"
+                [matTooltip]="device.name+' '+(device.ffd?'1':'0')"
                 matTooltipPosition="above"
                 matTooltipClass="device-size">
             </div>
@@ -50,5 +50,5 @@
             <button mat-raised-button id="move-right" (click)="moveSelectedRight()" [disabled]="!canMoveSelectedRight"><i class="fas fa-caret-right"></i></button>
         </div>
     </div>
-    <button mat-raised-button *ngIf="selected" id="del" (click)="onDelete(selected)" [disabled]="selected.name == 'EPROM' || selected.name =='Start'" @myInsertRemoveTrigger><i class="fas fa-trash"></i></button>
+    <button mat-raised-button *ngIf="selected" id="del" (click)="onDelete(selected)" [disabled]="selected.name == 'EPROM' || selected.name =='Start'" @showHideTrigger><i class="fas fa-trash"></i></button>
 </div>

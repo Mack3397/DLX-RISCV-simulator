@@ -4,6 +4,7 @@ import { MatSidenav } from '@angular/material/sidenav';
 import { ActivatedRoute } from '@angular/router';
 import { Registers } from '../registers/registers';
 import { CodeService } from '../services/code.service';
+import { MemoryService } from '../services/memory.service';
 
 @Component({
   selector: 'app-main-page',
@@ -22,6 +23,7 @@ export class MainPageComponent {
 
   constructor(
     public codeService: CodeService,
+    public memoryService: MemoryService,
     route: ActivatedRoute,
     breakpointObserver: BreakpointObserver
   ) {

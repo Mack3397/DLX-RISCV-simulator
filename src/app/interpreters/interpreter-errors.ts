@@ -1,4 +1,4 @@
-import { DLXDocumentation } from '../documentation/dlx.documentation';
+import { Documentation } from '../documentation/documentation.component';
 
 export class NotExistingInstructionError extends Error {
     constructor(instruction: string) {
@@ -8,8 +8,8 @@ export class NotExistingInstructionError extends Error {
 }
 
 export class WrongArgumentsError extends Error {
-    constructor(instruction: string) {
-        super('Wrong arguments: ' + DLXDocumentation.find(doc => doc.name == instruction).syntax); // 'Error' breaks prototype chain here
+    constructor(instruction: string, documentation: Documentation[]) {
+        super('Wrong arguments: ' + documentation.find(doc => doc.name == instruction).syntax); // 'Error' breaks prototype chain here
         Object.setPrototypeOf(this, new.target.prototype); // restore prototype chain
     }
 }

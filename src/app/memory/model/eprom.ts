@@ -17,7 +17,7 @@ export class Eprom extends Device {
     }
 
     public load(address: number): number {
-        return this.codeService.dlxDecode(address);
+        return this.codeService.encode(address);
     }
 
     public store(address: number, word: number): void {}

@@ -1,5 +1,5 @@
 import { animate, group, query, style, transition, trigger } from "@angular/animations";
-import { AfterViewInit, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ApplicationRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
@@ -45,6 +45,7 @@ export class EditorComponent implements AfterViewInit {
   @ViewChild('form', { static: false }) form: NgForm;
   
   @Input() public codeService: CodeService;
+  @Input() memoryService: MemoryService;
   @Input() registers: Registers;
 
   private _pc: number;
@@ -67,7 +68,11 @@ export class EditorComponent implements AfterViewInit {
       theme: 'dlx-riscv-theme',
       mode: this.codeService.editorMode,
       styleActiveLine: true,
-      viewportMargin: Infinity
+      viewportMargin: Infinity,
+      extraKeys: {
+        // associa allo shortcut Ctrl + S la funzione onSave e forza un refresh della view ad Angular.
+        "Ctrl-S": cm => {this.onSave(); this.appRef.tick()}
+      }
     };
   }
 
@@ -128,7 +133,10 @@ export class EditorComponent implements AfterViewInit {
     return !this.running;
   }
 
-  constructor(private memoryService: MemoryService, route: ActivatedRoute) {
+  constructor(
+    private appRef: ApplicationRef,
+    route: ActivatedRoute
+  ) {
     try {
       let editor_settings = JSON.parse(window.localStorage.getItem('editor_settings'));
       if (editor_settings && editor_settings.start && editor_settings.interval) {

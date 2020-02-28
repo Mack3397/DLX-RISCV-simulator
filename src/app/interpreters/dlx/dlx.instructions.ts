@@ -42,6 +42,7 @@ function store(n: number, dest: number, offset: number, dim: ('byte'|'halfword')
 
 export type InstructionType = 'R'|'RM'|'I'|'IB'|'IJ'|'IL'|'IS'|'J'|'LHI'|'NOP'|'RFE';
 export type Instruction = 'ADD'|'ADDI'|'ADDU'|'ADDUI'|'AND'|'ANDI'|'BEQZ'|'BNEZ'|'J'|'JAL'|'JALR'|'JR'|'LB'|'LBU'|'LH'|'LHI'|'LHU'|'LW'|'MOVI2S'|'MOVS2I'|'NOP'|'OR'|'ORI'|'RFE'|'SB'|'SEQ'|'SEQI'|'SGE'|'SGEI'|'SGT'|'SGTI'|'SH'|'SLE'|'SLEI'|'SLL'|'SLLI'|'SLT'|'SLTI'|'SNE'|'SNEI'|'SRA'|'SRAI'|'SRL'|'SRLI'|'SUB'|'SUBI'|'SUBU'|'SUBUI'|'SW'|'TRAP'|'XOR'|'XORI';
+export const specialRegisters: string[] = ['IAR'];
 
 export const instructions: {
         [key in Instruction]: {
@@ -69,8 +70,8 @@ export const instructions: {
     LHI:    { type: 'LHI', func: (registers) => registers.c = registers.temp << 16 },
     LHU:    { type: 'IL',  func: (registers) => registers.c = load(registers.mdr, registers.temp, 'halfword') },
     LW:     { type: 'IL',  func: (registers) => registers.c = registers.mdr },
-    MOVI2S: { type: 'RM',  func: (registers, [rd, rs1]) => registers.iar = registers.a = registers.r[rs1] },
-    MOVS2I: { type: 'RM',  func: (registers, [rd, rs1]) => rd ? registers.r[rd] = registers.c = registers.iar : 0 },
+    MOVI2S: { type: 'RM',  func: (registers, [rd, rs1]) => registers[specialRegisters[rd-1].toLowerCase()] = registers.a = registers.r[rs1] },
+    MOVS2I: { type: 'RM',  func: (registers, [rd, rs1]) => rd ? registers.r[rd] = registers.c = registers[specialRegisters[rs1-1].toLowerCase()] : 0 },
     NOP:    { type: 'NOP', func: () => null },
     OR:     { type: 'R',   func: (registers) => registers.c = registers.a | registers.temp },
     ORI:    { type: 'I',   func: (registers) => registers.c = registers.a | registers.temp, unsigned: true },

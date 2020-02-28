@@ -330,7 +330,7 @@ export class RV32Interpreter extends Interpreter {
             this.instructions[instruction](argsFixed, registers as RV32IRegisters, memory);  
     }
     
-    decode(line: string): number {    
+    encode(line: string): number {    
         try{   
             this.run(line, this.tmpRegisters, this.myMem);
             this.tmpRegisters.instruction = this.tmpRegisters.opcode + this.tmpRegisters.rd + this.tmpRegisters.rs1 + this.tmpRegisters.rs2 + this.tmpRegisters.func3 + this.tmpRegisters.func7 + this.tmpRegisters.jumpOffset +  + this.tmpRegisters.immediate;

@@ -24,7 +24,7 @@ export class CodeService {
     window.localStorage.setItem(`code-${this.editorMode}`, this.content);
   }
 
-  dlxDecode(lineN: number): number {
-    return this.interpreter.decode(this.content.split('\n')[lineN]);
+  encode(lineN: number): number {
+    return this.interpreter.encode(this.content.split('\n')[lineN]);
   }
 }

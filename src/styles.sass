@@ -1,12 +1,17 @@
 @import "~codemirror/lib/codemirror"
 @import "app/editor/codemirror-theme"
+@import url(https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css)
 
 .CodeMirror
-    font-size: 1.5em
+    font-size: 1.1em
     min-width: 100%
     max-width: 100%
     min-height: 100%
     max-height: 100%
+    font-family: 'Fira Code', monospace
+    font-weight: 300
+    .CodeMirror-lines
+        padding: 0
     .CodeMirror-linenumber
         padding-right: 1.5ch
     .CodeMirror-linenumber:after

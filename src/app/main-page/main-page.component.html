@@ -5,8 +5,8 @@
     <mat-sidenav-content>
         <div class="main">
             <div class="left">
-                <app-editor [(pc)]="registers.pc" [registers]="registers" [codeService]="codeService"></app-editor>
-                <app-memory></app-memory>
+                <app-editor [(pc)]="registers.pc" [registers]="registers" [codeService]="codeService" [memoryService]="memoryService"></app-editor>
+                <app-memory [memoryService]="memoryService"></app-memory>
             </div>
             <div class="right">
                 <app-registers [registers]="registers"></app-registers>
