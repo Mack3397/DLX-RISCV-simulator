@@ -151,32 +151,32 @@ export class RV32Interpreter extends Interpreter {
         BEQ: (args, registers) => {
             registers.func3 = 0;
             let jumpOffset = this.prepB(args, registers);
-            return registers.pc = (registers.rs1 == registers.rs2 ? jumpOffset : registers.pc);
+            return registers.pc += (registers.rs1 == registers.rs2 ? jumpOffset : registers.pc) - 4;
         },
         BNE: (args, registers) => {
             registers.func3 = 1;
             let jumpOffset = this.prepB(args, registers);
-            return registers.pc = (registers.rs1 != registers.rs2 ? jumpOffset : registers.pc);
+            return registers.pc += (registers.rs1 != registers.rs2 ? jumpOffset : registers.pc) - 4;
         },
         BLT: (args, registers) => {
             registers.func3 = 4;
             let jumpOffset = this.prepB(args, registers);
-            return registers.pc = (this.signExtend(registers.rs1) < this.signExtend(registers.rs2) ? jumpOffset : registers.pc);
+            return registers.pc += (this.signExtend(registers.rs1) < this.signExtend(registers.rs2) ? jumpOffset : registers.pc) - 4;
         },
         BGE: (args, registers) => {
             registers.func3 = 5;
             let jumpOffset = this.prepB(args, registers);
-            return registers.pc = (this.signExtend(registers.rs1) >= this.signExtend(registers.rs2) ? jumpOffset : registers.pc);
+            return registers.pc += (this.signExtend(registers.rs1) >= this.signExtend(registers.rs2) ? jumpOffset : registers.pc) - 4;
         },
         BLTU: (args, registers) => {
             registers.func3 = 6;
             let jumpOffset = this.prepB(args, registers);
-            return registers.pc = (registers.rs1 < registers.rs2 ? jumpOffset : registers.pc);
+            return registers.pc += (registers.rs1 < registers.rs2 ? jumpOffset : registers.pc) - 4;
         },
         BGEU: (args, registers) => {
             registers.func3 = 7;
             let jumpOffset = this.prepB(args, registers);
-            return registers.pc = (registers.rs1 >= registers.rs2 ? jumpOffset : registers.pc);
+            return registers.pc += (registers.rs1 >= registers.rs2 ? jumpOffset : registers.pc) - 4;
         },
 
         // U-type instructions 
@@ -191,11 +191,7 @@ export class RV32Interpreter extends Interpreter {
 
         // J-type instructions
         JAL: ([rd, immediate], registers) => {
-            if (rd == 0 ) {
-                window.alert('Cannot wirte in register x0');
-                registers.pc = 0;
-                return;
-            }
+            if (rd == 0 ) throw new Error("Cannot write into register x0");
             registers.func3 = 0; registers.func7 = 0; registers.opcode = 111;
             registers.rd = registers.x[rd] = registers.pc;
             registers.jumpOffset = immediate;
@@ -205,11 +201,7 @@ export class RV32Interpreter extends Interpreter {
 
     // PREP, Prepares args in the right format to be executed by the instructions
     prepR ([rd, rs1, rs2]: number[], registers: RV32IRegisters): number {
-        if (rd == 0 ) {
-            window.alert('Cannot wirte in register x0');
-            registers.pc = 0;
-            return;
-        }
+        if (rd == 0 ) throw new Error("Cannot write into register x0");
         registers.opcode = 51;
         registers.rs1 = registers.x[rs1];
         registers.rs2 = registers.x[rs2];
@@ -217,11 +209,7 @@ export class RV32Interpreter extends Interpreter {
     }
 
     prepI ([rd, rs1, immediate]: number[], registers: RV32IRegisters, unsigned: boolean = false): number {
-        if (rd == 0) {
-            window.alert('Cannot wirte in register x0');
-            registers.pc = 0;
-            return;
-        }
+        if (rd == 0 ) throw new Error("Cannot write into register x0");
         registers.opcode = 19; 
         registers.rs1 = registers.x[rs1];
         registers.immediate = unsigned ? immediate : this.signExtend(immediate);
@@ -229,11 +217,7 @@ export class RV32Interpreter extends Interpreter {
     }
 
     prepI_Load ([rd, immediate, rs1]: number[], registers: RV32IRegisters, unsigned: boolean = false): number {
-        if (rd == 0) {
-            window.alert('Cannot wirte in register x0');
-            registers.pc = 0;
-            return;
-        }
+        if (rd == 0 ) throw new Error("Cannot write into register x0");
         registers.opcode = 3; 
         registers.rs1 = registers.x[rs1];
         registers.immediate = unsigned ? immediate : this.signExtend(immediate);
@@ -255,11 +239,7 @@ export class RV32Interpreter extends Interpreter {
     }
 
     prepU ([rd, immediate]: number[], registers: RV32IRegisters): number {
-        if (rd == 0 ) {
-            window.alert('Cannot wirte in register x0');
-            registers.pc = 0;
-            return;
-        }
+        if (rd == 0 ) throw new Error("Cannot write into register x0");
         registers.immediate = (immediate) << 12;
         return rd;
     }
