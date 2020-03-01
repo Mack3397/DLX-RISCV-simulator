@@ -14,7 +14,19 @@ export class DocumentationComponent implements OnInit {
   search: string = '';
 
   get documentationFiltered() {
-    return this.documentation.filter(val => val.name.startsWith(this.search.toLocaleUpperCase()));
+    let upSearch = this.search.toUpperCase();
+    return this.documentation.filter(val =>
+      val.name.startsWith(upSearch) ||
+      val.description.toUpperCase().includes(upSearch)
+    ).sort((a,b) =>
+      a.name.startsWith(upSearch)
+        ? b.name.startsWith(upSearch)
+          ? a.name.localeCompare(b.name)
+          : -1
+        : b.name.startsWith(upSearch)
+          ? 1
+          : a.name.localeCompare(b.name)
+    );
   }
 
   constructor(route: ActivatedRoute) {
