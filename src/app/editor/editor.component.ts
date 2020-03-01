@@ -55,7 +55,7 @@ export class EditorComponent implements AfterViewInit {
   private previousLine: number = 0;
   private runnedLine: number = 0;
   private running: boolean = false;
-  private continuousRunning = false;
+  continuousRunning = false;
   errorMessage: string;
   start: string = 'main';
   interval: number = 1000;
