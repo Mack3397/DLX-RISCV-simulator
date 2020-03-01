@@ -120,6 +120,7 @@ export class DLXInterpreter extends Interpreter{
 
         if (instructions[instruction]) {
             argsFixed = args.map<number>(arg => {
+                console.log(arg);
                 if (arg.match(/^R[123]?\d/i)) {
                     return parseInt(arg.substr(1));
                 } else if (specialRegisters.includes(arg.toUpperCase())) {
@@ -128,8 +129,11 @@ export class DLXInterpreter extends Interpreter{
                     return parseInt(arg.substr(2, 4), 16);
                 } else if (this.tags[arg]) {
                     return this.tags[arg];
-                } else if (['IB', 'J'].includes(instructions[instruction].type)) throw new Error("the tag doesn't exist")
-                else if (arg) throw new WrongArgumentsError(instruction, DLXDocumentation);
+                } else if (arg) 
+                    if (['IB', 'J'].includes(instructions[instruction].type)) 
+                        throw new Error("the tag doesn't exist")
+                    else
+                        throw new WrongArgumentsError(instruction, DLXDocumentation);
             });
         } else if (instruction) {
             throw new NotExistingInstructionError(instruction);
