@@ -4,7 +4,7 @@ import { MainPageComponent } from './main-page/main-page.component';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.sass']
+  styleUrls: ['./app.component.sass'],
 })
 export class AppComponent implements OnInit{
   
@@ -29,12 +29,14 @@ export class AppComponent implements OnInit{
 
   constructor() {}
   
-  public onRouterOutletActivate(event : MainPageComponent) {
-    this.mainPageComponent = event;
-    this.mainPageComponent.sidebarOpened = this.sidebarOpened;
-    this.mainPageComponent.sidebarOpenedChange.subscribe((val: boolean) => {
-      this.sidebarOpened = val;
-    })
+  public onRouterOutletActivate(event: MainPageComponent) {
+    if (event instanceof MainPageComponent) {
+      this.mainPageComponent = event;
+      this.mainPageComponent.sidebarOpened = this.sidebarOpened;
+      this.mainPageComponent.sidebarOpenedChange.subscribe((val: boolean) => {
+        this.sidebarOpened = val;
+      })
+    }
   }
 
   ngOnInit() {

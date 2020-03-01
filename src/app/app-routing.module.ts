@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AboutPageComponent } from './about-page/about-page.component';
 import { DLXDocumentation } from './documentation/dlx.documentation';
 import { RV32IDocumentation } from './documentation/rv32i.documentation';
 import { DLXInterpreter } from './interpreters/dlx/dlx.interpreter';
@@ -31,6 +32,13 @@ const routes: Routes = [
       documentation: RV32IDocumentation
     }
   },
+  {
+    path: 'about',
+    component: AboutPageComponent,
+    data: {
+      editorMode: 'about',
+    }
+  }
 ];
 
 @NgModule({

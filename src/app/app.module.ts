@@ -16,6 +16,7 @@ import { MemoryComponent } from './memory/memory.component';
 import { MessageDialogComponent } from './message-dialog/message-dialog.component';
 import { FormatPipe } from './pipes/format.pipe';
 import { RegistersComponent } from './registers/registers.component';
+import { AboutPageComponent } from './about-page/about-page.component';
 
 
 
@@ -28,7 +29,8 @@ import { RegistersComponent } from './registers/registers.component';
       FormatPipe,
       MemoryComponent,
       DocumentationComponent,
-      MessageDialogComponent
+      MessageDialogComponent,
+      AboutPageComponent
    ],
    imports: [
       BrowserModule,
