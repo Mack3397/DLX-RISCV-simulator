@@ -52,18 +52,18 @@ export class Memory {
     public load(address: number): number {
         let device = this.devices.find(dev => dev.checkAddress(address));
         if (device) {
-            console.log("Device trovato LOAD " + address);
+            console.log("Device trovato LOAD " + address + device.name);
             return device.load(address);
-        }
+        } else throw new Error("Device not found");
         return 0;
     }
     
     public store(address: number, word: number): number {
         let device = this.devices.find(dev => dev.checkAddress(address));
         if (device) {
-            console.log("Device trovato STORE " + address + ' number: ' + word);
+            console.log("Device trovato STORE " + address + ' number: ' + word + ' Dev ' + device.name);
             device.store(address, word);
-        }
+        } else throw new Error("Device not found");
         return word;
     }
 }
