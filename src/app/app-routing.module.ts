@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AboutPageComponent } from './about-page/about-page.component';
 import { DLXDocumentation } from './documentation/dlx.documentation';
 import { RV32IDocumentation } from './documentation/rv32i.documentation';
+import { CanDeactivateGuard } from './guards/can-deactivate-guard';
 import { DLXInterpreter } from './interpreters/dlx/dlx.interpreter';
 import { RV32Interpreter } from './interpreters/rv32i.interpreter';
 import { MainPageComponent } from './main-page/main-page.component';
@@ -20,7 +21,8 @@ const routes: Routes = [
       editorMode: 'dlx',
       registers: new DLXRegisters(),
       documentation: DLXDocumentation
-    }
+    },
+    canDeactivate: [CanDeactivateGuard]
   },
   { 
     path: 'rv32i',
@@ -30,7 +32,8 @@ const routes: Routes = [
       editorMode: 'rv32i',
       registers: new RV32IRegisters(),
       documentation: RV32IDocumentation
-    }
+    },
+    canDeactivate: [CanDeactivateGuard]
   },
   {
     path: 'about',
@@ -43,6 +46,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [CanDeactivateGuard]
 })
 export class AppRoutingModule { }

@@ -5,7 +5,13 @@
     <mat-sidenav-content>
         <div class="main">
             <div class="left">
-                <app-editor [(pc)]="registers.pc" [registers]="registers" [codeService]="codeService" [memoryService]="memoryService"></app-editor>
+                <app-editor 
+                    [(pc)]="registers.pc"
+                    [registers]="registers"
+                    [codeService]="codeService"
+                    [memoryService]="memoryService"
+                    (formDirtyChange)="isFormDirty = $event"
+                ></app-editor>
                 <app-memory [memoryService]="memoryService"></app-memory>
             </div>
             <div class="right">

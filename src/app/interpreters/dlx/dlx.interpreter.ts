@@ -58,7 +58,8 @@ export class DLXInterpreter extends Interpreter{
             registers.a = registers.r[rs1];
             registers.b = registers.r[rd];
             registers.mar = signExtend(offset) + registers.a;
-            registers.mdr = memory.load(Math.floor((registers.mar >>> 0) / 4) >>> 0);
+            let addr = Math.floor((registers.mar >>> 0) / 4) >>> 0;
+            registers.mdr = memory.load(addr);
             registers.temp = offset;
             func(registers);
             if (rd) {
@@ -71,7 +72,8 @@ export class DLXInterpreter extends Interpreter{
             registers.mdr = registers.b = registers.r[rd];
             registers.mar = signExtend(offset) + registers.a;
             registers.temp = offset;
-            memory.store(Math.floor((registers.mar >>> 0) / 4) >>> 0, func(registers, [memory.load(registers.mar)]));
+            let addr = Math.floor((registers.mar >>> 0) / 4) >>> 0;
+            memory.store(addr, func(registers, [memory.load(addr)]));
         },
         J: (line, instruction, [name], func, registers, _memory, unsigned = false) => {
             if (!(/\w+\s+\w+/i.test(line))) throw new WrongArgumentsError(instruction, DLXDocumentation);
@@ -120,7 +122,6 @@ export class DLXInterpreter extends Interpreter{
 
         if (instructions[instruction]) {
             argsFixed = args.map<number>(arg => {
-                console.log(arg);
                 if (arg.match(/^R[123]?\d/i)) {
                     return parseInt(arg.substr(1));
                 } else if (specialRegisters.includes(arg.toUpperCase())) {

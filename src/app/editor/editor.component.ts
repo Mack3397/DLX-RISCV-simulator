@@ -1,10 +1,11 @@
 import { animate, group, query, style, transition, trigger } from "@angular/animations";
-import { AfterViewInit, ApplicationRef, Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, ApplicationRef, Component, EventEmitter, HostListener, Input, OnDestroy, Output, ViewChild } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { CodemirrorComponent } from '@ctrl/ngx-codemirror';
 import { EditorFromTextArea } from 'codemirror';
 import 'codemirror/addon/selection/active-line';
+import { Subscription } from 'rxjs';
 import { StartLogicalNetwork } from '../memory/model/start.logical-network.js';
 import { Registers } from '../registers/registers.js';
 import { CodeService } from '../services/code.service.js';
@@ -39,7 +40,7 @@ import './modes/rv32i.js';
     ])
   ],
 })
-export class EditorComponent implements AfterViewInit {
+export class EditorComponent implements AfterViewInit, OnDestroy {
 
   @ViewChild('codeEditor', { static: false }) codeEditor: CodemirrorComponent;
   @ViewChild('form', { static: false }) form: NgForm;
@@ -50,6 +51,9 @@ export class EditorComponent implements AfterViewInit {
 
   private _pc: number;
   @Output() pcChange: EventEmitter<number> = new EventEmitter();
+
+  private formStatusChangeSub: Subscription;
+  @Output() formDirtyChange: EventEmitter<boolean> = new EventEmitter();
 
   private timeout;
   private previousLine: number = 0;
@@ -153,6 +157,7 @@ export class EditorComponent implements AfterViewInit {
       if (this.running) this.onStop();
       if (this.errorMessage) { this.doc.removeLineClass(this.runnedLine, 'wrap', 'error'); this.errorMessage = undefined;}
     });
+    this.formStatusChangeSub = this.form.statusChanges.subscribe(v => this.formDirtyChange.emit(this.form.dirty));
   }
 
   continuousRun() {
@@ -180,7 +185,6 @@ export class EditorComponent implements AfterViewInit {
       if (this.codeService.editorMode === 'dlx') {
         (this.memoryService.memory.devices.find(v => v.name == 'Start') as StartLogicalNetwork).a_set();
       } else {
-        (this.memoryService.memory.devices.find(v => v.name == 'Start') as StartLogicalNetwork).a_set();
         this._pc = this.codeService.interpreter.getTag('start_tag');
       }
       this.running = true;
@@ -212,6 +216,17 @@ export class EditorComponent implements AfterViewInit {
 
   onInterrupt() {
     this.codeService.interpreter.interrupt(this.registers);
+  }
+
+  @HostListener('window:beforeunload', ['$event'])
+  unloadNotification($event: any) {
+      if (this.form.dirty) {
+          $event.returnValue = true;
+      }
+  }
+
+  ngOnDestroy() {
+    if (this.formStatusChangeSub) this.formStatusChangeSub.unsubscribe();
   }
 
 }

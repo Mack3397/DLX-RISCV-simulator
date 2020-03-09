@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { MainPageComponent } from './main-page/main-page.component';
 
 @Component({
@@ -6,10 +7,11 @@ import { MainPageComponent } from './main-page/main-page.component';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.sass'],
 })
-export class AppComponent implements OnInit{
+export class AppComponent implements OnInit, OnDestroy{
   
   private mainPageComponent: MainPageComponent;
   private _theme: 'light'|'dark';
+  private sideBarOpenedSub: Subscription;
 
   sidebarOpened: boolean = false;
 
@@ -33,7 +35,8 @@ export class AppComponent implements OnInit{
     if (event instanceof MainPageComponent) {
       this.mainPageComponent = event;
       this.mainPageComponent.sidebarOpened = this.sidebarOpened;
-      this.mainPageComponent.sidebarOpenedChange.subscribe((val: boolean) => {
+      if (this.sideBarOpenedSub) this.sideBarOpenedSub.unsubscribe();
+      this.sideBarOpenedSub = this.mainPageComponent.sidebarOpenedChange.subscribe((val: boolean) => {
         this.sidebarOpened = val;
       })
     }
@@ -41,6 +44,10 @@ export class AppComponent implements OnInit{
 
   ngOnInit() {
     this.theme = 'dark';
+  }
+
+  ngOnDestroy() {
+    if (this.sideBarOpenedSub) this.sideBarOpenedSub.unsubscribe();
   }
 
   toggleSidenav() {

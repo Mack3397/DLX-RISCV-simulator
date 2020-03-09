@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 export type Documentation = {name: string, type: string, syntax: string, description: string};
 
@@ -8,7 +9,9 @@ export type Documentation = {name: string, type: string, syntax: string, descrip
   templateUrl: './documentation.component.html',
   styleUrls: ['./documentation.component.sass']
 })
-export class DocumentationComponent implements OnInit {
+export class DocumentationComponent implements OnInit, OnDestroy {
+
+  private routeDataSub: Subscription;
 
   documentation: Documentation[];
   search: string = '';
@@ -30,11 +33,14 @@ export class DocumentationComponent implements OnInit {
   }
 
   constructor(route: ActivatedRoute) {
-    route.data.subscribe(data => {
+    this.routeDataSub = route.data.subscribe(data => {
       this.documentation = data.documentation
     })
   }
 
   ngOnInit() { }
 
+  ngOnDestroy() {
+    if (this.routeDataSub) this.routeDataSub.unsubscribe();
+  }
 }

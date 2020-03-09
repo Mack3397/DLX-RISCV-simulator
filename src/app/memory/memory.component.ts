@@ -1,7 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { MessageDialogComponent } from '../message-dialog/message-dialog.component';
+import { MessageDialogComponent } from '../dialogs/message-dialog.component';
 import { MemoryService } from '../services/memory.service';
 import { Device } from './model/device';
 import { LogicalNetwork } from './model/logical-network';

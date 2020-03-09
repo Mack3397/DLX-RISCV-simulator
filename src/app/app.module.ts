@@ -6,17 +6,18 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CodemirrorModule } from '@ctrl/ngx-codemirror';
 import "../polyfills";
+import { AboutPageComponent } from './about-page/about-page.component';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ConfirmDialogComponent } from './dialogs/confirm-dialog.component';
+import { MessageDialogComponent } from './dialogs/message-dialog.component';
 import { DocumentationComponent } from './documentation/documentation.component';
 import { EditorComponent } from './editor/editor.component';
 import { MainPageComponent } from './main-page/main-page.component';
 import { MaterialModule } from './material.module';
 import { MemoryComponent } from './memory/memory.component';
-import { MessageDialogComponent } from './message-dialog/message-dialog.component';
 import { FormatPipe } from './pipes/format.pipe';
 import { RegistersComponent } from './registers/registers.component';
-import { AboutPageComponent } from './about-page/about-page.component';
 
 
 
@@ -30,6 +31,7 @@ import { AboutPageComponent } from './about-page/about-page.component';
       MemoryComponent,
       DocumentationComponent,
       MessageDialogComponent,
+      ConfirmDialogComponent,
       AboutPageComponent
    ],
    imports: [
@@ -44,7 +46,8 @@ import { AboutPageComponent } from './about-page/about-page.component';
       MaterialModule
    ],
    entryComponents: [
-      MessageDialogComponent
+      MessageDialogComponent,
+      ConfirmDialogComponent
    ],
    providers: [],
    bootstrap: [
