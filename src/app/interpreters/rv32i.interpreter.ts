@@ -3,6 +3,7 @@ import { Registers } from '../registers/registers';
 import { RV32IRegisters } from '../registers/rv32i.registers';
 import { Interpreter } from './interpreter';
 
+const BASE = 0;
 const instructions_R  = 'ADD|SUB|SLL|SLT|SLTU|XOR|SRL|SRA|OR|AND';
 const instructions_I  = 'ADDI|SLTI|SLTIU|XORI|ORI|ANDI|SLLI|SRLI|SRAI';
 const instructions_IL = 'LB|LH|LW|LBU|LHU';
@@ -322,6 +323,12 @@ export class RV32Interpreter extends Interpreter {
     }
 
     public interrupt(registers: Registers): void {
-        //TODO to be implemented
+        if(this.interruptEnabled) {
+            this.interruptEnabled = false;
+            (registers as RV32IRegisters).x[5] = registers.pc;
+            registers.pc = BASE; 
+            // in caso di VECTORED INTERRUPTS -> PC = BASE + ExcCode * 4
+            // ExcCode = 11 (Machine external interrupt)
+        } 
     }
 }

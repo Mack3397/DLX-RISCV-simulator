@@ -180,6 +180,7 @@ export class EditorComponent implements AfterViewInit {
       if (this.codeService.editorMode === 'dlx') {
         (this.memoryService.memory.devices.find(v => v.name == 'Start') as StartLogicalNetwork).a_set();
       } else {
+        (this.memoryService.memory.devices.find(v => v.name == 'Start') as StartLogicalNetwork).a_set();
         this._pc = this.codeService.interpreter.getTag('start_tag');
       }
       this.running = true;
